@@ -1,9 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { X, MessageSquare, Phone, Mail } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { contactInfo } from '@/data/navigation'
 
 export function ExpertPanel() {
   const [isVisible, setIsVisible] = useState(false)
@@ -59,15 +61,21 @@ export function ExpertPanel() {
           </p>
           
           <div className="space-y-2">
-            <Button className="w-full bg-primary hover:bg-primary/90 text-white font-bold h-11 rounded-xl gap-2 shadow-lg shadow-primary/20">
-              <MessageSquare className="h-4 w-4" /> Message Arthur
+            <Button asChild className="w-full bg-primary hover:bg-primary/90 text-white font-bold h-11 rounded-xl gap-2 shadow-lg shadow-primary/20">
+              <Link href="/contact">
+                <MessageSquare className="h-4 w-4" /> Message Arthur
+              </Link>
             </Button>
             <div className="flex gap-2">
-              <Button variant="outline" className="flex-1 border-slate-200 text-slate-700 h-10 rounded-xl px-0">
-                <Phone className="h-3.5 w-3.5" />
+              <Button asChild variant="outline" className="flex-1 border-slate-200 text-slate-700 h-10 rounded-xl px-0">
+                <Link href={`tel:${contactInfo.phone.replace(/\s/g, '')}`}>
+                  <Phone className="h-3.5 w-3.5" />
+                </Link>
               </Button>
-              <Button variant="outline" className="flex-1 border-slate-200 text-slate-700 h-10 rounded-xl px-0">
-                <Mail className="h-3.5 w-3.5" />
+              <Button asChild variant="outline" className="flex-1 border-slate-200 text-slate-700 h-10 rounded-xl px-0">
+                <Link href={`mailto:${contactInfo.email}`}>
+                  <Mail className="h-3.5 w-3.5" />
+                </Link>
               </Button>
             </div>
           </div>

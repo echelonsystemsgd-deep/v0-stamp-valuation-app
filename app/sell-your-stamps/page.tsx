@@ -5,7 +5,6 @@ import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { SellForm } from '@/components/forms/sell-form'
 import { BuyingTable } from '@/components/valuation/buying-table'
-import { ExpertPanel } from '@/components/valuation/expert-panel'
 import { ImportantNotice } from '@/components/sections/important-notice'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calculator, FileText, Verified } from 'lucide-react'
@@ -86,7 +85,6 @@ export default function SellYourStampsPage() {
         </section>
       </main>
       <Footer />
-      <ExpertPanel />
     </>
   )
 }
