@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import { ExpertPanel } from '@/components/valuation/expert-panel'
+import { SupportPanel } from '@/components/valuation/expert-panel'
 import './globals.css'
 
 const inter = Inter({ 
@@ -47,7 +47,7 @@ export default function RootLayout({
       <body className="font-sans antialiased min-h-screen flex flex-col">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
-        <ExpertPanel />
+        <SupportPanel />
       </body>
     </html>
   )
