@@ -99,7 +99,8 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
                   key={product.id}
                   className={`grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 p-6 transition-all duration-200 hover:bg-primary/5 ${
                     index % 2 === 0 ? "bg-background" : "bg-muted/5"
-                  }`}
+                  } animate-fade-in-up reveal-hidden`}
+                  style={{ animationDelay: `${index * 150}ms` }}
                 >
                   <div className="flex items-center gap-4">
                     <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-border/50 bg-slate-50 shadow-sm">
@@ -162,8 +163,12 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
 
       {/* Mobile & Tablet Card View - Show on anything below lg breakpoint */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:hidden gap-6">
-        {products.map((product) => (
-          <Card key={product.id} className="overflow-hidden border-border/60 shadow-md rounded-2xl flex flex-col h-full bg-card">
+        {products.map((product, index) => (
+          <Card 
+            key={product.id} 
+            className="overflow-hidden border-border/60 shadow-md rounded-2xl flex flex-col h-full bg-card animate-fade-in-up reveal-hidden"
+            style={{ animationDelay: `${index * 150}ms` }}
+          >
             <CardContent className="p-6 space-y-6 flex flex-col h-full">
               <div className="flex gap-5">
                 <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-border/50 bg-muted/30 shadow-sm">
@@ -234,7 +239,7 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
       </div>
 
       {/* Summary Section */}
-      <section className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden ring-1 ring-white/10">
+      <section className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden ring-1 ring-white/10 animate-slide-in-right reveal-hidden" style={{ animationDelay: '800ms' }}>
         {/* Background Accents */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 blur-[120px] -mr-48 -mt-48 rounded-full animate-pulse" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 blur-[100px] -ml-32 -mb-32 rounded-full" />
