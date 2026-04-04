@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Award, Shield, Users, CheckCircle } from 'lucide-react'
+import { AboutNarrative } from '@/components/sections/about-narrative'
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -69,11 +70,12 @@ export default function AboutUsPage() {
       <Header />
       <main id="main-content" className="flex-1">
         {/* Page Header */}
-        <section className="bg-oxford-blue py-16 lg:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
-              <h1 className="text-white">About UK Stamp Valuations</h1>
-              <p className="mt-4 text-lg text-white/80 leading-relaxed">
+        <section className="bg-oxford-blue py-16 lg:py-24 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 transform translate-x-1/2 hidden md:block" />
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-3xl">
+              <h1 className="text-white text-4xl md:text-5xl lg:text-7xl font-black mb-6 tracking-tight leading-[1.1]">About Us</h1>
+              <p className="mt-4 text-xl md:text-2xl text-white/80 leading-relaxed font-medium">
                 For over 25 years, we have been helping collectors across the United Kingdom 
                 discover the value of their stamp collections and receive fair prices.
               </p>
@@ -81,43 +83,7 @@ export default function AboutUsPage() {
           </div>
         </section>
 
-        {/* Our Story */}
-        <section className="py-16 lg:py-20" aria-labelledby="story-heading">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 id="story-heading" className="text-primary">Our Story</h2>
-                <div className="mt-6 flex flex-col gap-4 text-muted-foreground leading-relaxed">
-                  <p>
-                    UK Stamp Valuations was founded in 1998 by James Thornton, a lifelong philatelist 
-                    who recognised that many collectors struggled to find trustworthy buyers for their 
-                    cherished collections.
-                  </p>
-                  <p>
-                    What began as a small family operation has grown into one of Britain&apos;s most 
-                    respected stamp valuation services. Today, our team of expert philatelists handles 
-                    thousands of valuations each year, from single rare stamps to comprehensive 
-                    multi-generation collections.
-                  </p>
-                  <p>
-                    Despite our growth, we remain committed to the principles on which we were founded: 
-                    fair prices, honest assessments, and treating every customer and collection with 
-                    the respect they deserve.
-                  </p>
-                </div>
-              </div>
-              <div className="relative aspect-4/3 rounded-lg overflow-hidden">
-                <Image
-                  src="/images/about/office.jpg"
-                  alt="Our valuation office"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
+        <AboutNarrative />
 
         {/* Our Values */}
         <section className="py-16 lg:py-20 bg-secondary" aria-labelledby="values-heading">

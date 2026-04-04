@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/footer'
 import { SellForm } from '@/components/forms/sell-form'
 import { BuyingTable } from '@/components/valuation/buying-table'
 import { ExpertPanel } from '@/components/valuation/expert-panel'
+import { ImportantNotice } from '@/components/sections/important-notice'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calculator, FileText, Verified } from 'lucide-react'
 
@@ -44,6 +45,8 @@ export default function SellYourStampsPage() {
             </div>
           </div>
         </section>
+
+        <ImportantNotice />
 
         <section className="py-12 lg:py-20 -mt-10 md:-mt-16 relative z-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

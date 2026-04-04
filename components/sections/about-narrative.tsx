@@ -1,0 +1,81 @@
+'use client'
+
+import React from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { CheckCircle2 } from 'lucide-react'
+
+export function AboutNarrative() {
+  return (
+    <section className="py-24 lg:py-32 bg-white" aria-labelledby="about-heading text-lg">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          {/* Left Column: Narrative */}
+          <div className="order-2 lg:order-1 space-y-8">
+            <div className="space-y-4">
+              <h2 id="about-heading" className="text-4xl md:text-5xl font-black tracking-tight text-primary">
+                About Us
+              </h2>
+              <p className="text-xl md:text-2xl font-semibold text-forest-green italic">
+                A Heritage of Precision and Fairness
+              </p>
+            </div>
+            
+            <div className="space-y-6 text-slate-700 leading-relaxed text-lg lg:text-xl">
+              <p>
+                UK Stamp Valuations was established over 25 years ago with a single mission: to provide collectors across the United Kingdom with a transparent, expert, and dignified way to discover the true value of their philatelic collections.
+              </p>
+              <p>
+                Founded by James Thornton, a Fellow of the Royal Philatelic Society London, we have grown from a private consultancy into one of Britain&apos;s most trusted independent stamp buyers. We believe that every collection represents years of dedication, and it deserves to be handled with the utmost professional respect.
+              </p>
+              <p>
+                Our independence is our strength. Unlike auction houses that charge seller fees and take months to settle, we provide instant valuations and direct payments, ensuring you receive the maximum value for your collection without the wait.
+              </p>
+            </div>
+
+            {/* Trust Highlight Block */}
+            <div className="bg-primary/5 border-l-4 border-primary p-6 rounded-r-2xl shadow-sm">
+              <div className="flex gap-4">
+                <CheckCircle2 className="h-6 w-6 text-primary shrink-0" />
+                <p className="font-bold text-primary leading-tight">
+                  All collections are carefully checked and professionally assessed by our lead philatelists before any purchase.
+                </p>
+              </div>
+            </div>
+
+            <Button asChild size="lg" className="bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-10 text-lg rounded-xl shadow-lg shadow-forest-green/20">
+              <Link href="/sell-your-stamps">Get a Free Valuation</Link>
+            </Button>
+          </div>
+
+          {/* Right Column: Visual */}
+          <div className="order-1 lg:order-2">
+            <div className="relative group">
+              {/* Decorative background element */}
+              <div className="absolute -inset-4 bg-slate-100 rounded-[2.5rem] -rotate-2 transition-transform group-hover:rotate-0 duration-700" />
+              
+              <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden border-4 border-white shadow-2xl">
+                <Image
+                  src="/images/about/expertise-desk.jpg"
+                  alt="Expert stamp evaluation desk with magnifying glass"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+
+              {/* Float Badge */}
+              <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-2xl border border-slate-50 hidden md:block">
+                <div className="text-center">
+                  <p className="text-3xl font-black text-primary">25+</p>
+                  <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Years Experience</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
