@@ -52,7 +52,7 @@ const products: Product[] = [
   }
 ]
 
-export function BuyingTable() {
+export function BuyingTable({ onAction }: { onAction?: () => void }) {
   const [quantities, setQuantities] = useState<Record<string, number>>(
     products.reduce((acc, p) => ({ ...acc, [p.id]: 0 }), {})
   )
@@ -245,7 +245,7 @@ export function BuyingTable() {
               <div className="bg-primary p-3 rounded-2xl shadow-lg shadow-primary/30">
                 <Calculator className="h-8 w-8 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-black tracking-tight">Est. Valuation</h2>
+              <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white">Est. Valuation</h2>
             </div>
             <p className="text-slate-400 max-w-lg text-lg leading-relaxed">
               This is an instant estimate of what we can pay today. 
@@ -255,12 +255,16 @@ export function BuyingTable() {
 
           <div className="flex flex-col items-center xl:items-end gap-6 w-full xl:w-auto">
             <div className="text-center xl:text-right space-y-1">
-              <span className="text-primary text-sm font-black uppercase tracking-[0.2em]">Total Estimated Payout</span>
+              <span className="text-blue-400 text-sm font-black uppercase tracking-[0.2em]">Total Estimated Payout</span>
               <div className="text-6xl sm:text-7xl lg:text-8xl font-black text-white tracking-tighter font-mono">
                 £{totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             </div>
-            <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-black text-xl h-20 px-12 rounded-2xl shadow-2xl shadow-primary/40 transition-all duration-300 hover:scale-105 active:scale-95 group">
+            <Button 
+              size="lg" 
+              onClick={onAction}
+              className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-black text-xl h-20 px-12 rounded-2xl shadow-2xl shadow-primary/40 transition-all duration-300 hover:scale-105 active:scale-95 group"
+            >
               Submit for Valuation
               <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-1" />
             </Button>
