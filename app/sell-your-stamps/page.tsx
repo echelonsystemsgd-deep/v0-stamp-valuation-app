@@ -2,34 +2,76 @@ import type { Metadata } from 'next'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { SellForm } from '@/components/forms/sell-form'
+import { BuyingTable } from '@/components/valuation/buying-table'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Calculator, FileText, Verified } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Sell Your Stamps',
-  description: 'Get a free, no-obligation valuation for your stamp collection. Our UK-based experts will provide a fair market assessment within 48 hours.',
+  description: 'Instant estimation and selling tool for your modern UK stamp collection. Get a fair price or professional valuation within 48 hours.',
 }
 
 export default function SellYourStampsPage() {
   return (
     <>
       <Header />
-      <main id="main-content" className="flex-1">
+      <main id="main-content" className="flex-1 min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
         {/* Page Header */}
-        <section className="bg-oxford-blue py-16 lg:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
-              <h1 className="text-white">Sell Your Stamps</h1>
-              <p className="mt-4 text-lg text-white/80 leading-relaxed">
-                Complete the form below to receive a free, no-obligation valuation 
-                from our expert team. We will respond within 48 hours.
+        <section className="bg-[#0b1b3d] py-20 lg:py-24 text-white relative overflow-hidden">
+          {/* Accent decoration */}
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 transform translate-x-1/2" />
+          
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 text-center lg:text-left">
+            <div className="max-w-3xl">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 text-primary border border-primary/30 text-xs font-black uppercase tracking-widest mb-6">
+                <Verified className="h-4 w-4" /> Trusted UK Stamp Dealer
+              </span>
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight leading-[1.1]">
+                Sell Your Modern <span className="text-primary italic">Stamps</span>
+              </h1>
+              <p className="mt-4 text-xl md:text-2xl text-slate-300 leading-relaxed max-w-2xl">
+                The fastest way to de-stash your collection. Calculate an instant 
+                estimate below or request a full appraisal for large lots.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Form Section */}
-        <section className="py-12 lg:py-16">
+        {/* Main Selection Area */}
+        <section className="py-12 lg:py-20 -mt-10 lg:-mt-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <SellForm />
+            <Tabs defaultValue="calculate" className="w-full">
+              <div className="flex flex-col items-center mb-12">
+                <TabsList className="h-16 p-1.5 bg-white shadow-2xl shadow-indigo-100/50 border border-slate-100 rounded-2xl w-full max-w-xl">
+                  <TabsTrigger value="calculate" className="flex-1 h-full rounded-xl gap-3 text-base font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white">
+                    <Calculator className="h-5 w-5" /> Instant Calculator
+                  </TabsTrigger>
+                  <TabsTrigger value="form" className="flex-1 h-full rounded-xl gap-3 text-base font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white">
+                    <FileText className="h-5 w-5" /> Request Appraisal
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              <TabsContent value="calculate" className="mt-0">
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between gap-4 mb-4">
+                    <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-800">1. Instant Buying Rates</h2>
+                    <span className="text-sm font-bold text-slate-400">UPDATED: APRIL 2024</span>
+                  </div>
+                  <BuyingTable />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="form" className="mt-0">
+                <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100">
+                  <div className="mb-10 text-center">
+                    <h2 className="text-3xl font-black text-slate-900 mb-3">Professional Stamp Valuation</h2>
+                    <p className="text-slate-500 text-lg">Upload photos of your collection and our experts will provide a detailed appraisal within 48 hours.</p>
+                  </div>
+                  <SellForm />
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         </section>
       </main>
