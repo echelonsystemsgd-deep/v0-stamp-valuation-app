@@ -1,0 +1,65 @@
+import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { featuredProducts } from '@/data/stamps'
+
+export function StampTypesPreview() {
+  return (
+    <section className="py-20 lg:py-24" aria-labelledby="stamp-types-heading">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <h2 id="stamp-types-heading" className="text-primary">
+              What We Buy
+            </h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
+              From rare Victorian stamps to complete collections, we purchase a wide variety of philatelic items at fair market prices.
+            </p>
+          </div>
+          <Button
+            asChild
+            variant="outline"
+            className="shrink-0 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+          >
+            <Link href="/what-we-buy">
+              View All Categories
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+            </Link>
+          </Button>
+        </div>
+
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredProducts.slice(0, 6).map((product) => (
+            <Card
+              key={product.id}
+              className="group overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg"
+            >
+              <div className="relative aspect-4/3 overflow-hidden bg-muted">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+              </div>
+              <CardContent className="p-5">
+                <h3 className="font-serif text-lg font-semibold text-primary group-hover:text-forest-green transition-colors">
+                  {product.name}
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                  {product.description}
+                </p>
+                <p className="mt-3 text-base font-semibold text-forest-green">
+                  {product.priceRange}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
