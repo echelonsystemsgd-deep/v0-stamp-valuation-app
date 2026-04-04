@@ -16,20 +16,19 @@ export default function SellYourStampsPage() {
     <>
       <Header />
       <main id="main-content" className="flex-1 min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
-        {/* Page Header */}
-        <section className="bg-[#0b1b3d] py-20 lg:py-24 text-white relative overflow-hidden">
+        <section className="bg-[#0b1b3d] py-16 md:py-24 lg:py-32 text-white relative overflow-hidden">
           {/* Accent decoration */}
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 transform translate-x-1/2" />
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 transform translate-x-1/2 hidden md:block" />
           
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 text-center lg:text-left">
-            <div className="max-w-3xl">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-4xl mx-auto lg:mx-0 text-center lg:text-left">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 text-primary border border-primary/30 text-xs font-black uppercase tracking-widest mb-6">
                 <Verified className="h-4 w-4" /> Trusted UK Stamp Dealer
               </span>
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight leading-[1.1]">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight leading-[1.1] sm:max-w-3xl">
                 Sell Your Modern <span className="text-primary italic">Stamps</span>
               </h1>
-              <p className="mt-4 text-xl md:text-2xl text-slate-300 leading-relaxed max-w-2xl">
+              <p className="mt-4 text-lg sm:text-xl md:text-2xl text-slate-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 The fastest way to de-stash your collection. Calculate an instant 
                 estimate below or request a full appraisal for large lots.
               </p>
@@ -38,16 +37,16 @@ export default function SellYourStampsPage() {
         </section>
 
         {/* Main Selection Area */}
-        <section className="py-12 lg:py-20 -mt-10 lg:-mt-16">
+        <section className="py-12 lg:py-20 -mt-10 md:-mt-16 relative z-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <Tabs defaultValue="calculate" className="w-full">
               <div className="flex flex-col items-center mb-12">
-                <TabsList className="h-16 p-1.5 bg-white shadow-2xl shadow-indigo-100/50 border border-slate-100 rounded-2xl w-full max-w-xl">
-                  <TabsTrigger value="calculate" className="flex-1 h-full rounded-xl gap-3 text-base font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white">
-                    <Calculator className="h-5 w-5" /> Instant Calculator
+                <TabsList className="h-14 sm:h-16 p-1 bg-white shadow-2xl shadow-indigo-100/50 border border-slate-100 rounded-2xl w-full max-w-xl">
+                  <TabsTrigger value="calculate" className="flex-1 h-full rounded-xl gap-2 sm:gap-3 text-sm sm:text-base font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
+                    <Calculator className="h-4 w-4 sm:h-5 sm:w-5" /> Instant Calculator
                   </TabsTrigger>
-                  <TabsTrigger value="form" className="flex-1 h-full rounded-xl gap-3 text-base font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white">
-                    <FileText className="h-5 w-5" /> Request Appraisal
+                  <TabsTrigger value="form" className="flex-1 h-full rounded-xl gap-2 sm:gap-3 text-sm sm:text-base font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
+                    <FileText className="h-4 w-4 sm:h-5 sm:w-5" /> Request Appraisal
                   </TabsTrigger>
                 </TabsList>
               </div>
