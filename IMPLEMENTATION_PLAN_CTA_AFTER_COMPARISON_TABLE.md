@@ -47,6 +47,7 @@
 ## Shipped
 
 - **2026-04-05:** CTA block added inside the comparison card in `components/home/why-choose-us.tsx` (reassurance copy, “Get a free valuation” → `/sell-your-stamps`, “See what we buy” → `/what-we-buy`).
+- **2026-04-05 (update):** That simple single-block CTA was **replaced** by the dual-band follow-up described in `IMPLEMENTATION_PLAN_DUAL_BAND_CTA_AFTER_COMPARISON.md` (centred hook + muted detail band, catalog-aligned disclaimer, primary + outline secondaries).
 
 ---
 

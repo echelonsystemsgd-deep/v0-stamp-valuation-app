@@ -150,28 +150,72 @@ export function WhyChooseUs() {
             </table>
           </div>
 
-          <div className="mt-8 pt-8 border-t border-border flex flex-col items-center text-center gap-4">
-            <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-              Ready for a straight answer on value? Request a free, no-obligation valuation from our
-              UK specialists—there is nothing to pay upfront.
-            </p>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
-              <Button
-                asChild
-                size="lg"
-                className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-12 sm:h-14 px-8 text-base sm:text-lg w-full sm:w-auto"
+          <section
+            className="mt-8 -mx-6 md:-mx-8 border-t border-border"
+            aria-labelledby="comparison-followup-hook"
+          >
+            <div className="px-6 md:px-8 py-10 md:py-12 text-center">
+              <h4
+                id="comparison-followup-hook"
+                className="text-xl sm:text-2xl font-semibold text-primary tracking-tight"
               >
-                <Link href="/sell-your-stamps">Get a free valuation</Link>
-              </Button>
-              <Button
-                asChild
-                variant="link"
-                className="text-primary font-semibold h-auto py-2 px-2 sm:px-4"
-              >
-                <Link href="/what-we-buy">See what we buy</Link>
-              </Button>
+                Ready to sell your UK stamps?
+              </h4>
+              <p className="mt-3 text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
+                Free valuation · No obligation · UK-based specialists
+              </p>
             </div>
-          </div>
+
+            <div className="px-6 md:px-8 py-10 bg-muted/50 border-t border-border">
+              <div className="max-w-3xl">
+                <p className="text-base font-semibold text-primary">
+                  Send an enquiry—we&apos;re happy to help if you have questions.
+                </p>
+                <p className="mt-3 text-sm text-muted-foreground italic leading-relaxed">
+                  We focus on British decimal and modern UK material. Heavily damaged, non-UK, or
+                  unverifiable lots may be declined—{' '}
+                  <Link
+                    href="/what-we-buy"
+                    className="text-primary font-medium not-italic underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+                  >
+                    see what we buy
+                  </Link>{' '}
+                  for full detail.
+                </p>
+                <div className="mt-6 border-l-4 border-forest-green pl-4">
+                  <p className="text-sm text-foreground leading-relaxed">
+                    We aim for a fair, clear process and prompt payment once we agree a price on
+                    material that fits our buying profile.
+                  </p>
+                </div>
+                <div className="mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-12 sm:h-14 px-8 text-base sm:text-lg w-full sm:w-auto"
+                  >
+                    <Link href="/sell-your-stamps">Get a free valuation</Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="h-12 sm:h-14 px-6 text-base font-semibold w-full sm:w-auto border-forest-green/40 text-primary hover:bg-forest-green/5"
+                  >
+                    <Link href="/what-we-buy">See what we buy</Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="h-12 sm:h-14 px-6 text-base font-semibold w-full sm:w-auto border-forest-green/40 text-primary hover:bg-forest-green/5"
+                  >
+                    <Link href="/contact">Contact</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </section>
