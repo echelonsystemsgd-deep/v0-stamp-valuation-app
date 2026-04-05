@@ -49,7 +49,16 @@ export function SupportPanel() {
             </div>
           </div>
           <button 
-            onClick={() => {
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              setIsVisible(false)
+              setTimeout(() => setIsDismissed(true), 700)
+            }}
+            onTouchEnd={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
               setIsVisible(false)
               setTimeout(() => setIsDismissed(true), 700)
             }}
