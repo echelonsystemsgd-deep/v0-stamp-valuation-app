@@ -105,7 +105,7 @@ export function WhatWeBuyNextSteps() {
         className="bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-8"
       >
         <Link href="/sell-your-stamps" className="gap-2">
-          Get a free valuation
+          Sell your stamps
           <ArrowRight className="h-4 w-4" />
         </Link>
       </Button>

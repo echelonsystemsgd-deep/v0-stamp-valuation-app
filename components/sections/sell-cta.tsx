@@ -42,7 +42,7 @@ export function InlineSellCTA({
                   className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-8 group"
                 >
                   <Link href="/sell-your-stamps" className="flex items-center gap-2">
-                    Start Your Free Valuation
+                    Sell Your Stamps
                     <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>

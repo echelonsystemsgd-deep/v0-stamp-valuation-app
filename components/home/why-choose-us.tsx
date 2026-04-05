@@ -194,7 +194,7 @@ export function WhyChooseUs() {
                     size="lg"
                     className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-12 sm:h-14 px-8 text-base sm:text-lg w-full sm:w-auto"
                   >
-                    <Link href="/sell-your-stamps">Get a free valuation</Link>
+                    <Link href="/sell-your-stamps">Start your free appraisal</Link>
                   </Button>
                   <Button
                     asChild
