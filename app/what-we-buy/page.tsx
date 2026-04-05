@@ -35,12 +35,7 @@ export default function WhatWeBuyPage() {
                   <Verified className="h-4 w-4 text-gold shrink-0" aria-hidden />
                   Trusted UK specialists
                 </span>
-                <Link
-                  href="/buying-rates"
-                  className="text-white font-semibold hover:text-gold underline underline-offset-4 transition-colors"
-                >
-                  Need live rates & totals? →
-                </Link>
+
               </p>
             </div>
           </div>
