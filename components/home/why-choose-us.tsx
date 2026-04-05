@@ -1,4 +1,6 @@
+import Link from 'next/link'
 import { Award, Check, MapPin, ShieldCheck, X, Clock, BadgePoundSterling } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 const pillars = [
   {
@@ -146,6 +148,29 @@ export function WhyChooseUs() {
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-border flex flex-col items-center text-center gap-4">
+            <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
+              Ready for a straight answer on value? Request a free, no-obligation valuation from our
+              UK specialists—there is nothing to pay upfront.
+            </p>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+              <Button
+                asChild
+                size="lg"
+                className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-12 sm:h-14 px-8 text-base sm:text-lg w-full sm:w-auto"
+              >
+                <Link href="/sell-your-stamps">Get a free valuation</Link>
+              </Button>
+              <Button
+                asChild
+                variant="link"
+                className="text-primary font-semibold h-auto py-2 px-2 sm:px-4"
+              >
+                <Link href="/what-we-buy">See what we buy</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
