@@ -20,13 +20,7 @@ export function WhatWeBuyIntroBlock() {
           {p}
         </p>
       ))}
-      <p className="mt-6 text-sm text-slate-500">
-        For line-by-line percentages and quantities, use our{" "}
-        <Link href="/buying-rates" className="font-semibold text-forest-green hover:underline underline-offset-4">
-          detailed buying rates desk
-        </Link>
-        .
-      </p>
+
     </div>
   )
 }
@@ -115,9 +109,7 @@ export function WhatWeBuyNextSteps() {
           <ArrowRight className="h-4 w-4" />
         </Link>
       </Button>
-      <Button asChild variant="outline" size="lg" className="h-14 px-8 font-semibold border-slate-300">
-        <Link href="/buying-rates">Open buying rates desk</Link>
-      </Button>
+
       <Button asChild variant="ghost" size="lg" className="h-14 px-8 font-semibold text-slate-700">
         <Link href="/contact">Contact us</Link>
       </Button>
