@@ -33,8 +33,10 @@ export function BackToTop() {
       variant="secondary"
       size="icon"
       className={cn(
-        'fixed bottom-6 right-6 z-50 h-10 w-10 rounded-full shadow-lg transition-all duration-300 hover:scale-110 focus-visible:ring-2 focus-visible:ring-forest-green',
-        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0 pointer-events-none'
+        'fixed right-6 z-50 h-10 w-10 rounded-full shadow-lg transition-all duration-300 hover:scale-110 focus-visible:ring-2 focus-visible:ring-forest-green',
+        isVisible 
+          ? 'bottom-6 md:bottom-28 opacity-100' 
+          : 'bottom-6 md:bottom-28 opacity-0 pointer-events-none shadow-none'
       )}
       onClick={scrollToTop}
       aria-label="Back to top"
