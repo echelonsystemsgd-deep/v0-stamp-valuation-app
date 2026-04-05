@@ -28,6 +28,7 @@ export interface FormData {
   phone: string
   preferredContact: string
   postcode: string
+  leadSource?: string
 }
 
 const initialFormData: FormData = {
@@ -42,11 +43,26 @@ const initialFormData: FormData = {
   phone: '',
   preferredContact: 'email',
   postcode: '',
+  leadSource: 'direct',
 }
 
-export function SellForm() {
+export interface SellFormProps {
+  initialQuantity?: string
+  initialDescription?: string
+  /** Set when user arrives from homepage calculator lock-in URL (offer_low present). */
+  isLockInOffer?: boolean
+}
+
+export function SellForm({ initialQuantity, initialDescription, isLockInOffer = false }: SellFormProps) {
   const [currentStep, setCurrentStep] = React.useState(1)
-  const [formData, setFormData] = React.useState<FormData>(initialFormData)
+  const [formData, setFormData] = React.useState<FormData>(() => {
+    return {
+      ...initialFormData,
+      quantity: initialQuantity || "",
+      description: initialDescription || "",
+      leadSource: isLockInOffer ? "homepage_calculator" : initialFormData.leadSource,
+    }
+  })
   const [isSubmitted, setIsSubmitted] = React.useState(false)
   const [errors, setErrors] = React.useState<Partial<Record<keyof FormData, string>>>({})
 
@@ -62,16 +78,27 @@ export function SellForm() {
 
   // Persist form data to localStorage (excluding images)
   React.useEffect(() => {
-    const savedData = localStorage.getItem('sell_form_progress')
+    const savedData = localStorage.getItem("sell_form_progress")
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData)
-        setFormData((prev) => ({ ...prev, ...parsedData }))
+        setFormData((prev) => ({
+          ...prev,
+          ...parsedData,
+          quantity: initialQuantity || parsedData.quantity || prev.quantity,
+          description: initialDescription || parsedData.description || prev.description,
+          leadSource: isLockInOffer ? "homepage_calculator" : parsedData.leadSource || prev.leadSource || "direct",
+        }))
       } catch (e) {
-        console.error('Failed to load form progress', e)
+        console.error("Failed to load form progress", e)
       }
+    } else if (isLockInOffer) {
+      setFormData((prev) => ({
+        ...prev,
+        leadSource: "homepage_calculator",
+      }))
     }
-  }, [])
+  }, [initialQuantity, initialDescription, isLockInOffer])
 
   React.useEffect(() => {
     const { images, ...persistentData } = formData
@@ -179,6 +206,7 @@ export function SellForm() {
             <StepIndicator currentStep={currentStep} totalSteps={3} steps={steps} />
             
             <form onSubmit={handleSubmit}>
+              <input type="hidden" name="leadSource" value={formData.leadSource ?? "direct"} />
               {currentStep === 1 && (
                 <CollectionInfoStep
                   formData={formData}

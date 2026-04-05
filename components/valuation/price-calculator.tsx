@@ -64,6 +64,23 @@ export function InteractivePriceCalculator() {
     calculateEstimate()
   }, [calculateEstimate])
 
+  const lockInHref = React.useMemo(() => {
+    const rarityLabelByMultiplier: Record<number, string> = {
+      1: "Standard",
+      2: "Limited",
+      5: "Scarce",
+      10: "Rare",
+    }
+    const rarityLabel = rarityLabelByMultiplier[rarity] ?? String(rarity)
+    const params = new URLSearchParams({
+      offer_low: String(estimate[0]),
+      offer_high: String(estimate[1]),
+      face_value: String(faceValue),
+      condition,
+      rarity: rarityLabel,
+    })
+    return `/sell-your-stamps?${params.toString()}`
+  }, [estimate, faceValue, condition, rarity])
 
   return (
     <section 
@@ -218,7 +235,7 @@ export function InteractivePriceCalculator() {
                    
                    <div className="space-y-4 pt-4">
                       <Button asChild size="lg" className="w-full bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 group">
-                        <a href="/sell-your-stamps">
+                        <a href={lockInHref}>
                            Lock In This Offer <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </a>
                       </Button>
