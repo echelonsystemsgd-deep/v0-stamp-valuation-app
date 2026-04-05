@@ -79,17 +79,16 @@ export function Header() {
             ))}
           </div>
 
-          {/* Desktop CTA */}
           <div className="hidden lg:block">
             <Button
               asChild
               className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold px-6 h-11"
+              suppressHydrationWarning
             >
               <Link href="/sell-your-stamps">Sell Your Stamps</Link>
             </Button>
           </div>
 
-          {/* Mobile Menu */}
           <div className="lg:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
@@ -98,6 +97,7 @@ export function Header() {
                   size="icon" 
                   className="h-11 w-11"
                   aria-label="Open menu"
+                  suppressHydrationWarning
                 >
                   <Menu className="h-6 w-6" />
                 </Button>
