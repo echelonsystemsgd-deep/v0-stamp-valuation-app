@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { BackToTop } from '@/components/layout/back-to-top'
+import { StickyCTA } from '@/components/layout/sticky-cta'
+import { JsonLd } from '@/components/seo/json-ld'
 import { SupportPanel } from '@/components/valuation/expert-panel'
 import './globals.css'
 
@@ -36,11 +39,6 @@ export const viewport: Viewport = {
   initialScale: 1,
   themeColor: '#1B263B',
 }
-
-import { BackToTop } from '@/components/layout/back-to-top'
-import { JsonLd } from '@/components/seo/json-ld'
-
-import { StickyCTA } from '@/components/layout/sticky-cta'
 
 export default function RootLayout({
   children,

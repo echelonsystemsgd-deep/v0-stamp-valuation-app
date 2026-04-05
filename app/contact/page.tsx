@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { ContactForm } from '@/components/forms/contact-form'
 import { Card, CardContent } from '@/components/ui/card'
+import { InlineSellCTA } from '@/components/sections/sell-cta'
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { contactInfo } from '@/data/navigation'
 
@@ -37,8 +39,6 @@ const contactDetails = [
     href: null,
   },
 ]
-
-import { InlineSellCTA } from '@/components/sections/sell-cta'
 
 export default function ContactPage() {
   return (
@@ -103,12 +103,12 @@ export default function ContactPage() {
                   <p className="text-muted-foreground mb-6">
                     For the fastest service, use our specialized valuation form. It helps our experts provide a more accurate initial assessment.
                   </p>
-                  <a
+                  <Link
                     href="/sell-your-stamps"
                     className="inline-flex items-center gap-2 text-forest-green font-bold text-lg hover:gap-3 transition-all"
                   >
                     Start your valuation now &rarr;
-                  </a>
+                  </Link>
                 </div>
               </div>
 

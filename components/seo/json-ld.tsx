@@ -24,7 +24,7 @@ export function JsonLd({ type, data }: JsonLdProps) {
         '@type': 'PostalAddress',
         streetAddress: '123 Philately House',
         addressLocality: 'London',
-        postalCode: 'EC1A 1BB',
+        postalCode: 'EC1A 1AA',
         addressCountry: 'GB',
       },
       geo: {
