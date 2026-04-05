@@ -1,9 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { 
   Select, 
@@ -14,7 +13,7 @@ import {
 } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
 import { Badge } from '@/components/ui/badge'
-import { Info, Calculator, ArrowRight, ShieldCheck, HelpCircle } from 'lucide-react'
+import { Calculator, ArrowRight, ShieldCheck, HelpCircle } from 'lucide-react'
 import { 
   Tooltip, 
   TooltipContent, 
@@ -22,6 +21,8 @@ import {
   TooltipTrigger 
 } from '@/components/ui/tooltip'
 import CountUp from 'react-countup'
+import { cn } from '@/lib/utils'
+import { useDebounce } from '@/lib/hooks'
 
 export function InteractivePriceCalculator() {
   const [faceValue, setFaceValue] = React.useState<number>(100)
@@ -29,6 +30,13 @@ export function InteractivePriceCalculator() {
   const [rarity, setRarity] = React.useState<number>(1) // Multiplier
   const [centering, setCentering] = React.useState<number>(80) // %
   const [estimate, setEstimate] = React.useState<[number, number]>([0, 0])
+
+  // Debounce values that update frequently via sliders
+  const debouncedFaceValue = useDebounce(faceValue, 150)
+  const debouncedCentering = useDebounce(centering, 150)
+
+  // Track dragging state to disable expensive filters
+  const [isDragging, setIsDragging] = React.useState(false)
 
   const calculateEstimate = React.useCallback(() => {
     // Basic logic for demonstration
@@ -41,23 +49,30 @@ export function InteractivePriceCalculator() {
     else baseRate = 0.15
 
     // Centering multiplier (80% is neutral)
-    const centeringMult = centering / 80
+    const centeringMult = debouncedCentering / 80
 
-    const baseAmount = faceValue * baseRate * rarity * centeringMult
+    const baseAmount = debouncedFaceValue * baseRate * rarity * centeringMult
     
     // Range of ±15%
     const low = Math.round(baseAmount * 0.85)
     const high = Math.round(baseAmount * 1.15)
     
     setEstimate([low, high])
-  }, [faceValue, condition, rarity, centering])
+  }, [debouncedFaceValue, condition, rarity, debouncedCentering])
 
   React.useEffect(() => {
     calculateEstimate()
   }, [calculateEstimate])
 
+
   return (
-    <section className="py-20 bg-secondary/30 bg-grainy-paper" aria-labelledby="calculator-heading">
+    <section 
+      className={cn(
+        "py-20 bg-secondary/30 transition-colors duration-200",
+        !isDragging && "bg-grainy-paper"
+      )} 
+      aria-labelledby="calculator-heading"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge variant="outline" className="mb-4 gap-1.5 px-3 border-forest-green/20 text-forest-green bg-forest-green/5 font-bold uppercase tracking-widest text-[10px]">
@@ -91,6 +106,9 @@ export function InteractivePriceCalculator() {
                       max={1000} 
                       step={10} 
                       onValueChange={(val) => setFaceValue(val[0])}
+                      onPointerDown={() => setIsDragging(true)}
+                      onPointerUp={() => setIsDragging(false)}
+                      onPointerLeave={() => setIsDragging(false)}
                     />
                     <div className="flex justify-between text-[10px] text-slate-400 font-black uppercase">
                        <span>£0</span>
@@ -155,6 +173,9 @@ export function InteractivePriceCalculator() {
                       min={40} 
                       step={5} 
                       onValueChange={(val) => setCentering(val[0])}
+                      onPointerDown={() => setIsDragging(true)}
+                      onPointerUp={() => setIsDragging(false)}
+                      onPointerLeave={() => setIsDragging(false)}
                     />
                     <div className="flex justify-between text-[10px] text-slate-400 font-black uppercase">
                        <span>Off-Center</span>
@@ -167,7 +188,10 @@ export function InteractivePriceCalculator() {
           </div>
 
           <div className="lg:col-span-5">
-             <Card className="bg-oxford-blue text-white border-none shadow-2xl overflow-hidden relative glassmorphism !bg-oxford-blue/90 border-white/20">
+             <Card className={cn(
+               "bg-oxford-blue text-white border-none shadow-2xl overflow-hidden relative border-white/20 transition-all duration-300 will-change-transform",
+               !isDragging ? "glassmorphism !bg-oxford-blue/90" : "bg-oxford-blue"
+             )}>
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 -skew-x-12 transform translate-x-1/2 -translate-y-1/2" />
                 <CardHeader className="text-center pt-10">
                    <p className="text-white/60 text-xs font-black uppercase tracking-widest mb-2">Estimated Market Value</p>

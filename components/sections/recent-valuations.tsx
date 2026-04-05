@@ -36,7 +36,7 @@ const recentValuations = [
   }
 ]
 
-export function RecentValuations() {
+export const RecentValuations = React.memo(function RecentValuations() {
   return (
     <section className="py-16 bg-white border-y border-slate-100" aria-labelledby="valuations-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -97,4 +97,5 @@ export function RecentValuations() {
       </div>
     </section>
   )
-}
+})
+

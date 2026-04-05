@@ -22,7 +22,7 @@ const heroImages = [
   },
 ]
 
-export function HeroSlideshow() {
+export const HeroSlideshow = React.memo(function HeroSlideshow() {
   const [currentIndex, setCurrentIndex] = React.useState(0)
 
   React.useEffect(() => {
@@ -112,4 +112,5 @@ export function HeroSlideshow() {
       </div>
     </section>
   )
-}
+})
+

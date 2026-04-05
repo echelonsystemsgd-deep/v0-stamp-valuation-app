@@ -35,7 +35,7 @@ const steps = [
   }
 ]
 
-export function ValuationQuiz() {
+export const ValuationQuiz = React.memo(function ValuationQuiz() {
   const [currentStep, setCurrentStep] = React.useState(0)
   const [answers, setAnswers] = React.useState<string[]>([])
   const [isFinished, setIsFinished] = React.useState(false)
@@ -128,7 +128,8 @@ export function ValuationQuiz() {
       </div>
     </section>
   )
-}
+})
+
 
 function Badge({ children, variant, className }: any) {
   return (
