@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu } from 'lucide-react'
+import { Menu, PhoneCall } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -12,10 +12,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { mainNavigation } from '@/data/navigation'
+import { mainNavigation, contactInfo } from '@/data/navigation'
 import { cn } from '@/lib/utils'
 import { PageBreadcrumbs } from '@/components/layout/breadcrumbs'
-import { TextSizeToggle } from '@/components/layout/text-size-toggle'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false)
@@ -82,7 +81,18 @@ export function Header() {
           </div>
 
           <div className="hidden lg:flex items-center gap-6">
-            <TextSizeToggle />
+            <div className="flex flex-col items-end mr-2">
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+                Need Expert Advice?
+              </span>
+              <a 
+                href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} 
+                className="flex items-center gap-2 text-forest-green hover:text-forest-green/80 transition-colors group"
+              >
+                <PhoneCall className="h-4 w-4" />
+                <span className="font-bold tracking-tight text-lg">{contactInfo.phone}</span>
+              </a>
+            </div>
             <Button
               asChild
               className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold px-6 h-11"
@@ -127,7 +137,17 @@ export function Header() {
                       {item.label}
                     </Link>
                   ))}
-                  <div className="mt-6 px-4">
+                  <div className="mt-8 px-4 py-6 bg-muted/30 rounded-xl border border-border/50">
+                    <p className="text-sm text-muted-foreground mb-3 font-medium">Need Expert Advice?</p>
+                    <a 
+                      href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} 
+                      className="flex items-center gap-3 text-forest-green font-bold text-xl mb-6 hover:opacity-80 transition-opacity"
+                    >
+                      <div className="bg-forest-green/10 p-2.5 rounded-full">
+                        <PhoneCall className="h-5 w-5" />
+                      </div>
+                      {contactInfo.phone}
+                    </a>
                     <Button
                       asChild
                       className="w-full bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-12"

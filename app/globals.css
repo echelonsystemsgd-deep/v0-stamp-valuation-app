@@ -210,11 +210,3 @@
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   }
 }
-
-.text-size-large body {
-  font-size: 22px !important;
-}
-
-.text-size-large h1 {
-  font-size: 72px !important;
-}
