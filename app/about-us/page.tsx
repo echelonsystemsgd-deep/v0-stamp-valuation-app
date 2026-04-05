@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { Header } from '@/components/layout/header'
@@ -9,36 +8,11 @@ import { Award, Shield, Users, CheckCircle } from 'lucide-react'
 import { AboutNarrative } from '@/components/sections/about-narrative'
 import { Testimonials } from '@/components/sections/testimonials'
 import { InlineSellCTA } from '@/components/sections/sell-cta'
-import { getBlurPlaceholder } from '@/lib/image-utils'
 
 export const metadata: Metadata = {
   title: 'About Us',
   description: 'Learn about UK Stamp Valuations - over 25 years of expertise in stamp valuation and philately. Meet our team of expert valuers.',
 }
-
-const teamMembers = [
-  {
-    name: 'James Thornton',
-    role: 'Founder & Lead Valuer',
-    image: '/images/team/james-thornton.jpg',
-    bio: 'With over 30 years in philately, James founded UK Stamp Valuations to provide fair, expert valuations to collectors across Britain.',
-    credentials: 'Fellow of the Royal Philatelic Society London',
-  },
-  {
-    name: 'Sarah Mitchell',
-    role: 'Senior Philatelist',
-    image: '/images/team/sarah-mitchell.jpg',
-    bio: 'Sarah specialises in Victorian and Edwardian stamps, with particular expertise in GB line-engraved issues and surface-printed stamps.',
-    credentials: 'Member of the Great Britain Philatelic Society',
-  },
-  {
-    name: 'David Chambers',
-    role: 'Commonwealth Specialist',
-    image: '/images/team/david-chambers.jpg',
-    bio: 'David brings 15 years of expertise in Commonwealth stamps, with deep knowledge of Australian, Canadian, and New Zealand issues.',
-    credentials: 'British Philatelic Trust certified appraiser',
-  },
-]
 
 const values = [
   {
@@ -106,41 +80,6 @@ export default function AboutUsPage() {
                     </div>
                     <h3 className="font-serif text-xl font-semibold text-primary">{value.title}</h3>
                     <p className="mt-3 text-muted-foreground">{value.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Meet the Team */}
-        <section className="py-16 lg:py-20" aria-labelledby="team-heading">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-12">
-              <h2 id="team-heading" className="text-primary">Meet Our Team</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Our expert valuers bring decades of combined experience in philately.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {teamMembers.map((member) => (
-                <Card key={member.name} className="overflow-hidden">
-                  <div className="relative aspect-square">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      placeholder="blur"
-                      blurDataURL={getBlurPlaceholder(400, 400)}
-                    />
-                  </div>
-                  <CardContent className="p-6">
-                    <h3 className="font-serif text-xl font-semibold text-primary">{member.name}</h3>
-                    <p className="text-sm text-forest-green font-medium mt-1">{member.role}</p>
-                    <p className="mt-3 text-sm text-muted-foreground">{member.bio}</p>
-                    <p className="mt-3 text-xs text-muted-foreground italic">{member.credentials}</p>
                   </CardContent>
                 </Card>
               ))}
