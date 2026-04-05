@@ -46,24 +46,24 @@ This document outlines the strategy for elevating the visual aesthetic, authorit
 ## 🛠 Progress Checklist
 
 ### Phase 1: Authority & Social Proof
-- [ ] Develop and integrate the `AssociationBar` logo scroll
-- [ ] Add Expert Signatures to the "About Us" team section
-- [ ] Implement "Live Valuation" pulse animations
+- [x] Develop and integrate the `AssociationBar` logo scroll
+- [x] Add Expert Signatures to the "About Us" team section
+- [x] Implement "Live Valuation" pulse animations
 
 ### Phase 2: Visual Texture & Depth
-- [ ] Create paper-texture background utilities in `globals.css`
-- [ ] Refactor main UI cards to use a premium glassmorphic style
-- [ ] Implement subtle scroll-parallax for hero images
+- [x] Create paper-texture background utilities in `globals.css`
+- [x] Refactor main UI cards to use a premium glassmorphic style
+- [x] Implement subtle scroll-parallax for hero images
 
 ### Phase 3: Interactive Valuation Tools
-- [ ] Add animated counters to the `PriceCalculator`
-- [ ] Build the `ConditionComparison` side-by-side slider
-- [ ] Develop the "Quick Value" Pre-qualification Quiz
+- [x] Add animated counters to the `PriceCalculator`
+- [x] Build the `ConditionComparison` side-by-side slider
+- [x] Develop the "Quick Value" Pre-qualification Quiz
 
 ### Phase 4: Senior-Friendly Accessibility
-- [ ] Implement the `TextSizeToggle` in the global `Header`
-- [ ] Review and adjust line-heights and contrast across the platform
-- [ ] Ensure all serif headings meet AA accessibility standards
+- [x] Implement the `TextSizeToggle` in the global `Header`
+- [x] Review and adjust line-heights and contrast across the platform
+- [x] Ensure all serif headings meet AA accessibility standards
 
 ---
 

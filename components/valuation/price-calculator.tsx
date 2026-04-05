@@ -21,6 +21,7 @@ import {
   TooltipProvider, 
   TooltipTrigger 
 } from '@/components/ui/tooltip'
+import CountUp from 'react-countup'
 
 export function InteractivePriceCalculator() {
   const [faceValue, setFaceValue] = React.useState<number>(100)
@@ -56,7 +57,7 @@ export function InteractivePriceCalculator() {
   }, [calculateEstimate])
 
   return (
-    <section className="py-20 bg-secondary/30" aria-labelledby="calculator-heading">
+    <section className="py-20 bg-secondary/30 bg-grainy-paper" aria-labelledby="calculator-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge variant="outline" className="mb-4 gap-1.5 px-3 border-forest-green/20 text-forest-green bg-forest-green/5 font-bold uppercase tracking-widest text-[10px]">
@@ -165,14 +166,17 @@ export function InteractivePriceCalculator() {
             </Card>
           </div>
 
-          {/* Output */}
           <div className="lg:col-span-5">
-             <Card className="bg-oxford-blue text-white border-none shadow-2xl overflow-hidden relative">
+             <Card className="bg-oxford-blue text-white border-none shadow-2xl overflow-hidden relative glassmorphism !bg-oxford-blue/90 border-white/20">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 -skew-x-12 transform translate-x-1/2 -translate-y-1/2" />
                 <CardHeader className="text-center pt-10">
                    <p className="text-white/60 text-xs font-black uppercase tracking-widest mb-2">Estimated Market Value</p>
-                   <CardTitle className="text-5xl md:text-6xl font-black tracking-tighter text-white">
-                      £{estimate[0]} – £{estimate[1]}
+                   <CardTitle className="text-5xl md:text-6xl font-black tracking-tighter text-white flex items-center justify-center gap-1">
+                      <span>£</span>
+                      <CountUp end={estimate[0]} duration={0.8} />
+                      <span>–</span>
+                      <span>£</span>
+                      <CountUp end={estimate[1]} duration={0.8} />
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="p-8 space-y-6">

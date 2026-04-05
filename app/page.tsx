@@ -9,6 +9,7 @@ import { Testimonials } from '@/components/sections/testimonials'
 import { RecentValuations } from '@/components/sections/recent-valuations'
 import { GradingGuide } from '@/components/sections/grading-guide'
 import { InteractivePriceCalculator } from '@/components/valuation/price-calculator'
+import { ValuationQuiz } from '@/components/sections/valuation-quiz'
 
 export default function HomePage() {
   return (
@@ -19,6 +20,7 @@ export default function HomePage() {
         <InteractivePriceCalculator />
         <HowItWorks />
         <StampTypesPreview />
+        <ValuationQuiz />
         <RecentValuations />
         <TrustIndicators />
         <GradingGuide />

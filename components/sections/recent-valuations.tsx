@@ -49,7 +49,11 @@ export function RecentValuations() {
             </p>
           </div>
           <Badge variant="outline" className="h-8 gap-1.5 px-3 border-forest-green/20 text-forest-green bg-forest-green/5 font-bold">
-            <Clock className="w-3.5 h-3.5" /> Updated Live
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-forest-green opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-forest-green"></span>
+            </span>
+            Updated Live
           </Badge>
         </div>
 

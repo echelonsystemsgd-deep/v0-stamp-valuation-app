@@ -4,6 +4,7 @@ import * as React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CheckCircle, Info } from 'lucide-react'
 import Image from 'next/image'
+import { ImageComparison } from '@/components/ui/image-comparison'
 
 const conditions = [
   {
@@ -40,26 +41,40 @@ export function GradingGuide() {
   return (
     <section className="py-20 bg-oxford-blue text-white" aria-labelledby="grading-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row gap-12 items-center mb-16">
-          <div className="flex-1 text-center lg:text-left">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-20">
+          <div className="lg:col-span-7 text-center lg:text-left">
             <h2 id="grading-heading" className="text-white mb-6">Condition & Grading Guide</h2>
             <p className="text-xl text-white/70 leading-relaxed max-w-2xl font-medium mx-auto lg:mx-0">
                Understanding the condition of your stamps is the first step to an accurate valuation. 
                We grade every item based on these international philatelic standards.
             </p>
-          </div>
-          <div className="flex-shrink-0 bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 max-w-md">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-forest-green/20 flex items-center justify-center shrink-0">
-                <Info className="w-5 h-5 text-forest-green" />
-              </div>
-              <div>
-                 <p className="font-serif font-black text-white text-lg mb-2">Expert Tip</p>
-                 <p className="text-sm text-white/60">
-                   "Centering" also plays a major role in valuation—the more symmetrical the margins, the higher the grade.
-                 </p>
+            <div className="mt-10 p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 inline-block text-left">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-forest-green/20 flex items-center justify-center shrink-0">
+                  <Info className="w-5 h-5 text-forest-green" />
+                </div>
+                <div>
+                   <p className="font-serif font-black text-white text-lg mb-2">Expert Tip</p>
+                   <p className="text-sm text-white/60">
+                     "Centering" also plays a major role—the more symmetrical the margins, the higher the grade. 
+                     Use the slider to compare MH vs MNH.
+                   </p>
+                </div>
               </div>
             </div>
+          </div>
+          
+          <div className="lg:col-span-5 relative group">
+             <div className="absolute -inset-4 bg-forest-green/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+             <ImageComparison 
+               beforeImage="/images/grading/mh-example.jpg" 
+               afterImage="/images/grading/mnh-example.jpg"
+               beforeLabel="Mint Hinged (MH)"
+               afterLabel="Never Hinged (MNH)"
+             />
+             <p className="text-center mt-4 text-[10px] uppercase font-black tracking-widest text-white/30">
+                Interactive: Drag the slider to compare
+             </p>
           </div>
         </div>
 

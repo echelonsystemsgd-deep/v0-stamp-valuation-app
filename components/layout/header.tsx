@@ -14,7 +14,8 @@ import {
 } from '@/components/ui/sheet'
 import { mainNavigation } from '@/data/navigation'
 import { cn } from '@/lib/utils'
-import { PageBreadcrumbs } from './breadcrumbs'
+import { PageBreadcrumbs } from '@/components/layout/breadcrumbs'
+import { TextSizeToggle } from '@/components/layout/text-size-toggle'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false)
@@ -80,7 +81,8 @@ export function Header() {
             ))}
           </div>
 
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex items-center gap-6">
+            <TextSizeToggle />
             <Button
               asChild
               className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold px-6 h-11"
