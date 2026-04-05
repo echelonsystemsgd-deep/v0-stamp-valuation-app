@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Award, Shield, Users, CheckCircle } from 'lucide-react'
 import { AboutNarrative } from '@/components/sections/about-narrative'
 import { Testimonials } from '@/components/sections/testimonials'
+import { InlineSellCTA } from '@/components/sections/sell-cta'
 import { getBlurPlaceholder } from '@/lib/image-utils'
 
 export const metadata: Metadata = {
@@ -174,34 +175,13 @@ export default function AboutUsPage() {
 
         <Testimonials />
 
-        {/* CTA Section */}
-        <section className="py-16 lg:py-20" aria-labelledby="cta-heading">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto">
-              <h2 id="cta-heading" className="text-primary">Ready to Work With Us?</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Get in touch today for a free, no-obligation valuation of your stamp collection.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-14 px-8 text-lg"
-                >
-                  <Link href="/sell-your-stamps">Get Your Free Valuation</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold h-14 px-8 text-lg"
-                >
-                  <Link href="/contact">Contact Us</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-20 lg:mb-24">
+          <InlineSellCTA 
+            variant="featured" 
+            title="Is your collection the next we value?"
+            description="Our expert team is ready to provide a fair, professional assessment of your stamp collection. No matter the size, we treat every collector with respect."
+          />
+        </div>
       </main>
       <Footer />
     </>

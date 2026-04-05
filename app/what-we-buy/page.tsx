@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: 'View the types of stamps and collections we purchase. From Penny Blacks to complete albums, we buy a wide variety of philatelic items at fair market prices.',
 }
 
+import { InlineSellCTA } from '@/components/sections/sell-cta'
+
 export default function WhatWeBuyPage() {
   return (
     <>
@@ -17,8 +19,8 @@ export default function WhatWeBuyPage() {
         <section className="bg-oxford-blue py-16 lg:py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl">
-              <h1 className="text-white">What We Buy</h1>
-              <p className="mt-4 text-lg text-white/80 leading-relaxed">
+              <h1 className="text-white text-4xl md:text-5xl font-black mb-6 tracking-tight leading-[1.1]">What We Buy</h1>
+              <p className="mt-4 text-xl text-white/80 leading-relaxed font-medium">
                 We purchase a wide variety of stamps and philatelic items at fair market prices. 
                 Browse our categories below to see what your collection might be worth.
               </p>
@@ -30,6 +32,16 @@ export default function WhatWeBuyPage() {
         <section className="py-12 lg:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <ProductGrid />
+          </div>
+        </section>
+
+        <section className="pb-20 lg:pb-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <InlineSellCTA 
+              variant="dark"
+              title="Have these stamps in your collection?"
+              description="Don't let your stamps gather dust. Turn them into cash today with our expert, fair, and professional buying service."
+            />
           </div>
         </section>
       </main>

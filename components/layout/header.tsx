@@ -95,7 +95,7 @@ export function Header() {
             </div>
             <Button
               asChild
-              className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold px-6 h-11"
+              className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold px-6 h-11 animate-pulse-subtle shadow-[0_0_0_0_rgba(45,106,79,0.4)]"
               suppressHydrationWarning
             >
               <Link href="/sell-your-stamps">Sell Your Stamps</Link>

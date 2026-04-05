@@ -42,6 +42,8 @@ import { JsonLd } from '@/components/seo/json-ld'
 
 import { AssociationBar } from '@/components/sections/association-bar'
 
+import { StickyCTA } from '@/components/layout/sticky-cta'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -54,6 +56,7 @@ export default function RootLayout({
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <AssociationBar />
         <SupportPanel />
+        <StickyCTA />
         <BackToTop />
         <JsonLd type="LocalBusiness" data={{}} />
       </body>

@@ -31,6 +31,8 @@ const trustPoints = [
   },
 ]
 
+import { InlineSellCTA } from '@/components/sections/sell-cta'
+
 export default function HowToSellPage() {
   return (
     <>
@@ -40,8 +42,8 @@ export default function HowToSellPage() {
         <section className="bg-oxford-blue py-16 lg:py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl">
-              <h1 className="text-white">How to Sell Your Stamps</h1>
-              <p className="mt-4 text-lg text-white/80 leading-relaxed">
+              <h1 className="text-white text-4xl md:text-5xl font-black mb-6 tracking-tight leading-[1.1]">How to Sell Your Stamps</h1>
+              <p className="mt-4 text-xl text-white/80 leading-relaxed font-medium">
                 Our straightforward process makes selling your stamp collection simple and stress-free. 
                 From free valuations to secure shipping and fast payment, we handle everything.
               </p>
@@ -119,35 +121,13 @@ export default function HowToSellPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-16 lg:py-20" aria-labelledby="cta-heading">
+        <section className="py-20 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto">
-              <h2 id="cta-heading" className="text-primary">Ready to Get Started?</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Get your free, no-obligation valuation today. Our team is ready to help you discover the value of your collection.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-14 px-8 text-lg"
-                >
-                  <Link href="/sell-your-stamps">Get Your Free Valuation</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold h-14 px-8 text-lg"
-                >
-                  <Link href="/contact">Contact Us</Link>
-                </Button>
-              </div>
-              <p className="mt-6 text-sm text-muted-foreground">
-                No obligation to sell. Valuations typically provided within 48 hours.
-              </p>
-            </div>
+            <InlineSellCTA 
+              variant="featured"
+              title="Ready to Start the Process?"
+              description="Join thousands of UK collectors who have trusted us with their collections. Our expert team is ready to provide a fair, professional assessment today."
+            />
           </div>
         </section>
       </main>
