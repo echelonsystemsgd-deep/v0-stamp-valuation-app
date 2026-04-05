@@ -1,6 +1,5 @@
 export const mainNavigation = [
   { label: 'Home', href: '/' },
-  { label: 'What We Buy', href: '/what-we-buy' },
   { label: 'How to Sell', href: '/how-to-sell' },
   { label: 'About Us', href: '/about-us' },
   { label: 'Contact', href: '/contact' },
@@ -9,7 +8,6 @@ export const mainNavigation = [
 export const footerNavigation = {
   services: [
     { label: 'Stamp Valuations', href: '/sell-your-stamps' },
-    { label: 'What We Buy', href: '/what-we-buy' },
     { label: 'How to Sell', href: '/how-to-sell' },
   ],
   company: [
