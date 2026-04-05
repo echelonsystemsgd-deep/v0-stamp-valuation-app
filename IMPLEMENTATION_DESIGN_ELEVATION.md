@@ -46,7 +46,7 @@ This document outlines the strategy for elevating the visual aesthetic, authorit
 ## 🛠 Progress Checklist
 
 ### Phase 1: Authority & Social Proof
-- [x] Develop and integrate the `AssociationBar` logo scroll
+- [x] Removed `AssociationBar` (Client non-membership)
 - [x] Add Expert Signatures to the "About Us" team section
 - [x] Implement "Live Valuation" pulse animations
 

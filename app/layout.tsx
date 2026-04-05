@@ -40,8 +40,6 @@ export const viewport: Viewport = {
 import { BackToTop } from '@/components/layout/back-to-top'
 import { JsonLd } from '@/components/seo/json-ld'
 
-import { AssociationBar } from '@/components/sections/association-bar'
-
 import { StickyCTA } from '@/components/layout/sticky-cta'
 
 export default function RootLayout({
@@ -54,7 +52,6 @@ export default function RootLayout({
       <body className="font-sans antialiased min-h-screen flex flex-col">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
-        <AssociationBar />
         <SupportPanel />
         <StickyCTA />
         <BackToTop />
