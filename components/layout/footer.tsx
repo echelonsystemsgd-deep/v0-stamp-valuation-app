@@ -1,9 +1,21 @@
+'use client'
+
+import React from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { footerNavigation, contactInfo } from '@/data/navigation'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
+  const pathname = usePathname()
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === '/') {
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
 
   return (
     <footer className="bg-primary text-primary-foreground" role="contentinfo">
@@ -13,8 +25,8 @@ export function Footer() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {/* Brand Column */}
             <div className="lg:col-span-1">
-              <Link href="/" className="inline-block">
-                <span className="font-serif text-2xl font-bold text-primary-foreground">
+              <Link href="/" onClick={handleLogoClick} className="inline-block group focus:outline-none focus:ring-2 focus:ring-gold rounded-sm px-1 -mx-1">
+                <span className="font-serif text-2xl font-bold text-primary-foreground group-hover:text-gold transition-colors">
                   UK Stamp Valuations
                 </span>
               </Link>

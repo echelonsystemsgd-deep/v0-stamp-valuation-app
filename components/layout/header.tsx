@@ -21,6 +21,13 @@ export function Header() {
   const [isOpen, setIsOpen] = React.useState(false)
   const pathname = usePathname()
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === '/') {
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   React.useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
@@ -50,6 +57,7 @@ export function Header() {
           {/* Logo */}
           <Link 
             href="/" 
+            onClick={handleLogoClick}
             className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
           >
             <div className="flex flex-col">
