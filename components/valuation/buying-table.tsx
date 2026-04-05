@@ -17,7 +17,13 @@ const getImageForProduct = (item: BuyingRateItem) => {
 }
 
 export function BuyingTable({ onAction }: { onAction?: () => void }) {
-  const [quantities, setQuantities] = useState<Record<string, number>>(
+  const [isMounted, setIsMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  const [quantities, setQuantities] = useState<Record<string, number>>(() =>
     buyingRates.reduce((acc, p) => ({ ...acc, [p.id]: 0 }), {})
   )
 
@@ -41,27 +47,23 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
     return calculatePurchaseTotal(item.faceValue, quantities[item.id] || 0, item.rate)
   }
 
-  const [isMounted, setIsMounted] = React.useState(false)
-
-  React.useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
   const totalValue = buyingRates.reduce((acc, item) => acc + calculateSubtotal(item), 0)
 
   // Group by category
-  const groupedRates = buyingRates.reduce((acc, item) => {
-    if (!acc[item.category]) acc[item.category] = []
-    acc[item.category].push(item)
-    return acc
-  }, {} as Record<string, BuyingRateItem[]>)
+  const groupedRates = React.useMemo(() => {
+    return buyingRates.reduce((acc, item) => {
+      if (!acc[item.category]) acc[item.category] = []
+      acc[item.category].push(item)
+      return acc
+    }, {} as Record<string, BuyingRateItem[]>)
+  }, [])
 
   return (
-    <div className="w-full space-y-12">
+    <div className="w-full space-y-12" suppressHydrationWarning>
       {Object.entries(groupedRates).map(([category, items]) => (
         <div key={category} className="space-y-6">
           <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-black text-slate-800 tracking-tight">{category} Rates</h2>
+            <h3 className="text-xl font-black text-slate-800 tracking-tight">{category} Rates</h3>
             <div className="h-px flex-1 bg-slate-200" />
           </div>
 
@@ -104,7 +106,11 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
                       </div>
                       <div className="text-right font-medium text-slate-600 font-mono">£{item.faceValue.toFixed(2)}</div>
                       <div className="text-right">
-                        <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1 font-bold whitespace-nowrap">
+                        <Badge 
+                          variant="outline" 
+                          className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1 font-bold whitespace-nowrap"
+                          suppressHydrationWarning
+                        >
                           {(item.rate * 100).toFixed(item.rate % 0.01 === 0 ? 0 : 1)}%
                         </Badge>
                       </div>
@@ -115,6 +121,7 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
                             size="icon"
                             className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-r"
                             onClick={() => updateQuantity(item.id, -1)}
+                            suppressHydrationWarning
                           >
                             <Minus className="h-4 w-4" />
                           </Button>
@@ -124,12 +131,14 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
                             onChange={(e) => handleInputChange(item.id, e.target.value)}
                             className="h-10 w-16 border-0 bg-transparent text-center font-bold text-lg focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             placeholder="0"
+                            suppressHydrationWarning
                           />
                           <Button
                             variant="ghost"
                             size="icon"
                             className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-l"
                             onClick={() => updateQuantity(item.id, 1)}
+                            suppressHydrationWarning
                           >
                             <Plus className="h-4 w-4" />
                           </Button>
@@ -176,7 +185,7 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
                     </div>
                     <div className="space-y-1.5 pl-4">
                       <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black">Our Rate</span>
-                      <div>
+                      <div suppressHydrationWarning>
                         <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 font-bold px-3 py-0.5">
                           {(item.rate * 100).toFixed(item.rate % 0.01 === 0 ? 0 : 1)}%
                         </Badge>
@@ -191,6 +200,7 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
                         size="icon"
                         className="h-14 w-14 rounded-none text-muted-foreground border-r"
                         onClick={() => updateQuantity(item.id, -1)}
+                        suppressHydrationWarning
                       >
                         <Minus className="h-6 w-6" />
                       </Button>
@@ -200,12 +210,14 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
                         onChange={(e) => handleInputChange(item.id, e.target.value)}
                         className="h-14 w-20 border-0 bg-transparent text-center text-2xl font-black focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         placeholder="0"
+                        suppressHydrationWarning
                       />
                       <Button
                         variant="ghost"
                         size="icon"
                         className="h-14 w-14 rounded-none text-muted-foreground border-l"
                         onClick={() => updateQuantity(item.id, 1)}
+                        suppressHydrationWarning
                       >
                         <Plus className="h-6 w-6" />
                       </Button>

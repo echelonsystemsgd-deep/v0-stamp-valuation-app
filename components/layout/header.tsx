@@ -96,6 +96,7 @@ export function Header() {
               <a 
                 href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} 
                 className="flex items-center gap-2 text-forest-green hover:text-forest-green/80 transition-colors group"
+                suppressHydrationWarning
               >
                 <PhoneCall className="h-4 w-4" />
                 <span className="font-bold tracking-tight text-lg">{contactInfo.phone}</span>
@@ -160,6 +161,7 @@ export function Header() {
                       asChild
                       className="w-full bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-12"
                       onClick={() => setIsOpen(false)}
+                      suppressHydrationWarning
                     >
                       <Link href="/sell-your-stamps">Sell Your Stamps</Link>
                     </Button>

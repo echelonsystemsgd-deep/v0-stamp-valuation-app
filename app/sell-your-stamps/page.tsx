@@ -12,7 +12,7 @@ import { Calculator, FileText, Verified } from 'lucide-react'
 export default function SellYourStampsPage() {
   const [activeTab, setActiveTab] = useState("calculate")
 
-  const handleValuationAction = () => {
+  const handleValuationAction = React.useCallback(() => {
     setActiveTab("form")
     setTimeout(() => {
       const formSection = document.getElementById('appraisal-form-header')
@@ -20,7 +20,7 @@ export default function SellYourStampsPage() {
         formSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
     }, 100)
-  }
+  }, [])
   return (
     <>
       <Header />
