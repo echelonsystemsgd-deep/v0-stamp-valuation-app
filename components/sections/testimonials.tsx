@@ -30,7 +30,8 @@ const testimonials = [
   {
     name: 'David Millington',
     location: 'Cardiff, Wales',
-    content: 'Fast, efficient, and transparent. The interactive calculator gave me a great starting point, and the final appraisal was even better. Truly experts in their field.',
+    content:
+      'Fast, efficient, and transparent. The initial guidance was clear, and the final appraisal was better than I expected. Truly experts in their field.',
     rating: 5,
     initials: 'DM'
   },

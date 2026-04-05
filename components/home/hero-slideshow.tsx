@@ -75,7 +75,7 @@ export const HeroSlideshow = React.memo(function HeroSlideshow() {
               size="lg"
               className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-14 px-8 text-lg"
             >
-              <Link href="/sell-your-stamps">Get Your Free Valuation</Link>
+              <Link href="/sell-your-stamps">Sell Your Stamps</Link>
             </Button>
             <Button
               asChild

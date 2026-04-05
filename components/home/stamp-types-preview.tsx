@@ -41,6 +41,7 @@ export function StampTypesPreview() {
                   src={product.image}
                   alt={product.name}
                   fill
+                  quality={90}
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
