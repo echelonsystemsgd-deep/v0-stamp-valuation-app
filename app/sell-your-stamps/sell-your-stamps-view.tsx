@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useCallback, useEffect, useState } from "react"
+import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { SellForm } from "@/components/forms/sell-form"
@@ -113,9 +114,18 @@ export function SellYourStampsView() {
 
               <TabsContent value="calculate" className="mt-0 outline-none focus-visible:ring-0">
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between gap-4 mb-4">
-                    <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-800">1. Instant Buying Rates</h2>
-                    <span className="text-sm font-bold text-slate-400">UPDATED: APRIL 2024</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                    <div>
+                      <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-800">1. Instant Buying Rates</h2>
+                      <p className="mt-2 text-sm text-slate-500">
+                        For the full line-by-line acquisition desk with sticky totals, open the{" "}
+                        <Link href="/buying-rates" className="font-semibold text-forest-green hover:underline underline-offset-4">
+                          buying rates desk
+                        </Link>
+                        .
+                      </p>
+                    </div>
+                    <span className="text-sm font-bold text-slate-400 shrink-0">UPDATED: APRIL 2024</span>
                   </div>
                   <BuyingTable onAction={handleValuationAction} />
                 </div>

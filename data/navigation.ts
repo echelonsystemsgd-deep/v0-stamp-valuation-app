@@ -8,6 +8,8 @@ export const mainNavigation = [
 export const footerNavigation = {
   services: [
     { label: 'Stamp Valuations', href: '/sell-your-stamps' },
+    { label: 'What We Buy', href: '/what-we-buy' },
+    { label: 'Buying Rates Desk', href: '/buying-rates' },
     { label: 'How to Sell', href: '/how-to-sell' },
   ],
   company: [

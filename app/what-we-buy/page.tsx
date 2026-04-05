@@ -1,88 +1,74 @@
-"use client";
-
-import React, { useState } from "react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { StampBuyingTable } from "@/components/buying-desk/StampBuyingTable";
-import { GlobalValuationSummary } from "@/components/buying-desk/GlobalValuationSummary";
-import { Badge } from "@/components/ui/badge";
-import { ShieldCheck, TrendingUp, Clock, Info } from "lucide-react";
-import { InlineSellCTA } from '@/components/sections/sell-cta';
+import Link from "next/link"
+import { Header } from "@/components/layout/header"
+import { Footer } from "@/components/layout/footer"
+import { InlineSellCTA } from "@/components/sections/sell-cta"
+import {
+  WhatWeBuyCategoryGrid,
+  WhatWeBuyExclusionsSection,
+  WhatWeBuyIntroBlock,
+  WhatWeBuyNextSteps,
+} from "@/components/what-we-buy/catalog-sections"
+import { PackageSearch, Verified } from "lucide-react"
 
 export default function WhatWeBuyPage() {
-  const [totals, setTotals] = useState({ face: 0, offer: 0 });
-
-  const handleTotalChange = (face: number, offer: number) => {
-    setTotals({ face, offer });
-  };
-
-  const handleLockIn = () => {
-    alert(`You've locked in an offer of £${totals.offer.toFixed(2)}! Redirecting to checkout...`);
-  };
-
   return (
-    <div className="flex min-h-screen flex-col bg-background selection:bg-primary selection:text-primary-foreground">
+    <>
       <Header />
-
-      <main className="flex-1 pb-24 lg:pb-32">
-        <section className="bg-oxford-blue relative pt-24 pb-20 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.05] pointer-events-none" />
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-            <div className="text-center space-y-6 mb-16">
-              <Badge variant="outline" className="bg-white/10 text-white border-white/20 px-4 py-1.5 rounded-full font-bold uppercase tracking-widest text-[10px]">
-                Professional Acquisition Desk
-              </Badge>
-              <h1 className="text-4xl font-black tracking-tighter text-white sm:text-5xl lg:text-7xl">
-                Current <span className="text-primary italic">Buying Rates</span>
+      <main id="main-content" className="flex-1 min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
+        <section className="bg-[#0b1b3d] py-16 md:py-24 lg:py-32 text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 transform translate-x-1/2 hidden md:block" />
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-4xl mx-auto lg:mx-0 text-center lg:text-left">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white border border-white/20 text-xs font-black uppercase tracking-widest mb-6 backdrop-blur-sm">
+                <PackageSearch className="h-4 w-4 text-gold" aria-hidden />
+                Reference catalog
+              </span>
+              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight leading-[1.1] sm:max-w-3xl text-white">
+                What we <span className="text-gold italic">buy</span>
               </h1>
-              <p className="mx-auto max-w-2xl text-xl text-white/80 font-medium">
-                Transparent pricing for your stamp collections. Calculate your fixed offer in real-time and lock in today's best rates.
+              <p className="mt-4 text-lg sm:text-xl md:text-2xl text-slate-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                A straightforward list of UK stamp material we purchase. No calculator here—just clarity on fit, then
+                you can value or sell when you are ready.
+              </p>
+              <p className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2 text-sm text-slate-400">
+                <span className="inline-flex items-center gap-1.5">
+                  <Verified className="h-4 w-4 text-gold shrink-0" aria-hidden />
+                  Trusted UK specialists
+                </span>
+                <Link
+                  href="/buying-rates"
+                  className="text-white font-semibold hover:text-gold underline underline-offset-4 transition-colors"
+                >
+                  Need live rates & totals? →
+                </Link>
               </p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-4xl mx-auto">
-              {[
-                { icon: ShieldCheck, title: "Secure Offer", desc: "No haggling. Fixed rates based on market value." },
-                { icon: TrendingUp, title: "Market Rates", desc: "Daily updates ensuring you get the best price." },
-                { icon: Clock, title: "Fast Checkout", desc: "Lock in your rate and get paid within 48 hours." },
-              ].map((feature, i) => (
-                <div key={i} className="flex flex-col items-center text-center p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl shadow-primary/5 group hover:border-primary/30 transition-colors">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <feature.icon className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-bold text-white mb-1">{feature.title}</h3>
-                  <p className="text-xs text-white/60 font-medium leading-relaxed">{feature.desc}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
-        <section className="py-16 -mt-12">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="bg-background rounded-3xl p-6 md:p-10 shadow-2xl border border-border/50">
-               <StampBuyingTable onTotalChange={handleTotalChange} />
-            </div>
-          </div>
-        </section>
-
-        <section className="pb-20 lg:pb-24">
+        <section className="py-12 lg:py-20 -mt-10 md:-mt-16 relative z-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <InlineSellCTA 
-              variant="dark"
-              title="Ready to finalize your valuation?"
-              description="Our experts are standing by to process your collection. Lock in your rates now to guarantee the current market price."
-            />
+            <div className="max-w-5xl mx-auto bg-white p-8 md:p-12 lg:p-14 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 ring-1 ring-slate-100">
+              <WhatWeBuyIntroBlock />
+              <WhatWeBuyCategoryGrid />
+              <WhatWeBuyExclusionsSection />
+              <div className="border-t border-slate-100 pt-10 mb-10">
+                <p className="text-center text-sm font-bold uppercase tracking-widest text-slate-400 mb-6">
+                  Next steps
+                </p>
+                <WhatWeBuyNextSteps />
+              </div>
+              <InlineSellCTA
+                variant="featured"
+                title="Ready for a real offer?"
+                description="Use our sell page to run instant estimates or upload photos for a full appraisal. Same team—one clear place to take action."
+                className="my-0"
+              />
+            </div>
           </div>
         </section>
       </main>
-
-      <GlobalValuationSummary
-        faceTotal={totals.face}
-        offerTotal={totals.offer}
-        onLockIn={handleLockIn}
-      />
       <Footer />
-    </div>
-  );
+    </>
+  )
 }

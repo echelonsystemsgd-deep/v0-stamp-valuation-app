@@ -91,8 +91,8 @@ Each category should be a **card or section** with:
 
 ### Phase 0 — Decision (required)
 
-- [ ] Choose **Option A, B, or C** for the **existing** `StampBuyingTable` / `GlobalValuationSummary` experience.
-- [ ] Update **site map intent** in writing (this doc + any nav labels): “What we buy” = catalog; “Sell” = action.
+- [x] Choose **Option A, B, or C** for the **existing** `StampBuyingTable` / `GlobalValuationSummary` experience — **Option A implemented**: desk at **`/buying-rates`**, catalog at **`/what-we-buy`**.
+- [x] Update **site map intent** in writing (this doc + any nav labels): “What we buy” = catalog; “Sell” = action.
 
 ### Phase 1 — Content
 

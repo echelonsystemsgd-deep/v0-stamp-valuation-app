@@ -1,5 +1,7 @@
 # Implementation Plan: Professional Acquisition Desk (Buying Rates)
 
+> **Update:** The interactive desk now lives at **`/buying-rates`**. **`/what-we-buy`** is a read-only catalog (see `IMPLEMENTATION_WHAT_WE_BUY_CATALOG.md`). This document still describes the desk components and data (`StampBuyingTable`, `buying-rates` data).
+
 The goal is to transform the functional purchase tables provided in the client images into a premium, interactive "Buying Rates" component that matches the existing high-trust aesthetic of the UK Stamp Valuations platform.
 
 ## Performance Audit & Suggestion (Modernizing the Table)
@@ -48,7 +50,7 @@ Build the "Acquisition Desk" using the project's current design system.
 Connect the list to the main user journey.
 
 ### 3.1 Routing & Navigation
-- [ ] **New Page**: Create `/what-we-buy` to host the full acquisition desk.
+- [x] **Page**: Host the full acquisition desk at **`/buying-rates`** (moved from `/what-we-buy`).
 - [ ] **Header Update**: Ensure the "Sell Your Stamps" or "Valuation" flow links here.
 - [ ] **SEO Prep**: Title: "Current Stamp Buying Rates | UK Stamp Valuation Service".
 
@@ -70,7 +72,7 @@ Connect the list to the main user journey.
     - [ ] Real-time calculator logic.
     - [ ] Sticky summary footer.
 - [ ] **Integration**
-    - [ ] Layout in `/app/what-we-buy/page.tsx`.
+    - [x] Layout in `/app/buying-rates/page.tsx`.
     - [ ] Metadata & Metadata images.
 - [ ] **Validation**
     - [ ] Verify arithmetic against client provided PNG tables.
