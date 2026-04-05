@@ -36,10 +36,10 @@ Ensure no invalid nesting was introduced (e.g., `<nav>` inside `<nav>` or nested
 - [ ] Test in Incognito (to confirm extension interference)
 
 ### Implementation (Fixes)
-- [ ] Add `suppressHydrationWarning` to CTA Button (`header.tsx`)
-- [ ] Add `suppressHydrationWarning` to Mobile Menu Trigger (`header.tsx`)
-- [ ] Review `PageBreadcrumbs` for structural stability
-- [ ] Validate `RootLayout` component sequence
+- [x] Add `suppressHydrationWarning` to CTA Button (`header.tsx`)
+- [x] Add `suppressHydrationWarning` to Mobile Menu Trigger (`header.tsx`)
+- [x] Review `PageBreadcrumbs` for structural stability
+- [x] Validate `RootLayout` component sequence
 
 ---
 
