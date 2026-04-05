@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight, ListChecks } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -37,8 +38,18 @@ export function WhatWeBuyCategoryGrid() {
         <Card
           key={cat.id}
           id={cat.id}
-          className="border-slate-100 shadow-lg shadow-slate-200/40 ring-1 ring-slate-100 scroll-mt-28"
+          className="overflow-hidden border-slate-100 shadow-lg shadow-slate-200/40 ring-1 ring-slate-100 scroll-mt-28 group/card"
         >
+          <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
+            <Image
+              src={cat.image}
+              alt={cat.imageAlt}
+              fill
+              quality={90}
+              className="object-cover transition-transform duration-300 group-hover/card:scale-105"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
           <CardHeader className="pb-2">
             <CardTitle className="font-serif text-xl md:text-2xl text-primary">{cat.title}</CardTitle>
           </CardHeader>

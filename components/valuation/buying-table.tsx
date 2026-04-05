@@ -7,14 +7,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { buyingRates, calculatePurchaseTotal, BuyingRateItem } from "@/data/buying-rates"
-
-const getImageForProduct = (item: BuyingRateItem) => {
-  if (item.category === "1st Class") return "/images/stamp-1st-red.png"
-  if (item.category === "2nd Class") return "/images/stamp-2nd-blue.png"
-  if (item.category === "Large Letter") return "/images/stamp-2.20-green.png"
-  return "/images/stamp-1.70-purple.png"
-}
+import {
+  buyingRates,
+  calculatePurchaseTotal,
+  BuyingRateItem,
+  getBuyingRateImageSrc,
+  getBuyingRateSections,
+} from "@/data/buying-rates"
 
 export function BuyingTable({ onAction }: { onAction?: () => void }) {
   const [isMounted, setIsMounted] = React.useState(false)
@@ -49,190 +48,217 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
 
   const totalValue = buyingRates.reduce((acc, item) => acc + calculateSubtotal(item), 0)
 
-  // Group by category
-  const groupedRates = React.useMemo(() => {
-    return buyingRates.reduce((acc, item) => {
-      if (!acc[item.category]) acc[item.category] = []
-      acc[item.category].push(item)
-      return acc
-    }, {} as Record<string, BuyingRateItem[]>)
-  }, [])
+  const sections = React.useMemo(() => getBuyingRateSections(), [])
 
-  return (
-    <div className="w-full space-y-12" suppressHydrationWarning>
-      {Object.entries(groupedRates).map(([category, items]) => (
-        <div key={category} className="space-y-6">
-          <div className="flex items-center gap-3">
-            <h3 className="text-xl font-black text-slate-800 tracking-tight">{category} Rates</h3>
-            <div className="h-px flex-1 bg-slate-200" />
+  const renderDesktopRows = (items: BuyingRateItem[]) => (
+    <div className="divide-y divide-border/60">
+      {items.map((item, index) => (
+        <div
+          key={item.id}
+          className={`grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 p-6 transition-all duration-200 hover:bg-primary/5 ${
+            index % 2 === 0 ? "bg-background" : "bg-muted/5"
+          } animate-fade-in-up`}
+        >
+          <div className="flex items-center gap-4">
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-border/50 bg-slate-50 shadow-sm">
+              <Image
+                src={getBuyingRateImageSrc(item)}
+                alt={item.name}
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            </div>
+            <span className="font-bold text-foreground leading-tight text-lg">{item.name}</span>
           </div>
+          <div className="text-sm text-muted-foreground leading-relaxed pr-4">{item.description}</div>
+          <div className="text-right font-medium text-slate-600 font-mono">£{item.faceValue.toFixed(2)}</div>
+          <div className="text-right">
+            <Badge
+              variant="outline"
+              className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1 font-bold whitespace-nowrap"
+              suppressHydrationWarning
+            >
+              {(item.rate * 100).toFixed(item.rate % 0.01 === 0 ? 0 : 1)}%
+            </Badge>
+          </div>
+          <div className="flex justify-center">
+            <div className="flex items-center rounded-xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-r"
+                onClick={() => updateQuantity(item.id, -1)}
+                suppressHydrationWarning
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <Input
+                type="number"
+                value={quantities[item.id] || ""}
+                onChange={(e) => handleInputChange(item.id, e.target.value)}
+                className="h-10 w-16 border-0 bg-transparent text-center font-bold text-lg focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                placeholder="0"
+                suppressHydrationWarning
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-l"
+                onClick={() => updateQuantity(item.id, 1)}
+                suppressHydrationWarning
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div className="text-right font-extrabold text-2xl text-primary font-mono whitespace-nowrap">
+            £{calculateSubtotal(item).toFixed(2)}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 
-          {/* Desktop Table View */}
-          <div className="hidden lg:block overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
-            <div className="w-full overflow-x-auto">
-              <div className="min-w-[1000px]">
-                <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-muted/40 p-6 font-semibold text-muted-foreground text-sm uppercase tracking-wider">
-                  <div>Product</div>
-                  <div>Description</div>
-                  <div className="text-right">Face Price</div>
-                  <div className="text-right">Buy Rate %</div>
-                  <div className="text-center">Quantity</div>
-                  <div className="text-right">Subtotal Offer</div>
-                </div>
-                <div className="divide-y divide-border/60">
-                  {items.map((item, index) => (
-                    <div
-                      key={item.id}
-                      className={`grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 p-6 transition-all duration-200 hover:bg-primary/5 ${
-                        index % 2 === 0 ? "bg-background" : "bg-muted/5"
-                      } animate-fade-in-up`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-border/50 bg-slate-50 shadow-sm">
-                          <Image
-                            src={getImageForProduct(item)}
-                            alt={item.name}
-                            fill
-                            className="object-cover"
-                            unoptimized
-                          />
-                        </div>
-                        <span className="font-bold text-foreground leading-tight text-lg">
-                          {item.name}
-                        </span>
-                      </div>
-                      <div className="text-sm text-muted-foreground leading-relaxed pr-4">
-                        {item.description}
-                      </div>
-                      <div className="text-right font-medium text-slate-600 font-mono">£{item.faceValue.toFixed(2)}</div>
-                      <div className="text-right">
-                        <Badge 
-                          variant="outline" 
-                          className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1 font-bold whitespace-nowrap"
-                          suppressHydrationWarning
-                        >
-                          {(item.rate * 100).toFixed(item.rate % 0.01 === 0 ? 0 : 1)}%
-                        </Badge>
-                      </div>
-                      <div className="flex justify-center">
-                        <div className="flex items-center rounded-xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-r"
-                            onClick={() => updateQuantity(item.id, -1)}
-                            suppressHydrationWarning
-                          >
-                            <Minus className="h-4 w-4" />
-                          </Button>
-                          <Input
-                            type="number"
-                            value={quantities[item.id] || ""}
-                            onChange={(e) => handleInputChange(item.id, e.target.value)}
-                            className="h-10 w-16 border-0 bg-transparent text-center font-bold text-lg focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            placeholder="0"
-                            suppressHydrationWarning
-                          />
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-l"
-                            onClick={() => updateQuantity(item.id, 1)}
-                            suppressHydrationWarning
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="text-right font-extrabold text-2xl text-primary font-mono whitespace-nowrap">
-                        £{calculateSubtotal(item).toFixed(2)}
-                      </div>
-                    </div>
-                  ))}
+  const renderMobileCards = (items: BuyingRateItem[]) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:hidden gap-6">
+      {items.map((item) => (
+        <Card
+          key={item.id}
+          className="overflow-hidden border-border/60 shadow-md rounded-2xl flex flex-col h-full bg-card animate-fade-in-up"
+        >
+          <CardContent className="p-6 space-y-6 flex flex-col h-full">
+            <div className="flex gap-5">
+              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-border/50 bg-muted/30 shadow-sm">
+                <Image
+                  src={getBuyingRateImageSrc(item)}
+                  alt={item.name}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+              <div className="flex-1 space-y-2">
+                <h3 className="font-bold text-foreground text-xl leading-tight">{item.name}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{item.description}</p>
+              </div>
+            </div>
+
+            <div className="mt-auto grid grid-cols-2 gap-4 border-t border-b border-dashed py-5">
+              <div className="space-y-1.5 border-r border-border/30">
+                <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black">Face Price</span>
+                <div className="font-bold text-slate-700 text-lg font-mono">£{item.faceValue.toFixed(2)}</div>
+              </div>
+              <div className="space-y-1.5 pl-4">
+                <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black">Our Rate</span>
+                <div suppressHydrationWarning>
+                  <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 font-bold px-3 py-0.5">
+                    {(item.rate * 100).toFixed(item.rate % 0.01 === 0 ? 0 : 1)}%
+                  </Badge>
                 </div>
               </div>
             </div>
+
+            <div className="flex items-center justify-between gap-6 pt-2">
+              <div className="flex items-center rounded-2xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-14 w-14 rounded-none text-muted-foreground border-r"
+                  onClick={() => updateQuantity(item.id, -1)}
+                  suppressHydrationWarning
+                >
+                  <Minus className="h-6 w-6" />
+                </Button>
+                <Input
+                  type="number"
+                  value={quantities[item.id] || ""}
+                  onChange={(e) => handleInputChange(item.id, e.target.value)}
+                  className="h-14 w-20 border-0 bg-transparent text-center text-2xl font-black focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  placeholder="0"
+                  suppressHydrationWarning
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-14 w-14 rounded-none text-muted-foreground border-l"
+                  onClick={() => updateQuantity(item.id, 1)}
+                  suppressHydrationWarning
+                >
+                  <Plus className="h-6 w-6" />
+                </Button>
+              </div>
+              <div className="text-right">
+                <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black block mb-1">Subtotal</span>
+                <div className="text-4xl font-black text-primary font-mono tracking-tighter">
+                  £{calculateSubtotal(item).toFixed(2)}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+
+  const sectionHeading = (group: string) =>
+    group === "Large Letter" ? "Large Letter Rates" : `${group} Rates`
+
+  return (
+    <div className="w-full space-y-12" suppressHydrationWarning>
+      {sections.map((section) => (
+        <div key={section.group} className="space-y-6">
+          <div className="flex items-center gap-3">
+            <h3 className="text-xl font-black text-slate-800 tracking-tight">{sectionHeading(section.group)}</h3>
+            <div className="h-px flex-1 bg-slate-200" />
           </div>
 
-          {/* Mobile & Tablet Card View */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:hidden gap-6">
-            {items.map((item) => (
-              <Card 
-                key={item.id} 
-                className="overflow-hidden border-border/60 shadow-md rounded-2xl flex flex-col h-full bg-card animate-fade-in-up"
-              >
-                <CardContent className="p-6 space-y-6 flex flex-col h-full">
-                  <div className="flex gap-5">
-                    <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-border/50 bg-muted/30 shadow-sm">
-                      <Image
-                        src={getImageForProduct(item)}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                        unoptimized
-                      />
+          {section.kind === "flat" ? (
+            <>
+              <div className="hidden lg:block overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
+                <div className="w-full overflow-x-auto">
+                  <div className="min-w-[1000px]">
+                    <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-muted/40 p-6 font-semibold text-muted-foreground text-sm uppercase tracking-wider">
+                      <div>Product</div>
+                      <div>Description</div>
+                      <div className="text-right">Face Price</div>
+                      <div className="text-right">Buy Rate %</div>
+                      <div className="text-center">Quantity</div>
+                      <div className="text-right">Subtotal Offer</div>
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h3 className="font-bold text-foreground text-xl leading-tight">{item.name}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{item.description}</p>
-                    </div>
+                    {renderDesktopRows(section.items)}
                   </div>
-
-                  <div className="mt-auto grid grid-cols-2 gap-4 border-t border-b border-dashed py-5">
-                    <div className="space-y-1.5 border-r border-border/30">
-                      <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black">Face Price</span>
-                      <div className="font-bold text-slate-700 text-lg font-mono">£{item.faceValue.toFixed(2)}</div>
-                    </div>
-                    <div className="space-y-1.5 pl-4">
-                      <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black">Our Rate</span>
-                      <div suppressHydrationWarning>
-                        <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 font-bold px-3 py-0.5">
-                          {(item.rate * 100).toFixed(item.rate % 0.01 === 0 ? 0 : 1)}%
-                        </Badge>
+                </div>
+              </div>
+              {renderMobileCards(section.items)}
+            </>
+          ) : (
+            <div className="space-y-10">
+              {section.subgroups.map((sub) => (
+                <div key={sub.title} className="space-y-4">
+                  <h4 className="text-lg font-bold text-slate-700 tracking-tight border-l-4 border-primary pl-3">
+                    {sub.title}
+                  </h4>
+                  <div className="hidden lg:block overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
+                    <div className="w-full overflow-x-auto">
+                      <div className="min-w-[1000px]">
+                        <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-muted/40 p-6 font-semibold text-muted-foreground text-sm uppercase tracking-wider">
+                          <div>Product</div>
+                          <div>Description</div>
+                          <div className="text-right">Face Price</div>
+                          <div className="text-right">Buy Rate %</div>
+                          <div className="text-center">Quantity</div>
+                          <div className="text-right">Subtotal Offer</div>
+                        </div>
+                        {renderDesktopRows(sub.items)}
                       </div>
                     </div>
                   </div>
-
-                  <div className="flex items-center justify-between gap-6 pt-2">
-                    <div className="flex items-center rounded-2xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-14 w-14 rounded-none text-muted-foreground border-r"
-                        onClick={() => updateQuantity(item.id, -1)}
-                        suppressHydrationWarning
-                      >
-                        <Minus className="h-6 w-6" />
-                      </Button>
-                      <Input
-                        type="number"
-                        value={quantities[item.id] || ""}
-                        onChange={(e) => handleInputChange(item.id, e.target.value)}
-                        className="h-14 w-20 border-0 bg-transparent text-center text-2xl font-black focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                        placeholder="0"
-                        suppressHydrationWarning
-                      />
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-14 w-14 rounded-none text-muted-foreground border-l"
-                        onClick={() => updateQuantity(item.id, 1)}
-                        suppressHydrationWarning
-                      >
-                        <Plus className="h-6 w-6" />
-                      </Button>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black block mb-1">Subtotal</span>
-                      <div className="text-4xl font-black text-primary font-mono tracking-tighter">
-                        £{calculateSubtotal(item).toFixed(2)}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  {renderMobileCards(sub.items)}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ))}
 

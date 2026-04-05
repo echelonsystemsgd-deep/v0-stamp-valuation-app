@@ -1,6 +1,7 @@
 export const mainNavigation = [
   { label: 'Home', href: '/' },
   { label: 'How to Sell', href: '/how-to-sell' },
+  { label: 'What We Buy', href: '/what-we-buy' },
   { label: 'About Us', href: '/about-us' },
   { label: 'Contact', href: '/contact' },
 ] as const

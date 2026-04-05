@@ -7,6 +7,9 @@ export type WhatWeBuyCategory = {
   id: string
   title: string
   description: string
+  /** Same paths as `data/stamps.ts` — single source for imagery with the home grid. */
+  image: string
+  imageAlt: string
   examples?: string[]
   /** Static indicative wording only — not a live calculator. */
   indicativeNote?: string
@@ -29,6 +32,8 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
   {
     id: "modern-definitives",
     title: "Modern definitives",
+    image: "/images/stamps/george-v.jpg",
+    imageAlt: "UK definitive portrait stamps from the George V era as an example of everyday issues",
     description:
       "Current and recent everyday postage: barcoded and earlier Machin-style definitives in sheets, booklets, and part sheets.",
     examples: [
@@ -42,6 +47,8 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
   {
     id: "commemoratives",
     title: "Commemoratives and special issues",
+    image: "/images/stamps/fdc-commemorative.jpg",
+    imageAlt: "Commemorative first day cover with special UK stamps",
     description:
       "Royal Mail commemoratives, mini-sheets, and special sets where demand is clear and condition is sound.",
     examples: ["Recent commemorative sets", "Presentation packs (selected)", "Mint NH where stated"],
@@ -50,12 +57,16 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
   {
     id: "fdc",
     title: "First day covers",
+    image: "/images/stamps/fdc-definitive.jpg",
+    imageAlt: "First day cover featuring definitive UK stamps",
     description: "Clean, unaddressed FDCs and related postal history of mainstream UK issues, when they fit our stock profile.",
     examples: ["Unaddressed FDCs", "Sets in protective sleeves"],
   },
   {
     id: "collections",
     title: "Collections, albums, and mixtures",
+    image: "/images/stamps/complete-album.jpg",
+    imageAlt: "Stamp album open showing a collection of UK stamps",
     description:
       "Albums, stock books, and mixed lots of UK material. We assess on merit—sorting and condition strongly affect the offer.",
     examples: ["Part collections", "Dealer lots", "Inherited albums"],

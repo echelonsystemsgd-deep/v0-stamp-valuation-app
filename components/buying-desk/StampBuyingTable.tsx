@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { BuyingRateItem, buyingRates, calculatePurchaseTotal } from "@/data/buying-rates";
+import Image from "next/image";
+import {
+  BuyingRateItem,
+  buyingRates,
+  calculatePurchaseTotal,
+  BUYING_RATE_GROUP_ORDER,
+  getBuyingRateImageSrc,
+  getBuyingRateSections,
+} from "@/data/buying-rates";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -43,155 +51,190 @@ export const StampBuyingTable: React.FC<StampBuyingTableProps> = ({ onTotalChang
     }
   }, [quantities, onTotalChange]);
 
-  const categories = Array.from(new Set(buyingRates.map((item) => item.category)));
+  const sections = React.useMemo(() => getBuyingRateSections(), []);
+
+  const renderDesktopTable = (items: BuyingRateItem[]) => (
+    <div className="hidden md:block overflow-hidden rounded-xl border border-border/50 glassmorphism">
+      <Table>
+        <TableHeader className="bg-muted/30">
+          <TableRow>
+            <TableHead className="w-[300px]">Stamp Description</TableHead>
+            <TableHead className="text-center">Face Value</TableHead>
+            <TableHead className="text-center">Buy Rate</TableHead>
+            <TableHead className="text-center w-[150px]">Quantity</TableHead>
+            <TableHead className="text-right">Subtotal Offer</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {items.map((item) => (
+            <TableRow key={item.id} className="hover:bg-primary/5 transition-colors group">
+              <TableCell className="font-medium">
+                <div className="flex items-center space-x-3">
+                  <div className="relative w-10 h-12 shrink-0 overflow-hidden rounded border border-border/50 bg-muted group-hover:border-primary/30 transition-colors">
+                    <Image
+                      src={getBuyingRateImageSrc(item)}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                      sizes="40px"
+                      unoptimized
+                    />
+                  </div>
+                  <div>
+                    <div className="font-semibold">{item.name}</div>
+                    <div className="text-xs text-muted-foreground">{item.description}</div>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell className="text-center">£{item.faceValue.toFixed(2)}</TableCell>
+              <TableCell className="text-center">
+                <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5">
+                  {(item.rate * 100).toFixed(1)}%
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center justify-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8 rounded-full"
+                    onClick={() => handleQuantityChange(item.id, (quantities[item.id] || 0) - 1)}
+                  >
+                    <Minus className="h-3 w-3" />
+                  </Button>
+                  <Input
+                    type="number"
+                    className="h-8 w-16 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    value={quantities[item.id] || ""}
+                    onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) || 0)}
+                    placeholder="0"
+                  />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8 rounded-full"
+                    onClick={() => handleQuantityChange(item.id, (quantities[item.id] || 0) + 1)}
+                  >
+                    <Plus className="h-3 w-3" />
+                  </Button>
+                </div>
+              </TableCell>
+              <TableCell className="text-right font-bold text-primary">
+                £
+                <CountUp
+                  end={calculatePurchaseTotal(item.faceValue, quantities[item.id] || 0, item.rate)}
+                  decimals={2}
+                  duration={0.5}
+                />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+
+  const renderMobileCards = (items: BuyingRateItem[]) => (
+    <div className="md:hidden space-y-4">
+      {items.map((item) => (
+        <Card key={item.id} className="glassmorphism border-border/50 overflow-hidden">
+          <CardContent className="p-4">
+            <div className="flex gap-3 justify-between items-start mb-4">
+              <div className="relative w-14 h-16 shrink-0 overflow-hidden rounded border border-border/50 bg-muted">
+                <Image
+                  src={getBuyingRateImageSrc(item)}
+                  alt={item.name}
+                  fill
+                  className="object-cover"
+                  sizes="56px"
+                  unoptimized
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-bold">{item.name}</div>
+                <div className="text-xs text-muted-foreground">{item.description}</div>
+              </div>
+              <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5 shrink-0">
+                {(item.rate * 100).toFixed(1)}%
+              </Badge>
+            </div>
+            <div className="flex justify-between items-center">
+              <div className="text-xs">
+                Face: <span className="font-semibold">£{item.faceValue.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8 rounded-full"
+                  onClick={() => handleQuantityChange(item.id, (quantities[item.id] || 0) - 1)}
+                >
+                  <Minus className="h-3 w-3" />
+                </Button>
+                <Input
+                  type="number"
+                  className="h-8 w-14 text-center p-0"
+                  value={quantities[item.id] || ""}
+                  onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) || 0)}
+                  placeholder="0"
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8 rounded-full"
+                  onClick={() => handleQuantityChange(item.id, (quantities[item.id] || 0) + 1)}
+                >
+                  <Plus className="h-3 w-3" />
+                </Button>
+              </div>
+              <div className="text-right font-bold text-primary">
+                £
+                <CountUp
+                  end={calculatePurchaseTotal(item.faceValue, quantities[item.id] || 0, item.rate)}
+                  decimals={2}
+                  duration={0.5}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
 
   return (
     <div className="w-full space-y-6">
-      <Tabs defaultValue={categories[0]} className="w-full">
+      <Tabs defaultValue={BUYING_RATE_GROUP_ORDER[0]} className="w-full">
         <div className="flex justify-center mb-8">
-          <TabsList className="bg-muted/50 p-1 glassmorphism">
-            {categories.map((cat) => (
-              <TabsTrigger key={cat} value={cat} className="px-6 py-2">
+          <TabsList className="bg-muted/50 p-1 glassmorphism flex flex-wrap justify-center gap-1 h-auto">
+            {BUYING_RATE_GROUP_ORDER.map((cat) => (
+              <TabsTrigger key={cat} value={cat} className="px-4 sm:px-6 py-2">
                 {cat}
               </TabsTrigger>
             ))}
           </TabsList>
         </div>
 
-        {categories.map((cat) => (
-          <TabsContent key={cat} value={cat} className="space-y-4">
-            <div className="hidden md:block overflow-hidden rounded-xl border border-border/50 glassmorphism">
-              <Table>
-                <TableHeader className="bg-muted/30">
-                  <TableRow>
-                    <TableHead className="w-[300px]">Stamp Description</TableHead>
-                    <TableHead className="text-center">Face Value</TableHead>
-                    <TableHead className="text-center">Buy Rate</TableHead>
-                    <TableHead className="text-center w-[150px]">Quantity</TableHead>
-                    <TableHead className="text-right">Subtotal Offer</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {buyingRates
-                    .filter((item) => item.category === cat)
-                    .map((item) => (
-                      <TableRow key={item.id} className="hover:bg-primary/5 transition-colors group">
-                        <TableCell className="font-medium">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-10 h-12 bg-muted rounded flex items-center justify-center text-[10px] text-muted-foreground border border-border/50 group-hover:border-primary/30 transition-colors">
-                              IMG
-                            </div>
-                            <div>
-                              <div className="font-semibold">{item.name}</div>
-                              <div className="text-xs text-muted-foreground">{item.description}</div>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-center">£{item.faceValue.toFixed(2)}</TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5">
-                            {(item.rate * 100).toFixed(1)}%
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center justify-center space-x-2">
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-8 w-8 rounded-full"
-                              onClick={() => handleQuantityChange(item.id, (quantities[item.id] || 0) - 1)}
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <Input
-                              type="number"
-                              className="h-8 w-16 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                              value={quantities[item.id] || ""}
-                              onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) || 0)}
-                              placeholder="0"
-                            />
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-8 w-8 rounded-full"
-                              onClick={() => handleQuantityChange(item.id, (quantities[item.id] || 0) + 1)}
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-right font-bold text-primary">
-                          £
-                          <CountUp
-                            end={calculatePurchaseTotal(item.faceValue, quantities[item.id] || 0, item.rate)}
-                            decimals={2}
-                            duration={0.5}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </div>
-
-            {/* Mobile View */}
-            <div className="md:hidden space-y-4">
-              {buyingRates
-                .filter((item) => item.category === cat)
-                .map((item) => (
-                  <Card key={item.id} className="glassmorphism border-border/50 overflow-hidden">
-                    <CardContent className="p-4">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <div className="font-bold">{item.name}</div>
-                          <div className="text-xs text-muted-foreground">{item.description}</div>
-                        </div>
-                        <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5">
-                          {(item.rate * 100).toFixed(1)}%
-                        </Badge>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div className="text-xs">
-                          Face: <span className="font-semibold">£{item.faceValue.toFixed(2)}</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-8 w-8 rounded-full"
-                            onClick={() => handleQuantityChange(item.id, (quantities[item.id] || 0) - 1)}
-                          >
-                            <Minus className="h-3 w-3" />
-                          </Button>
-                          <Input
-                            type="number"
-                            className="h-8 w-14 text-center p-0"
-                            value={quantities[item.id] || ""}
-                            onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) || 0)}
-                            placeholder="0"
-                          />
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-8 w-8 rounded-full"
-                            onClick={() => handleQuantityChange(item.id, (quantities[item.id] || 0) + 1)}
-                          >
-                            <Plus className="h-3 w-3" />
-                          </Button>
-                        </div>
-                        <div className="text-right font-bold text-primary">
-                          £
-                          <CountUp
-                            end={calculatePurchaseTotal(item.faceValue, quantities[item.id] || 0, item.rate)}
-                            decimals={2}
-                            duration={0.5}
-                          />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+        {sections.map((section) => (
+          <TabsContent key={section.group} value={section.group} className="space-y-4">
+            {section.kind === "flat" ? (
+              <>
+                {renderDesktopTable(section.items)}
+                {renderMobileCards(section.items)}
+              </>
+            ) : (
+              <div className="space-y-8">
+                {section.subgroups.map((sub) => (
+                  <div key={sub.title} className="space-y-3">
+                    <h3 className="text-lg font-semibold text-foreground border-l-4 border-primary pl-3">
+                      {sub.title}
+                    </h3>
+                    {renderDesktopTable(sub.items)}
+                    {renderMobileCards(sub.items)}
+                  </div>
                 ))}
-            </div>
+              </div>
+            )}
           </TabsContent>
         ))}
       </Tabs>
