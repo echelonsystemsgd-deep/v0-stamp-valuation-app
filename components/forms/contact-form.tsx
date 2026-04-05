@@ -87,12 +87,23 @@ export function ContactForm() {
 
     setIsSubmitting(true)
     
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    
-    console.log('Contact form submitted:', formData)
-    setIsSubmitting(false)
-    setIsSubmitted(true)
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+
+      if (!response.ok) throw new Error('Submission failed')
+
+      console.log('Contact form submitted successfully:', formData)
+      setIsSubmitting(false)
+      setIsSubmitted(true)
+    } catch (err) {
+      console.error('Contact error:', err)
+      setErrors((prev) => ({ ...prev, email: 'Message failed to send. Please try again later.' }))
+      setIsSubmitting(false)
+    }
   }
 
   if (isSubmitted) {

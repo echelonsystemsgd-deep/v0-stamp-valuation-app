@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sheet'
 import { mainNavigation } from '@/data/navigation'
 import { cn } from '@/lib/utils'
+import { PageBreadcrumbs } from './breadcrumbs'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false)
@@ -37,6 +38,12 @@ export function Header() {
           : 'bg-transparent'
       )}
     >
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-forest-green focus:text-white focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-forest-green focus:ring-offset-2 transition-all duration-200"
+      >
+        Skip to main content
+      </a>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <nav className="flex h-20 items-center justify-between" aria-label="Main navigation">
           {/* Logo */}
@@ -132,6 +139,7 @@ export function Header() {
           </div>
         </nav>
       </div>
+      <PageBreadcrumbs />
     </header>
   )
 }

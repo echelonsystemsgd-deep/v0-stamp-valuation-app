@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { getBlurPlaceholder } from '@/lib/image-utils'
 
 const heroImages = [
   {
@@ -49,6 +50,8 @@ export function HeroSlideshow() {
             className="object-cover"
             priority={index === 0}
             sizes="100vw"
+            placeholder="blur"
+            blurDataURL={getBlurPlaceholder(1920, 1080)}
           />
         </div>
       ))}

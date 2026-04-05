@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Award, Shield, Users, CheckCircle } from 'lucide-react'
 import { AboutNarrative } from '@/components/sections/about-narrative'
+import { Testimonials } from '@/components/sections/testimonials'
+import { getBlurPlaceholder } from '@/lib/image-utils'
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -129,6 +131,8 @@ export default function AboutUsPage() {
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 33vw"
+                      placeholder="blur"
+                      blurDataURL={getBlurPlaceholder(400, 400)}
                     />
                   </div>
                   <CardContent className="p-6">
@@ -167,6 +171,8 @@ export default function AboutUsPage() {
             </div>
           </div>
         </section>
+
+        <Testimonials />
 
         {/* CTA Section */}
         <section className="py-16 lg:py-20" aria-labelledby="cta-heading">

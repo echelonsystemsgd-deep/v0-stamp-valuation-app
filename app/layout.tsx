@@ -37,6 +37,9 @@ export const viewport: Viewport = {
   themeColor: '#1B263B',
 }
 
+import { BackToTop } from '@/components/layout/back-to-top'
+import { JsonLd } from '@/components/seo/json-ld'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,6 +51,8 @@ export default function RootLayout({
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <SupportPanel />
+        <BackToTop />
+        <JsonLd type="LocalBusiness" data={{}} />
       </body>
     </html>
   )

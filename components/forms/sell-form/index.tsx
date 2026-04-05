@@ -60,6 +60,24 @@ export function SellForm() {
     setErrors(clearedErrors)
   }
 
+  // Persist form data to localStorage (excluding images)
+  React.useEffect(() => {
+    const savedData = localStorage.getItem('sell_form_progress')
+    if (savedData) {
+      try {
+        const parsedData = JSON.parse(savedData)
+        setFormData((prev) => ({ ...prev, ...parsedData }))
+      } catch (e) {
+        console.error('Failed to load form progress', e)
+      }
+    }
+  }, [])
+
+  React.useEffect(() => {
+    const { images, ...persistentData } = formData
+    localStorage.setItem('sell_form_progress', JSON.stringify(persistentData))
+  }, [formData])
+
   const validateStep = (step: number): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
 
@@ -96,12 +114,34 @@ export function SellForm() {
     setCurrentStep((prev) => Math.max(prev - 1, 1))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (validateStep(currentStep)) {
-      // In a real app, this would submit to an API
-      console.log('Form submitted:', formData)
-      setIsSubmitted(true)
+      setIsSubmitting(true)
+      try {
+        // In a real app, you would use FormData for image uploads
+        // For this demo, we'll send everything except the File objects
+        const { images, ...payload } = formData
+        
+        const response = await fetch('/api/sell', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+
+        if (!response.ok) throw new Error('Submission failed')
+
+        console.log('Form submitted successfully:', formData)
+        localStorage.removeItem('sell_form_progress')
+        setIsSubmitted(true)
+      } catch (err) {
+        console.error('Submission error:', err)
+        setErrors((prev) => ({ ...prev, email: 'Submission failed. Please try again or contact us directly.' }))
+      } finally {
+        setIsSubmitting(false)
+      }
     }
   }
 
@@ -180,9 +220,10 @@ export function SellForm() {
                 ) : (
                   <Button
                     type="submit"
+                    disabled={isSubmitting}
                     className="bg-forest-green hover:bg-forest-green/90 text-white h-12 px-8"
                   >
-                    Submit for Valuation
+                    {isSubmitting ? 'Submitting...' : 'Submit for Valuation'}
                   </Button>
                 )}
               </div>
