@@ -2,7 +2,15 @@ import Link from 'next/link'
 import { Check, X, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-const comparisonFeatures = [
+type ComparisonFeature = {
+  title: string;
+  us: string;
+  usIcon: boolean | 'partial';
+  them: string;
+  themIcon: boolean | 'partial';
+};
+
+const comparisonFeatures: ComparisonFeature[] = [
   {
     title: 'Selling & Listing Fees',
     us: 'None — 100% free appraisal',
@@ -58,30 +66,6 @@ export function WhyChooseUs() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-5xl mx-auto">
-          {/* Them Section (Mobile First) */}
-          <div className="flex flex-col gap-6 p-6 sm:p-8 rounded-2xl bg-muted/30 border border-border">
-            <div className="mb-2">
-              <h3 className="text-xl font-semibold text-foreground">Typical Auction / Dealer</h3>
-              <p className="text-sm text-muted-foreground mt-1">The traditional route with hidden costs & wait times</p>
-            </div>
-            
-            <div className="flex flex-col gap-6">
-              {comparisonFeatures.map((feature, idx) => (
-                <div key={idx} className="flex items-start gap-4 group">
-                  <div className="mt-0.5 p-1 rounded-full bg-background/50 border border-border shrink-0 transition-colors group-hover:bg-background/80">
-                    <IconIndicator type={feature.themIcon} />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-foreground text-sm">{feature.title}</h4>
-                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed transition-colors duration-200">
-                      {feature.them}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Us Section */}
           <div className="flex flex-col gap-6 p-8 sm:p-10 rounded-2xl bg-card border-2 border-forest-green/20 shadow-xl lg:scale-105 relative overflow-hidden z-10 transition-transform duration-300">
             <div className="absolute top-0 right-0 w-48 h-48 bg-forest-green/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
@@ -104,6 +88,30 @@ export function WhyChooseUs() {
                     <h4 className="font-semibold text-primary text-sm">{feature.title}</h4>
                     <p className="text-sm text-muted-foreground mt-1 leading-relaxed transition-colors duration-200 group-hover:text-primary">
                       {feature.us}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Them Section */}
+          <div className="flex flex-col gap-6 p-6 sm:p-8 rounded-2xl bg-muted/30 border border-border">
+            <div className="mb-2">
+              <h3 className="text-xl font-semibold text-foreground">Typical Auction / Dealer</h3>
+              <p className="text-sm text-muted-foreground mt-1">The traditional route with hidden costs & wait times</p>
+            </div>
+            
+            <div className="flex flex-col gap-6">
+              {comparisonFeatures.map((feature, idx) => (
+                <div key={idx} className="flex items-start gap-4 group">
+                  <div className="mt-0.5 p-1 rounded-full bg-background/50 border border-border shrink-0 transition-colors group-hover:bg-background/80">
+                    <IconIndicator type={feature.themIcon} />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-foreground text-sm">{feature.title}</h4>
+                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed transition-colors duration-200">
+                      {feature.them}
                     </p>
                   </div>
                 </div>
