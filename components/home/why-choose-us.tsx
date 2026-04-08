@@ -1,159 +1,120 @@
 import Link from 'next/link'
-import { Award, Check, MapPin, ShieldCheck, X, Clock, BadgePoundSterling } from 'lucide-react'
+import { Check, X, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-const pillars = [
+const comparisonFeatures = [
   {
-    icon: Award,
-    title: '25+ years experience',
-    body:
-      'We have valued and purchased British and worldwide material through every market cycle. That longevity means steady judgement—not inflated promises.',
+    title: 'Selling & Listing Fees',
+    us: 'None — 100% free appraisal',
+    usIcon: true,
+    them: 'Up to 30% commission + hidden fees',
+    themIcon: false,
   },
   {
-    icon: BadgePoundSterling,
-    title: 'Fair market prices',
-    body:
-      'Offers reflect current demand for your stamps and albums, explained in plain English. See how we compare to common alternatives in the table below.',
+    title: 'Payment Speed',
+    us: 'Fast — typically within ~7 days',
+    usIcon: true,
+    them: 'Weeks to months (hammer + fees + settlement)',
+    themIcon: false,
   },
   {
-    icon: MapPin,
-    title: 'UK-based experts',
-    body:
-      'Your enquiry is handled by specialists who understand GB issues, Commonwealth, and albums. Domestic banking, clear contracts, and no overseas middlemen.',
+    title: 'Valuation Model',
+    us: 'Fair market price tied to active buyer demand',
+    usIcon: true,
+    them: 'Varies heavily by auction room audience',
+    themIcon: 'partial',
   },
   {
-    icon: ShieldCheck,
-    title: 'Fast & secure',
-    body:
-      'Insured postage, tracked receipt, and prompt payment once we agree a price. We treat high-value lots with the same care as modest albums.',
+    title: 'Expertise & Security',
+    us: '25+ years experience, UK-based & fully insured',
+    usIcon: true,
+    them: 'Varies — Risk often left to the seller',
+    themIcon: 'partial',
   },
 ]
 
-const comparisonRows: { label: string; us: boolean | 'partial'; them: boolean | 'partial' }[] = [
-  { label: 'Offer tied to current buyer demand', us: true, them: 'partial' },
-  { label: 'No seller commission or listing fees', us: true, them: false },
-]
-
-function CellIcon({ value }: { value: boolean | 'partial' }) {
-  if (value === true) {
-    return (
-      <span className="inline-flex items-center justify-center" title="Yes">
-        <Check className="h-6 w-6 text-forest-green" strokeWidth={2.5} aria-hidden />
-        <span className="sr-only">Yes</span>
-      </span>
-    )
+function IconIndicator({ type }: { type: boolean | 'partial' }) {
+  if (type === true) {
+    return <Check className="h-5 w-5 text-forest-green shrink-0" strokeWidth={2.5} aria-hidden />
   }
-  if (value === false) {
-    return (
-      <span className="inline-flex items-center justify-center" title="No">
-        <X className="h-6 w-6 text-destructive" strokeWidth={2.5} aria-hidden />
-        <span className="sr-only">No</span>
-      </span>
-    )
+  if (type === false) {
+    return <X className="h-5 w-5 text-destructive shrink-0" strokeWidth={2.5} aria-hidden />
   }
-  return (
-    <span className="text-sm font-medium text-muted-foreground text-center block">
-      Varies
-    </span>
-  )
+  return <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0" strokeWidth={2.5} aria-hidden />
 }
 
 export function WhyChooseUs() {
   return (
     <section className="py-20 lg:py-24 bg-secondary" aria-labelledby="why-choose-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl">
-          <h2 id="why-choose-heading" className="text-primary">
-            Why choose us
+        <div className="max-w-3xl text-center mx-auto mb-16 lg:mb-20">
+          <h2 id="why-choose-heading" className="text-3xl font-bold tracking-tight text-primary sm:text-4xl text-balance">
+            Why Choose Us
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+          <p className="mt-4 text-lg text-muted-foreground leading-relaxed text-balance">
             Clarity and security matter—especially when parting with a collection you have kept for
-            years. Here is what sets our service apart.
+            years. See how our streamlined approach compares to traditional routes.
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-10 lg:gap-12">
-          {pillars.map((item) => (
-            <div key={item.title} className="flex gap-4">
-              <div className="shrink-0 w-12 h-12 rounded-full bg-oxford-blue flex items-center justify-center">
-                <item.icon className="w-6 h-6 text-gold" aria-hidden />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-primary">{item.title}</h3>
-                <p className="mt-2 text-muted-foreground leading-relaxed">{item.body}</p>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-5xl mx-auto">
+          {/* Them Section (Mobile First) */}
+          <div className="flex flex-col gap-6 p-6 sm:p-8 rounded-2xl bg-muted/30 border border-border">
+            <div className="mb-2">
+              <h3 className="text-xl font-semibold text-foreground">Typical Auction / Dealer</h3>
+              <p className="text-sm text-muted-foreground mt-1">The traditional route with hidden costs & wait times</p>
             </div>
-          ))}
+            
+            <div className="flex flex-col gap-6">
+              {comparisonFeatures.map((feature, idx) => (
+                <div key={idx} className="flex items-start gap-4 group">
+                  <div className="mt-0.5 p-1 rounded-full bg-background/50 border border-border shrink-0 transition-colors group-hover:bg-background/80">
+                    <IconIndicator type={feature.themIcon} />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-foreground text-sm">{feature.title}</h4>
+                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed transition-colors duration-200">
+                      {feature.them}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Us Section */}
+          <div className="flex flex-col gap-6 p-8 sm:p-10 rounded-2xl bg-card border-2 border-forest-green/20 shadow-xl lg:scale-105 relative overflow-hidden z-10 transition-transform duration-300">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-forest-green/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+            
+            <div className="mb-2 relative">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-forest-green/10 text-forest-green rounded-full text-xs font-semibold tracking-wide uppercase mb-4">
+                Recommended Choice
+              </div>
+              <h3 className="text-2xl font-bold text-primary">UK Stamp Valuations</h3>
+              <p className="text-sm text-muted-foreground mt-2 text-balance">A seamless, fully transparent selling experience</p>
+            </div>
+            
+            <div className="flex flex-col gap-6 relative">
+              {comparisonFeatures.map((feature, idx) => (
+                <div key={idx} className="flex items-start gap-4 group">
+                  <div className="mt-0.5 p-1 rounded-full bg-forest-green/10 shrink-0 transition-transform group-hover:scale-110 duration-200">
+                    <IconIndicator type={feature.usIcon} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-primary text-sm">{feature.title}</h4>
+                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed transition-colors duration-200 group-hover:text-primary">
+                      {feature.us}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="mt-16 rounded-xl border border-border bg-card p-6 md:p-8 shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-            <div>
-              <h3 className="text-xl font-semibold text-primary">What we pay versus typical routes</h3>
-              <p className="mt-2 text-sm text-muted-foreground max-w-xl">
-                Auction houses and general dealers serve a purpose—but fees, timing, and uncertainty
-                differ. This is a simple side-by-side guide, not a guarantee of every outcome.
-              </p>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground shrink-0">
-              <Clock className="h-4 w-4 text-gold" aria-hidden />
-              <span>
-                <strong className="text-foreground">Us:</strong> often within ~7 days of receipt
-              </span>
-            </div>
-          </div>
-
-          <div className="mt-8 overflow-x-auto rounded-lg border border-border">
-            <table className="w-full min-w-[520px] text-sm text-left border-collapse">
-              <caption className="sr-only">
-                Comparison of UK Stamp Valuations versus typical auction or high-street routes
-              </caption>
-              <thead>
-                <tr className="bg-muted/80">
-                  <th scope="col" className="p-4 font-semibold text-primary w-[40%]">
-                    Question
-                  </th>
-                  <th scope="col" className="p-4 font-semibold text-primary text-center w-[30%]">
-                    UK Stamp Valuations
-                  </th>
-                  <th scope="col" className="p-4 font-semibold text-primary text-center w-[30%]">
-                    Typical auction / dealer
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonRows.map((row) => (
-                  <tr key={row.label} className="border-t border-border">
-                    <th scope="row" className="p-4 font-medium text-foreground text-left align-middle">
-                      {row.label}
-                    </th>
-                    <td className="p-4 align-middle text-center">
-                      <CellIcon value={row.us} />
-                    </td>
-                    <td className="p-4 align-middle text-center">
-                      <CellIcon value={row.them} />
-                    </td>
-                  </tr>
-                ))}
-                <tr className="border-t border-border bg-muted/30">
-                  <th scope="row" className="p-4 font-medium text-foreground text-left align-top">
-                    Payment timing (typical)
-                  </th>
-                  <td className="p-4 align-middle text-center text-sm text-foreground">
-                    ~7 days after we agree your offer
-                  </td>
-                  <td className="p-4 align-middle text-center text-sm text-muted-foreground">
-                    Often several weeks to months (hammer + fees + settlement)
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <section
-            className="mt-8 -mx-6 md:-mx-8 border-t border-border"
-            aria-labelledby="comparison-followup-hook"
-          >
+        {/* Existing CTA Section (Retained & gently adapted to flow after cards) */}
+        <div className="mt-20 lg:mt-24 rounded-2xl border border-border bg-card shadow-sm overflow-hidden max-w-5xl mx-auto">
+          <section aria-labelledby="comparison-followup-hook">
             <div className="px-6 md:px-8 py-10 md:py-12 text-center">
               <h4
                 id="comparison-followup-hook"
@@ -167,7 +128,7 @@ export function WhyChooseUs() {
             </div>
 
             <div className="px-6 md:px-8 py-10 bg-muted/50 border-t border-border">
-              <div className="max-w-3xl">
+              <div className="max-w-3xl mx-auto">
                 <p className="text-base font-semibold text-primary">
                   Send an enquiry—we&apos;re happy to help if you have questions.
                 </p>
