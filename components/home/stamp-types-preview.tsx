@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { featuredProducts } from '@/data/stamps'
+import { buyingRates, getBuyingRateImageSrc } from '@/data/buying-rates'
 
 export function StampTypesPreview() {
   return (
@@ -15,7 +15,7 @@ export function StampTypesPreview() {
               What We Buy
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
-              From rare Victorian stamps to complete collections, we purchase a wide variety of philatelic items at fair market prices.
+              From modern unused postage to complete sheet collections, we purchase a wide variety of UK stamps at fair market percentages.
             </p>
           </div>
           <Button
@@ -31,14 +31,14 @@ export function StampTypesPreview() {
         </div>
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredProducts.slice(0, 6).map((product) => (
+          {buyingRates.slice(0, 6).map((product) => (
             <Card
               key={product.id}
               className="group flex flex-col h-full overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg"
             >
               <div className="relative aspect-4/3 overflow-hidden bg-muted">
                 <Image
-                  src={product.image}
+                  src={getBuyingRateImageSrc(product)}
                   alt={product.name}
                   fill
                   quality={90}
@@ -54,11 +54,11 @@ export function StampTypesPreview() {
                   {product.description}
                 </p>
                 <p className="mt-3 mb-4 text-base font-semibold text-forest-green">
-                  {product.priceRange}
+                  {product.rate * 100}% of Face Value
                 </p>
                 <div className="pt-4 mt-auto border-t border-border">
                   <Button asChild variant="outline" className="w-full border-forest-green text-forest-green hover:bg-forest-green hover:text-white transition-all duration-300 group/btn">
-                    <Link href={`/sell-your-stamps?category=${encodeURIComponent(product.name)}`} className="flex items-center justify-center gap-2 font-medium">
+                    <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
                       Sell your stamps
                       <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                     </Link>

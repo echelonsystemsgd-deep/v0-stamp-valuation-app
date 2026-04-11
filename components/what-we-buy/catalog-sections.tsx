@@ -4,10 +4,10 @@ import { ArrowRight, ListChecks } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
-  whatWeBuyCategories,
   whatWeBuyExclusions,
   whatWeBuyIntro,
 } from "@/data/what-we-buy-catalog"
+import { buyingRates, getBuyingRateImageSrc } from "@/data/buying-rates"
 
 export function WhatWeBuyIntroBlock() {
   return (
@@ -27,8 +27,8 @@ export function WhatWeBuyIntroBlock() {
 
 export function WhatWeBuyCategoryGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-16">
-      {whatWeBuyCategories.map((cat) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+      {buyingRates.map((cat) => (
         <Card
           key={cat.id}
           id={cat.id}
@@ -36,8 +36,8 @@ export function WhatWeBuyCategoryGrid() {
         >
           <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
             <Image
-              src={cat.image}
-              alt={cat.imageAlt}
+              src={getBuyingRateImageSrc(cat)}
+              alt={cat.name}
               fill
               quality={90}
               className="object-cover transition-transform duration-300 group-hover/card:scale-105"
@@ -45,26 +45,15 @@ export function WhatWeBuyCategoryGrid() {
             />
           </div>
           <CardHeader className="pb-2">
-            <CardTitle className="font-serif text-xl md:text-2xl text-primary">{cat.title}</CardTitle>
+            <CardTitle className="font-serif text-xl md:text-2xl text-primary">{cat.name}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 pt-0 flex-1 flex flex-col">
             <p className="text-slate-600 leading-relaxed">{cat.description}</p>
-            {cat.examples && cat.examples.length > 0 && (
-              <div>
-                <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Examples we see often</p>
-                <ul className="list-disc list-inside text-slate-700 text-sm space-y-1" role="list">
-                  {cat.examples.map((ex) => (
-                    <li key={ex}>{ex}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {cat.indicativeNote && (
-              <p className="text-sm text-slate-500 border-l-2 border-forest-green/40 pl-3 italic">{cat.indicativeNote}</p>
-            )}
+            <p className="font-bold text-forest-green text-lg">{cat.rate * 100}% of Face Value</p>
+            
             <div className="pt-6 mt-auto border-t border-slate-100">
               <Button asChild className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 hover:gap-3 group">
-                <Link href={`/sell-your-stamps?category=${encodeURIComponent(cat.title)}`} className="flex items-center justify-center gap-2 font-medium">
+                <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
                   Sell your stamps <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
