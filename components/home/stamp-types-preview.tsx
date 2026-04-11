@@ -34,7 +34,7 @@ export function StampTypesPreview() {
           {featuredProducts.slice(0, 6).map((product) => (
             <Card
               key={product.id}
-              className="group overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg"
+              className="group flex flex-col h-full overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg"
             >
               <div className="relative aspect-4/3 overflow-hidden bg-muted">
                 <Image
@@ -46,16 +46,24 @@ export function StampTypesPreview() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
-              <CardContent className="p-5">
+              <CardContent className="p-5 flex flex-col flex-1">
                 <h3 className="font-serif text-lg font-semibold text-primary group-hover:text-forest-green transition-colors">
                   {product.name}
                 </h3>
                 <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
                   {product.description}
                 </p>
-                <p className="mt-3 text-base font-semibold text-forest-green">
+                <p className="mt-3 mb-4 text-base font-semibold text-forest-green">
                   {product.priceRange}
                 </p>
+                <div className="pt-4 mt-auto border-t border-border">
+                  <Button asChild variant="outline" className="w-full border-forest-green text-forest-green hover:bg-forest-green hover:text-white transition-all duration-300 group/btn">
+                    <Link href={`/sell-your-stamps?category=${encodeURIComponent(product.name)}`} className="flex items-center justify-center gap-2 font-medium">
+                      Sell your stamps
+                      <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                    </Link>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}

@@ -64,8 +64,8 @@ export function WhatWeBuyCategoryGrid() {
             )}
             <div className="pt-6 mt-auto border-t border-slate-100">
               <Button asChild className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 hover:gap-3 group">
-                <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
-                  Sell Your Stamps Now <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                <Link href={`/sell-your-stamps?category=${encodeURIComponent(cat.title)}`} className="flex items-center justify-center gap-2 font-medium">
+                  Sell your stamps <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
             </div>
