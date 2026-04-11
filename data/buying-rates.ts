@@ -1,6 +1,6 @@
 export type BuyingRateGroup = "1st Class" | "2nd Class" | "Large Letter";
 
-export type LargeLetterSubgroup = "1st Class" | "2nd Class";
+export type LargeLetterSubgroup = "1st Class Large" | "2nd Class Large";
 
 export interface BuyingRateItem {
   id: string;
@@ -132,7 +132,7 @@ export const buyingRates: BuyingRateItem[] = [
     id: "ll-1st-commem-xmas-non-barcoded-self-adhesive",
     name: "1st Class Commemorative & Xmas, Non Barcoded Self Adhesive Stamps",
     group: "Large Letter",
-    subgroup: "1st Class",
+    subgroup: "1st Class Large",
     description: "Large letter format commemorative and Christmas self-adhesive, non-barcoded.",
     faceValue: 1.7,
     rate: 0.35,
@@ -143,7 +143,7 @@ export const buyingRates: BuyingRateItem[] = [
     id: "ll-1st-commem-xmas-non-barcoded-gummed",
     name: "1st Class Commemorative & Xmas, Non Barcoded Gummed Stamps",
     group: "Large Letter",
-    subgroup: "1st Class",
+    subgroup: "1st Class Large",
     description: "Large letter commemorative and Christmas gummed stamps without barcode.",
     faceValue: 1.7,
     rate: 0.33,
@@ -154,7 +154,7 @@ export const buyingRates: BuyingRateItem[] = [
     id: "ll-1st-turquoise-complete-sheets-25-50",
     name: "1st Class Large Letter Barcoded Turquoise, Complete Sheets 25/50",
     group: "Large Letter",
-    subgroup: "1st Class",
+    subgroup: "1st Class Large",
     description: "Full sheets of 25 or 50 barcoded turquoise large letter 1st class.",
     faceValue: 1.7,
     rate: 0.52,
@@ -165,7 +165,7 @@ export const buyingRates: BuyingRateItem[] = [
     id: "ll-1st-turquoise-complete-booklets-4",
     name: "1st Class Large Letter Barcoded Turquoise, Complete Booklets 4",
     group: "Large Letter",
-    subgroup: "1st Class",
+    subgroup: "1st Class Large",
     description: "Complete booklets of 4 barcoded turquoise large letter 1st class.",
     faceValue: 1.7,
     rate: 0.52,
@@ -176,7 +176,7 @@ export const buyingRates: BuyingRateItem[] = [
     id: "ll-1st-turquoise-incomplete-sheets-booklets",
     name: "1st Class Large Letter Barcoded Turquoise, Incomplete Sheets & Booklets",
     group: "Large Letter",
-    subgroup: "1st Class",
+    subgroup: "1st Class Large",
     description: "Incomplete turquoise large letter sheets, booklets, or loose stamps.",
     faceValue: 1.7,
     rate: 0.5,
@@ -189,7 +189,7 @@ export const buyingRates: BuyingRateItem[] = [
     id: "ll-2nd-green-complete-booklets-sheets-25-50",
     name: "2nd Class Large Letter Barcoded Green, Complete Booklets & Complete Sheets 25/50",
     group: "Large Letter",
-    subgroup: "2nd Class",
+    subgroup: "2nd Class Large",
     description: "Complete large letter 2nd class booklets and full sheets of 25 or 50, barcoded green.",
     faceValue: 1.15,
     rate: 0.7,
@@ -200,18 +200,40 @@ export const buyingRates: BuyingRateItem[] = [
     id: "ll-2nd-green-incomplete-sheets-booklets",
     name: "2nd Class Large Letter Barcoded Green, Incomplete Sheets & Booklets",
     group: "Large Letter",
-    subgroup: "2nd Class",
+    subgroup: "2nd Class Large",
     description: "Incomplete large letter 2nd class sheets, booklets, or loose barcoded green stamps.",
     faceValue: 1.15,
     rate: 0.675,
     isBarcoded: true,
     imageUrl: "/images/stamp-2nd-blue.png",
   },
+  {
+    id: "ll-2nd-xmas-complete-sheets-booklets",
+    name: "2nd Class Large Letter Barcoded XMAS, Complete Sheets and Booklets",
+    group: "Large Letter",
+    subgroup: "2nd Class Large",
+    description: "Complete Christmas / festive barcoded large letter 2nd class sheets and booklets.",
+    faceValue: 1.15,
+    rate: 0.6,
+    isBarcoded: true,
+    imageUrl: "/images/stamps/fdc-definitive.jpg",
+  },
+  {
+    id: "ll-2nd-xmas-incomplete-sheets-booklets",
+    name: "2nd Class Large Letter Barcoded XMAS, Incomplete Sheets and Booklets",
+    group: "Large Letter",
+    subgroup: "2nd Class Large",
+    description: "Incomplete festive large letter 2nd class sheets, booklets, or loose stamps.",
+    faceValue: 1.15,
+    rate: 0.55,
+    isBarcoded: true,
+    imageUrl: "/images/stamps/fdc-definitive.jpg",
+  },
 ];
 
 const LARGE_LETTER_SUBGROUP_ORDER: LargeLetterSubgroup[] = [
-  "1st Class",
-  "2nd Class",
+  "1st Class Large",
+  "2nd Class Large",
 ];
 
 export function getBuyingRateImageSrc(item: BuyingRateItem): string {
