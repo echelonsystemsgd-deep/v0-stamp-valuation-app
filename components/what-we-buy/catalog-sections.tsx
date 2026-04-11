@@ -32,7 +32,7 @@ export function WhatWeBuyCategoryGrid() {
         <Card
           key={cat.id}
           id={cat.id}
-          className="overflow-hidden border-slate-100 shadow-lg shadow-slate-200/40 ring-1 ring-slate-100 scroll-mt-28 group/card"
+          className="overflow-hidden border-slate-100 shadow-lg shadow-slate-200/40 ring-1 ring-slate-100 scroll-mt-28 group/card flex flex-col h-full"
         >
           <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
             <Image
@@ -47,7 +47,7 @@ export function WhatWeBuyCategoryGrid() {
           <CardHeader className="pb-2">
             <CardTitle className="font-serif text-xl md:text-2xl text-primary">{cat.title}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 pt-0">
+          <CardContent className="space-y-4 pt-0 flex-1 flex flex-col">
             <p className="text-slate-600 leading-relaxed">{cat.description}</p>
             {cat.examples && cat.examples.length > 0 && (
               <div>
@@ -62,6 +62,13 @@ export function WhatWeBuyCategoryGrid() {
             {cat.indicativeNote && (
               <p className="text-sm text-slate-500 border-l-2 border-forest-green/40 pl-3 italic">{cat.indicativeNote}</p>
             )}
+            <div className="pt-6 mt-auto border-t border-slate-100">
+              <Button asChild className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 hover:gap-3 group">
+                <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
+                  Sell Your Stamps Now <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       ))}
