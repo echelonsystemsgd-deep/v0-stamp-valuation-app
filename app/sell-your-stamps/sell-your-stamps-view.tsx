@@ -11,6 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calculator, FileText, Verified } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { SavedEstimateBanner } from "@/components/sell/saved-estimate-banner"
+import { HeroSlideshow } from "@/components/ui/hero-slideshow"
+import { sellYourStampsHero } from "@/data/slideshows"
 
 const CONDITION_LABEL: Record<string, string> = {
   mnh: "MNH",
@@ -71,24 +73,17 @@ export function SellYourStampsView() {
     <>
       <Header />
       <main id="main-content" className="flex-1 min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
-        <section className="bg-[#0b1b3d] py-16 md:py-24 lg:py-32 text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 transform translate-x-1/2 hidden md:block" />
-
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-4xl mx-auto lg:mx-0 text-center lg:text-left">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white border border-white/20 text-xs font-black uppercase tracking-widest mb-6 backdrop-blur-sm">
-                <Verified className="h-4 w-4 text-gold" /> Trusted UK Stamp Dealer
-              </span>
-              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight leading-[1.1] sm:max-w-3xl text-white">
-                Sell Your Modern <span className="text-gold italic">Stamps</span>
-              </h1>
-              <p className="mt-4 text-lg sm:text-xl md:text-2xl text-slate-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                The fastest way to de-stash your collection. Calculate an instant estimate below or request a full
-                appraisal for large lots.
-              </p>
-            </div>
+        <HeroSlideshow 
+          images={sellYourStampsHero}
+          title="Sell Your Modern Stamps"
+          subtitle="The fastest way to de-stash your collection. Calculate an instant estimate below or request a full appraisal for large lots."
+        >
+          <div className="mt-8">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 text-white border border-white/30 text-xs font-black uppercase tracking-widest backdrop-blur-sm shadow-sm">
+              <Verified className="h-4 w-4 text-gold" /> Trusted UK Stamp Dealer
+            </span>
           </div>
-        </section>
+        </HeroSlideshow>
 
         <ImportantNotice />
 

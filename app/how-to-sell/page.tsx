@@ -7,6 +7,8 @@ import { FAQAccordion, shippingFAQs, generalFAQs } from '@/components/content/fa
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Shield, Clock, Award } from 'lucide-react'
+import { HeroSlideshow } from '@/components/ui/hero-slideshow'
+import { howToSellSlideshow } from '@/data/slideshows'
 
 export const metadata: Metadata = {
   title: 'How to Sell Your Stamps',
@@ -38,18 +40,11 @@ export default function HowToSellPage() {
     <>
       <Header />
       <main id="main-content" className="flex-1">
-        {/* Page Header */}
-        <section className="bg-oxford-blue py-16 lg:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
-              <h1 className="text-white text-4xl md:text-5xl font-black mb-6 tracking-tight leading-[1.1]">How to Sell Your Stamps</h1>
-              <p className="mt-4 text-xl text-white/80 leading-relaxed font-medium">
-                Our straightforward process makes selling your stamp collection simple and stress-free. 
-                From free valuations to secure shipping and fast payment, we handle everything.
-              </p>
-            </div>
-          </div>
-        </section>
+        <HeroSlideshow 
+          images={howToSellSlideshow}
+          title="How to Sell Your Stamps"
+          subtitle="Our straightforward process makes selling your stamp collection simple and stress-free. From free valuations to secure shipping and fast payment, we handle everything."
+        />
 
         {/* Trust Points */}
         <section className="py-12 bg-secondary" aria-labelledby="trust-points-heading">

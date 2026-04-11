@@ -7,6 +7,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { InlineSellCTA } from '@/components/sections/sell-cta'
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { contactInfo } from '@/data/navigation'
+import { HeroSlideshow } from '@/components/ui/hero-slideshow'
+import { contactUsHero } from '@/data/slideshows'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
@@ -45,18 +47,11 @@ export default function ContactPage() {
     <>
       <Header />
       <main id="main-content" className="flex-1">
-        {/* Page Header */}
-        <section className="bg-oxford-blue py-16 lg:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
-              <h1 className="text-white text-4xl md:text-5xl font-black mb-6 tracking-tight leading-[1.1]">Contact Us</h1>
-              <p className="mt-4 text-xl text-white/80 leading-relaxed font-medium">
-                Have questions about selling your stamps or need more information? 
-                We&apos;d love to hear from you. Get in touch using any of the methods below.
-              </p>
-            </div>
-          </div>
-        </section>
+        <HeroSlideshow 
+          images={contactUsHero}
+          title="Contact Us"
+          subtitle="Have questions about selling your stamps or need more information? We'd love to hear from you. Get in touch using any of the methods below."
+        />
 
         {/* Contact Content */}
         <section className="py-16 lg:py-20">

@@ -8,6 +8,8 @@ import {
   WhatWeBuyIntroBlock,
   WhatWeBuyNextSteps,
 } from "@/components/what-we-buy/catalog-sections"
+import { HeroSlideshow } from "@/components/ui/hero-slideshow"
+import { whatWeBuySlideshow } from "@/data/slideshows"
 import { PackageSearch, Verified } from "lucide-react"
 
 export default function WhatWeBuyPage() {
@@ -15,31 +17,22 @@ export default function WhatWeBuyPage() {
     <>
       <Header />
       <main id="main-content" className="flex-1 min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
-        <section className="bg-[#0b1b3d] py-16 md:py-24 lg:py-32 text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 transform translate-x-1/2 hidden md:block" />
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-4xl mx-auto lg:mx-0 text-center lg:text-left">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white border border-white/20 text-xs font-black uppercase tracking-widest mb-6 backdrop-blur-sm">
-                <PackageSearch className="h-4 w-4 text-gold" aria-hidden />
-                Reference catalog
-              </span>
-              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight leading-[1.1] sm:max-w-3xl text-white">
-                What we <span className="text-gold italic">buy</span>
-              </h1>
-              <p className="mt-4 text-lg sm:text-xl md:text-2xl text-slate-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                A straightforward list of UK stamp material we purchase. No calculator here—just clarity on fit, then
-                you can value or sell when you are ready.
-              </p>
-              <p className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2 text-sm text-slate-400">
-                <span className="inline-flex items-center gap-1.5">
-                  <Verified className="h-4 w-4 text-gold shrink-0" aria-hidden />
-                  Trusted UK specialists
-                </span>
-
-              </p>
-            </div>
+        <HeroSlideshow 
+          images={whatWeBuySlideshow}
+          title="What we buy"
+          subtitle="A straightforward list of UK stamp material we purchase. No calculator here—just clarity on fit, then you can value or sell when you are ready."
+        >
+          <div className="mt-8 flex items-center gap-4">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 text-white border border-white/30 text-xs font-black uppercase tracking-widest backdrop-blur-sm shadow-sm">
+              <PackageSearch className="h-4 w-4 text-gold" aria-hidden />
+              Reference catalog
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-sm text-white/90">
+              <Verified className="h-4 w-4 text-gold shrink-0" aria-hidden />
+              Trusted UK specialists
+            </span>
           </div>
-        </section>
+        </HeroSlideshow>
 
         <section className="py-12 lg:py-20 -mt-10 md:-mt-16 relative z-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
