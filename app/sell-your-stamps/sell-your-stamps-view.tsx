@@ -13,6 +13,7 @@ import { useSearchParams } from "next/navigation"
 import { SavedEstimateBanner } from "@/components/sell/saved-estimate-banner"
 import { HeroSlideshow } from "@/components/ui/hero-slideshow"
 import { sellYourStampsHero } from "@/data/slideshows"
+import { buyingRates } from "@/data/buying-rates"
 
 const CONDITION_LABEL: Record<string, string> = {
   mnh: "MNH",
@@ -42,6 +43,8 @@ export function SellYourStampsView() {
   const faceValue = searchParams.get("face_value")
   const condition = searchParams.get("condition")
 
+  const [calculatorData, setCalculatorData] = useState<string | null>(null)
+
   const isLockInOffer = Boolean(offerLow?.trim())
   const hasFullEstimate = Boolean(offerLow?.trim() && offerHigh?.trim())
 
@@ -56,7 +59,21 @@ export function SellYourStampsView() {
     }
   }, [isLockInOffer])
 
-  const handleValuationAction = useCallback(() => {
+  const handleValuationAction = useCallback((quantities?: Record<string, number>, totalValue?: number) => {
+    if (quantities && totalValue && totalValue > 0) {
+      let calculationText = `Calculated via tool:\n`
+      for (const [id, qty] of Object.entries(quantities)) {
+        if (qty > 0) {
+          const item = buyingRates.find((b) => b.id === id)
+          if (item) {
+            calculationText += `- ${qty}x ${item.name}\n`
+          }
+        }
+      }
+      calculationText += `Total Est. Payout: £${totalValue.toFixed(2)}`
+      setCalculatorData(calculationText)
+    }
+
     setActiveTab("form")
     setTimeout(() => {
       const formSection = document.getElementById("appraisal-form-header")
@@ -64,8 +81,9 @@ export function SellYourStampsView() {
     }, 100)
   }, [])
 
-  const initialDescription =
-    hasFullEstimate && offerLow && offerHigh
+  const initialDescription = calculatorData
+    ? calculatorData
+    : hasFullEstimate && offerLow && offerHigh
       ? formatLockInDescription(faceValue, condition, offerLow, offerHigh)
       : undefined
 

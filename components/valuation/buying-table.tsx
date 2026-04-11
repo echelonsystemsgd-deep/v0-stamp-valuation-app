@@ -15,7 +15,7 @@ import {
   getBuyingRateSections,
 } from "@/data/buying-rates"
 
-export function BuyingTable({ onAction }: { onAction?: () => void }) {
+export function BuyingTable({ onAction }: { onAction?: (quantities: Record<string, number>, totalValue: number) => void }) {
   const [isMounted, setIsMounted] = React.useState(false)
 
   React.useEffect(() => {
@@ -262,6 +262,28 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
         </div>
       ))}
 
+      {/* Sticky Floating Action Bar */}
+      {isMounted && totalValue > 0 && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-auto max-w-lg z-50 animate-fade-in-up">
+          <div className="flex items-center justify-between gap-6 px-6 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 dark:border-slate-800/50 shadow-2xl shadow-primary/20 rounded-full">
+            <div className="flex flex-col">
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Total Est. Payout</span>
+              <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono tracking-tight leading-none">
+                £{totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </span>
+            </div>
+            <Button 
+              size="default" 
+              onClick={() => onAction && onAction(quantities, totalValue)}
+              className="bg-primary hover:bg-primary/90 text-white font-bold h-12 px-6 sm:px-8 rounded-full shadow-lg shadow-primary/30 transition-all hover:scale-105 active:scale-95 group shrink-0"
+            >
+              Submit <span className="hidden sm:inline">&nbsp;for Valuation</span>
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Summary Section */}
       <section className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden ring-1 ring-white/10 animate-slide-in-right">
         {/* Background Accents */}
@@ -294,7 +316,7 @@ export function BuyingTable({ onAction }: { onAction?: () => void }) {
             </div>
             <Button 
               size="lg" 
-              onClick={onAction}
+              onClick={() => onAction && onAction(quantities, totalValue)}
               className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-black text-xl h-20 px-12 rounded-2xl shadow-2xl shadow-primary/40 transition-all duration-300 hover:scale-105 active:scale-95 group"
             >
               Submit for Valuation
