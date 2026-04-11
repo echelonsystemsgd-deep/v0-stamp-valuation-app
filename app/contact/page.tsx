@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/footer'
 import { ContactForm } from '@/components/forms/contact-form'
 import { Card, CardContent } from '@/components/ui/card'
 import { InlineSellCTA } from '@/components/sections/sell-cta'
-import { Phone, Mail, MapPin, Clock } from 'lucide-react'
+import { Phone, Mail, Clock } from 'lucide-react'
 import { contactInfo } from '@/data/navigation'
 import { HeroSlideshow } from '@/components/ui/hero-slideshow'
 import { contactUsHero } from '@/data/slideshows'
@@ -16,12 +16,6 @@ export const metadata: Metadata = {
 }
 
 const contactDetails = [
-  {
-    icon: MapPin,
-    label: 'Address',
-    value: contactInfo.address,
-    href: null,
-  },
   {
     icon: Phone,
     label: 'Phone',
@@ -116,30 +110,6 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Map Placeholder */}
-        <section className="py-16 lg:py-20 bg-secondary" aria-labelledby="location-heading">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-10">
-              <h2 id="location-heading" className="text-primary">Visit Our Office</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                We welcome visits to our London office. Please contact us in advance to arrange an appointment.
-              </p>
-            </div>
-            <div className="aspect-video rounded-2xl overflow-hidden bg-muted flex items-center justify-center border border-border/50 shadow-inner group">
-              <div className="text-center p-8 transition-transform group-hover:scale-105 duration-500">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
-                  <MapPin className="w-8 h-8 text-forest-green" />
-                </div>
-                <p className="text-primary font-serif font-bold text-xl mb-2">
-                  {contactInfo.address}
-                </p>
-                <p className="text-muted-foreground">
-                  Appointments available Monday - Friday, 9am - 5pm
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
 
         <section className="py-20 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
