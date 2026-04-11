@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ClipboardList, Search, MessageSquare, Truck, ShieldCheck, Banknote } from 'lucide-react'
+import { ClipboardList, Search, MessageSquare, Truck, ShieldCheck, Banknote, ArrowRight } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
@@ -110,9 +110,9 @@ export function ProcessTimeline() {
                 </ul>
 
                 <div className="mt-6 pt-6 border-t border-border/50">
-                  <Button asChild variant="outline" className="w-full sm:w-auto text-forest-green border-forest-green/30 hover:bg-forest-green hover:text-white transition-colors duration-300">
-                    <Link href="/sell-your-stamps">
-                      {step.ctaText}
+                  <Button asChild className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 hover:gap-3 group">
+                    <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
+                      Sell Your Stamps Now <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </Button>
                 </div>
