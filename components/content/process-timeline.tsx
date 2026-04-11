@@ -1,5 +1,7 @@
+import Link from 'next/link'
 import { ClipboardList, Search, MessageSquare, Truck, ShieldCheck, Banknote } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 
 const timelineSteps = [
   {
@@ -11,6 +13,7 @@ const timelineSteps = [
       'Mention any stamps you believe may be particularly valuable',
       'Include how the collection was stored over the years',
     ],
+    ctaText: 'Start Your Submission',
   },
   {
     icon: Search,
@@ -21,6 +24,7 @@ const timelineSteps = [
       'We may request additional photos if needed',
       'All valuations are provided free of charge',
     ],
+    ctaText: 'Request Your Valuation',
   },
   {
     icon: MessageSquare,
@@ -31,6 +35,7 @@ const timelineSteps = [
       'Ask us anything about the valuation',
       'Request a detailed breakdown if needed',
     ],
+    ctaText: 'Sell Your Stamps',
   },
   {
     icon: Truck,
@@ -41,6 +46,7 @@ const timelineSteps = [
       'Fully insured up to £50,000',
       'Track your shipment online',
     ],
+    ctaText: 'Arrange Collection',
   },
   {
     icon: ShieldCheck,
@@ -51,6 +57,7 @@ const timelineSteps = [
       'Final valuation confirmed within 2 working days',
       'We only adjust downward if condition was misrepresented',
     ],
+    ctaText: 'Sell Your Stamps',
   },
   {
     icon: Banknote,
@@ -61,6 +68,7 @@ const timelineSteps = [
       'No hidden fees or deductions',
       'Full payment confirmation provided',
     ],
+    ctaText: 'Start Selling Today',
   },
 ]
 
@@ -100,6 +108,14 @@ export function ProcessTimeline() {
                     </li>
                   ))}
                 </ul>
+
+                <div className="mt-6 pt-6 border-t border-border/50">
+                  <Button asChild variant="outline" className="w-full sm:w-auto text-forest-green border-forest-green/30 hover:bg-forest-green hover:text-white transition-colors duration-300">
+                    <Link href="/sell-your-stamps">
+                      {step.ctaText}
+                    </Link>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
