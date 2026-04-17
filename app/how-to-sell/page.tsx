@@ -44,7 +44,29 @@ export default function HowToSellPage() {
           images={howToSellSlideshow}
           title="How to Sell Your Stamps"
           subtitle="Our straightforward process makes selling your stamp collection simple and stress-free. From free valuations to secure shipping and fast payment, we handle everything."
-        />
+        >
+          <div className="mt-10 flex flex-col sm:flex-row gap-4">
+            <Button
+              asChild
+              size="lg"
+              className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-14 px-8 text-lg"
+            >
+              <Link href="/sell-your-stamps">Sell Your Stamps</Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-white text-white hover:bg-white hover:text-oxford-blue font-semibold h-14 px-8 text-lg bg-transparent"
+            >
+              <Link href="/what-we-buy">View What We Buy</Link>
+            </Button>
+          </div>
+          <p className="mt-6 text-base text-white/70 flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-forest-green" aria-hidden="true" />
+            No obligation to sell
+          </p>
+        </HeroSlideshow>
 
         {/* Trust Points */}
         <section className="py-12 bg-secondary" aria-labelledby="trust-points-heading">

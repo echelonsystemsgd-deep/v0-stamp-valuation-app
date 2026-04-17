@@ -57,7 +57,7 @@ export function StampTypesPreview() {
                   {product.rate * 100}% of Face Value
                 </p>
                 <div className="pt-4 mt-auto border-t border-border">
-                  <Button asChild variant="outline" className="w-full border-forest-green text-forest-green hover:bg-forest-green hover:text-white transition-all duration-300 group/btn">
+                  <Button asChild className="w-full bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 group/btn">
                     <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
                       Sell your stamps
                       <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />

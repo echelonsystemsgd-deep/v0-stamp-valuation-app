@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
+import { Button } from "@/components/ui/button"
 import { Footer } from "@/components/layout/footer"
 import { InlineSellCTA } from "@/components/sections/sell-cta"
 import {
@@ -22,16 +23,27 @@ export default function WhatWeBuyPage() {
           title="What we buy"
           subtitle="A straightforward list of UK stamp material we purchase. No calculator here—just clarity on fit, then you can value or sell when you are ready."
         >
-          <div className="mt-8 flex items-center gap-4">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 text-white border border-white/30 text-xs font-black uppercase tracking-widest backdrop-blur-sm shadow-sm">
-              <PackageSearch className="h-4 w-4 text-gold" aria-hidden />
-              Reference catalog
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-sm text-white/90">
-              <Verified className="h-4 w-4 text-gold shrink-0" aria-hidden />
-              Trusted UK specialists
-            </span>
+          <div className="mt-10 flex flex-col sm:flex-row gap-4">
+            <Button
+              asChild
+              size="lg"
+              className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-14 px-8 text-lg"
+            >
+              <Link href="/sell-your-stamps">Sell Your Stamps</Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-white text-white hover:bg-white hover:text-oxford-blue font-semibold h-14 px-8 text-lg bg-transparent"
+            >
+              <Link href="/how-to-sell">How to Sell</Link>
+            </Button>
           </div>
+          <p className="mt-6 text-base text-white/70 flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-forest-green" aria-hidden="true" />
+            No obligation to sell
+          </p>
         </HeroSlideshow>
 
         <section className="py-12 lg:py-20 -mt-10 md:-mt-16 relative z-20">
