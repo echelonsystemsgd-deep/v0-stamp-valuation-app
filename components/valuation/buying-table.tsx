@@ -190,7 +190,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
               </div>
               <div className="text-right">
                 <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black block mb-1">Subtotal</span>
-                <div className="text-4xl font-black text-primary font-mono tracking-tighter">
+                <div className="text-3xl sm:text-4xl font-black text-primary font-mono tracking-tighter">
                   £{calculateSubtotal(item).toFixed(2)}
                 </div>
               </div>
@@ -308,7 +308,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             <div className="text-center xl:text-right space-y-1">
               <span className="text-blue-400 text-sm font-black uppercase tracking-[0.2em]">Total Estimated Payout</span>
               <div 
-                className="text-6xl sm:text-7xl lg:text-8xl font-black text-white tracking-tighter font-mono"
+                className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white tracking-tighter font-mono"
                 suppressHydrationWarning
               >
                 £{isMounted ? totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : totalValue.toFixed(2)}
