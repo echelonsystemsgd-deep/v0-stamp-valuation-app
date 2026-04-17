@@ -1,6 +1,8 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { 
   Carousel, 
@@ -102,7 +104,7 @@ export function Testimonials() {
           </Carousel>
         </div>
         
-        <div className="mt-16 text-center">
+        <div className="mt-16 text-center flex flex-col items-center gap-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-slate-200">
             <span className="flex">
                {[...Array(5)].map((_, i) => (
@@ -111,6 +113,9 @@ export function Testimonials() {
             </span>
             <span className="text-sm font-bold text-slate-800">4.9/5 Average Rating on Trustpilot</span>
           </div>
+          <Button asChild size="lg" className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-14 px-8 text-lg">
+            <Link href="/sell-your-stamps">Sell Your Stamps</Link>
+          </Button>
         </div>
       </div>
     </section>
