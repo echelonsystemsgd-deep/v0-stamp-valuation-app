@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Phone, Mail, MapPin, Clock } from 'lucide-react'
+import { Phone, Mail, Clock } from 'lucide-react'
 import { footerNavigation, contactInfo } from '@/data/navigation'
 
 export function Footer() {
@@ -80,12 +80,7 @@ export function Footer() {
                 Contact Us
               </h3>
               <address className="not-italic flex flex-col gap-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-gold shrink-0 mt-0.5" aria-hidden="true" />
-                  <span className="text-base text-primary-foreground/80">
-                    {contactInfo.address}
-                  </span>
-                </div>
+
                 <div className="flex items-center gap-3">
                   <Phone className="h-5 w-5 text-gold shrink-0" aria-hidden="true" />
                   <a
