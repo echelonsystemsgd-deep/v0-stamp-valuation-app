@@ -83,7 +83,7 @@ export function WhatWeBuyExclusionsSection() {
               <CardTitle className="text-base font-bold text-slate-800">{item.title}</CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <p className="text-sm text-slate-600 leading-relaxed">{item.description}</p>
+              <p className="text-base text-slate-600 leading-relaxed">{item.description}</p>
             </CardContent>
           </Card>
         ))}

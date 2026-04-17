@@ -90,7 +90,7 @@ export function Header() {
 
           <div className="hidden lg:flex items-center gap-6">
             <div className="flex flex-col items-end mr-2">
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+              <span className="text-xs md:text-sm uppercase tracking-wider text-muted-foreground font-semibold">
                 Need Expert Advice?
               </span>
               <a 
@@ -119,7 +119,7 @@ export function Header() {
               suppressHydrationWarning
             >
               <PhoneCall className="h-4 w-4" />
-              <span className="text-xs font-bold hidden sm:inline-block tracking-tight">
+              <span className="text-sm font-bold hidden sm:inline-block tracking-tight">
                 {contactInfo.phone}
               </span>
             </a>
@@ -158,7 +158,7 @@ export function Header() {
                     </Link>
                   ))}
                   <div className="mt-8 px-4 py-6 bg-muted/30 rounded-xl border border-border/50">
-                    <p className="text-sm text-muted-foreground mb-3 font-medium">Need Expert Advice?</p>
+                    <p className="text-base text-muted-foreground mb-3 font-medium">Need Expert Advice?</p>
                     <a 
                       href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} 
                       className="flex items-center gap-3 text-forest-green font-bold text-xl mb-6 hover:opacity-80 transition-opacity"

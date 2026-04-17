@@ -71,7 +71,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             </div>
             <span className="font-bold text-foreground leading-tight text-lg">{item.name}</span>
           </div>
-          <div className="text-sm text-muted-foreground leading-relaxed pr-4">{item.description}</div>
+          <div className="text-base text-muted-foreground leading-relaxed pr-4">{item.description}</div>
           <div className="text-right font-medium text-slate-600 font-mono">£{item.faceValue.toFixed(2)}</div>
           <div className="text-right">
             <Badge
@@ -140,7 +140,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
               </div>
               <div className="flex-1 space-y-2">
                 <h3 className="font-bold text-foreground text-xl leading-tight">{item.name}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{item.description}</p>
+                <p className="text-base text-muted-foreground leading-relaxed line-clamp-3">{item.description}</p>
               </div>
             </div>
 
