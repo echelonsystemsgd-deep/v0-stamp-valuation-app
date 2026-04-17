@@ -111,7 +111,18 @@ export function Header() {
             </Button>
           </div>
 
-          <div className="lg:hidden">
+          <div className="flex items-center gap-1 lg:hidden">
+            <a 
+              href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} 
+              className="flex items-center gap-1.5 text-forest-green hover:text-forest-green/80 bg-forest-green/10 px-3 py-2 rounded-md transition-colors"
+              aria-label="Call us"
+              suppressHydrationWarning
+            >
+              <PhoneCall className="h-4 w-4" />
+              <span className="text-xs font-bold hidden sm:inline-block tracking-tight">
+                {contactInfo.phone}
+              </span>
+            </a>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button 
