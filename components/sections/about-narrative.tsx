@@ -8,21 +8,21 @@ import { CheckCircle2 } from 'lucide-react'
 
 export function AboutNarrative() {
   return (
-    <section className="py-24 lg:py-32 bg-white" aria-labelledby="about-heading text-lg">
+    <section className="py-14 md:py-20 lg:py-32 bg-white" aria-labelledby="about-heading text-lg">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-14 lg:gap-24 items-center">
           {/* Left Column: Narrative */}
-          <div className="order-2 lg:order-1 space-y-8">
-            <div className="space-y-4">
-              <h2 id="about-heading" className="text-4xl md:text-5xl font-black tracking-tight text-primary">
+          <div className="order-2 lg:order-1 space-y-6 md:space-y-8">
+            <div className="space-y-3 md:space-y-4">
+              <h2 id="about-heading" className="text-3xl md:text-5xl font-black tracking-tight text-primary">
                 About Us
               </h2>
-              <p className="text-xl md:text-2xl font-semibold text-forest-green italic">
+              <p className="text-lg md:text-2xl font-semibold text-forest-green italic">
                 A Heritage of Precision and Fairness
               </p>
             </div>
             
-            <div className="space-y-6 text-slate-700 leading-relaxed text-lg lg:text-xl">
+            <div className="space-y-4 md:space-y-6 text-slate-700 leading-relaxed text-base md:text-lg lg:text-xl">
               <p>
                 UK Stamp Valuations was established over 25 years ago with a single mission: to provide collectors across the United Kingdom with a transparent, expert, and dignified way to discover the true value of their philatelic collections.
               </p>
@@ -35,16 +35,16 @@ export function AboutNarrative() {
             </div>
 
             {/* Trust Highlight Block */}
-            <div className="bg-primary/5 border-l-4 border-primary p-6 rounded-r-2xl shadow-sm">
+            <div className="bg-primary/5 border-l-4 border-primary p-4 md:p-6 rounded-r-2xl shadow-sm">
               <div className="flex gap-4">
-                <CheckCircle2 className="h-6 w-6 text-primary shrink-0" />
-                <p className="font-bold text-primary leading-tight">
+                <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-primary shrink-0" />
+                <p className="font-bold text-primary leading-tight text-sm md:text-base">
                   All collections are carefully checked and professionally assessed by our lead philatelists before any purchase.
                 </p>
               </div>
             </div>
 
-            <Button asChild size="lg" className="bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-10 text-lg rounded-xl shadow-lg shadow-forest-green/20">
+            <Button asChild size="lg" className="bg-forest-green hover:bg-forest-green/90 text-white font-bold h-11 md:h-14 px-6 md:px-10 text-base md:text-lg rounded-xl shadow-lg shadow-forest-green/20">
               <Link href="/sell-your-stamps">Start Your Free Appraisal</Link>
             </Button>
           </div>

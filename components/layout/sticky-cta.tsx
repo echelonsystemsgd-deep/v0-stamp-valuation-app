@@ -25,23 +25,32 @@ export function StickyCTA() {
 
   return (
     <>
-      {/* Mobile Floating Action Button */}
+      {/* Mobile Sticky Bar */}
       <div 
         className={cn(
-          "fixed bottom-24 right-4 z-40 transition-all duration-300 lg:hidden",
-          isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-90 pointer-events-none"
+          "fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-border shadow-xl py-2 transition-all duration-300 lg:hidden",
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
         )}
       >
-        <Button
-          asChild
-          size="lg"
-          className="rounded-full h-14 w-14 p-0 bg-forest-green hover:bg-forest-green/90 text-white shadow-xl border-2 border-white/20"
-          aria-label="Sell Your Stamps"
-        >
-          <Link href="/sell-your-stamps">
-            <Tag className="h-6 w-6" />
-          </Link>
-        </Button>
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
+          <Button
+            asChild
+            variant="ghost"
+            className="h-10 px-3 text-sm font-semibold text-primary hover:text-forest-green"
+          >
+            <Link href="/how-to-sell">How it works</Link>
+          </Button>
+          <Button
+            asChild
+            className="group h-10 px-4 text-sm font-bold bg-forest-green text-white hover:bg-forest-green/90"
+            aria-label="Sell Your Stamps"
+          >
+            <Link href="/sell-your-stamps" className="flex items-center gap-2">
+              <Tag className="h-4 w-4" />
+              <span>Sell Your Stamps</span>
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Desktop Sticky Bar (Bottom) */}

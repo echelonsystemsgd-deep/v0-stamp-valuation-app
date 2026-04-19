@@ -53,7 +53,7 @@ export function Header() {
         Skip to main content
       </a>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <nav className="flex h-20 items-center justify-between" aria-label="Main navigation">
+        <nav className="flex h-16 sm:h-20 items-center justify-between" aria-label="Main navigation">
           {/* Logo */}
           <Link 
             href="/" 
@@ -61,10 +61,10 @@ export function Header() {
             className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
           >
             <div className="flex flex-col">
-              <span className="font-serif text-xl font-bold text-primary leading-tight">
+              <span className="font-serif text-lg sm:text-xl font-bold text-primary leading-tight">
                 UK Stamp
               </span>
-              <span className="font-serif text-xl font-bold text-primary leading-tight">
+              <span className="font-serif text-lg sm:text-xl font-bold text-primary leading-tight">
                 Valuations
               </span>
             </div>
@@ -115,7 +115,7 @@ export function Header() {
           <div className="flex items-center gap-1 lg:hidden">
             <a 
               href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} 
-              className="flex items-center gap-1.5 text-forest-green hover:text-forest-green/80 bg-forest-green/10 px-3 py-2 rounded-md transition-colors"
+              className="flex items-center gap-1.5 text-forest-green hover:text-forest-green/80 bg-forest-green/10 px-2.5 sm:px-3 py-2 rounded-md transition-colors"
               aria-label="Call us"
               suppressHydrationWarning
             >
