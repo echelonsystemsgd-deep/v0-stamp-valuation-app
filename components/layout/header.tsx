@@ -67,7 +67,7 @@ export function Header() {
               <span className="font-serif text-lg sm:text-xl font-bold text-primary leading-tight">
                 Valuations
               </span>
-              <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-forest-green/80 sm:hidden">
+              <span className="mt-0.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-forest-green/80">
                 25+ Years Expertise
               </span>
             </div>
