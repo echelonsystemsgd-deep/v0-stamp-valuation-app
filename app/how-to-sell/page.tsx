@@ -39,7 +39,7 @@ export default function HowToSellPage() {
   return (
     <>
       <Header />
-      <main id="main-content" className="flex-1">
+      <main id="main-content" className="flex-1 flex flex-col w-full">
         <HeroSlideshow 
           images={howToSellSlideshow}
           title="How to Sell Your Stamps"

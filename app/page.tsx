@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <main id="main-content">
+      <main id="main-content" className="flex-1 flex flex-col w-full">
         <HeroSlideshow />
         <AboutSummary />
         <Testimonials />

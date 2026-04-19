@@ -10,8 +10,8 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
   const pathname = usePathname()
 
-  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (pathname === '/') {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname === href) {
       e.preventDefault()
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
@@ -25,7 +25,7 @@ export function Footer() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {/* Brand Column */}
             <div className="lg:col-span-1">
-              <Link href="/" onClick={handleLogoClick} className="inline-block group focus:outline-none focus:ring-2 focus:ring-gold rounded-sm px-1 -mx-1">
+              <Link href="/" onClick={(e) => handleLinkClick(e, '/')} className="inline-block group focus:outline-none focus:ring-2 focus:ring-gold rounded-sm px-1 -mx-1">
                 <span className="font-serif text-2xl font-bold text-primary-foreground group-hover:text-gold transition-colors">
                   UK Stamp Valuations
                 </span>
@@ -46,6 +46,7 @@ export function Footer() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
+                      onClick={(e) => handleLinkClick(e, item.href)}
                       className="text-base text-primary-foreground/80 hover:text-gold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded-sm"
                     >
                       {item.label}
@@ -65,6 +66,7 @@ export function Footer() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
+                      onClick={(e) => handleLinkClick(e, item.href)}
                       className="text-base text-primary-foreground/80 hover:text-gold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded-sm"
                     >
                       {item.label}
@@ -119,12 +121,14 @@ export function Footer() {
             <div className="flex items-center gap-6">
               <Link
                 href="/privacy"
+                onClick={(e) => handleLinkClick(e, '/privacy')}
                 className="text-base text-primary-foreground/60 hover:text-primary-foreground transition-colors"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms"
+                onClick={(e) => handleLinkClick(e, '/terms')}
                 className="text-base text-primary-foreground/60 hover:text-primary-foreground transition-colors"
               >
                 Terms of Service

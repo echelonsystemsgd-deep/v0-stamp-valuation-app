@@ -47,7 +47,7 @@ export default function AboutUsPage() {
   return (
     <>
       <Header />
-      <main id="main-content" className="flex-1">
+      <main id="main-content" className="flex-1 flex flex-col w-full">
         <HeroSlideshow 
           images={aboutSlideshow} 
           title="About Us"

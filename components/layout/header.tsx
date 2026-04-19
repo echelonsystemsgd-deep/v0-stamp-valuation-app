@@ -21,8 +21,8 @@ export function Header() {
   const [isOpen, setIsOpen] = React.useState(false)
   const pathname = usePathname()
 
-  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (pathname === '/') {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname === href) {
       e.preventDefault()
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
@@ -57,7 +57,7 @@ export function Header() {
           {/* Logo */}
           <Link 
             href="/" 
-            onClick={handleLogoClick}
+            onClick={(e) => handleLinkClick(e, '/')}
             className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
           >
             <div className="flex flex-col">
@@ -76,6 +76,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={(e) => handleLinkClick(e, item.href)}
                 className={cn(
                   'text-base font-medium transition-colors hover:text-forest-green focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm px-1 py-2',
                   pathname === item.href
@@ -146,7 +147,10 @@ export function Header() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      onClick={() => setIsOpen(false)}
+                      onClick={(e) => {
+                        setIsOpen(false)
+                        handleLinkClick(e, item.href)
+                      }}
                       className={cn(
                         'flex items-center px-4 py-3 text-lg font-medium rounded-lg transition-colors',
                         pathname === item.href

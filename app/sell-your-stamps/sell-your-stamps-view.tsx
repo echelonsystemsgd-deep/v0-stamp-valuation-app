@@ -90,7 +90,7 @@ export function SellYourStampsView() {
   return (
     <>
       <Header />
-      <main id="main-content" className="flex-1 min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
+      <main id="main-content" className="flex-1 flex flex-col w-full bg-slate-50/50 dark:bg-slate-950/50">
         <HeroSlideshow 
           images={sellYourStampsHero}
           title="Sell Your Modern Stamps"
