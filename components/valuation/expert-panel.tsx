@@ -32,7 +32,7 @@ export function SupportPanel() {
   return (
     <div
       className={cn(
-        "fixed bottom-6 right-6 z-[60] w-[340px] transition-all duration-700 ease-in-out transform",
+        "hidden lg:block fixed bottom-28 right-4 xl:right-6 z-[60] w-[340px] max-w-[calc(100vw-2rem)] transition-all duration-700 ease-in-out transform",
         isVisible ? "translate-x-0 opacity-100" : "translate-x-[120%] opacity-0"
       )}
     >
