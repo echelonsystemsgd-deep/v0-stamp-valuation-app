@@ -67,6 +67,9 @@ export function Header() {
               <span className="font-serif text-lg sm:text-xl font-bold text-primary leading-tight">
                 Valuations
               </span>
+              <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-forest-green/80 sm:hidden">
+                25+ Years Expertise
+              </span>
             </div>
           </Link>
 
@@ -115,12 +118,15 @@ export function Header() {
           <div className="flex items-center gap-1 lg:hidden">
             <a 
               href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} 
-              className="flex items-center gap-1.5 text-forest-green hover:text-forest-green/80 bg-forest-green/10 px-2.5 sm:px-3 py-2 rounded-md transition-colors"
-              aria-label="Call us"
+              className="flex items-center gap-1.5 text-forest-green hover:text-forest-green/80 bg-forest-green/10 px-2 py-2 rounded-md transition-colors min-h-11"
+              aria-label={`Call us on ${contactInfo.phone}`}
               suppressHydrationWarning
             >
               <PhoneCall className="h-4 w-4" />
-              <span className="text-sm font-bold hidden sm:inline-block tracking-tight">
+              <span className="text-sm font-semibold tracking-tight hidden min-[360px]:inline min-[390px]:hidden">
+                Call Us
+              </span>
+              <span className="text-sm font-bold hidden min-[390px]:inline tracking-tight">
                 {contactInfo.phone}
               </span>
             </a>
