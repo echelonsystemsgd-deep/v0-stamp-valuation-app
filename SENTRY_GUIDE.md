@@ -23,17 +23,3 @@ During the wizard setup:
 ## 3. Verify the Configuration
 After the wizard completes, review the generated files. Sentry will add a `SENTRY_AUTH_TOKEN` to your `.env.local` file for source map uploading. **Make sure `.env.local` is in your `.gitignore`**.
 
-## 4. Test Sentry (Optional)
-To verify everything is working, you can add a temporary button to intentionally throw an error:
-
-```javascript
-<button
-  onClick={() => {
-    throw new Error("Sentry Test Error!");
-  }}
->
-  Test Sentry
-</button>
-```
-
-Click the button and check your Sentry dashboard to confirm the error was captured. Once confirmed, remove the button. You're ready to use Sentry for production error tracking!
