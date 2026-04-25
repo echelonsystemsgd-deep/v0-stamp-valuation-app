@@ -76,6 +76,15 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
     setErrors(clearedErrors)
   }
 
+  // React to prop changes (like when calculator data comes in later)
+  React.useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      quantity: initialQuantity && !prev.quantity ? initialQuantity : prev.quantity,
+      description: initialDescription && prev.description !== initialDescription ? initialDescription : prev.description,
+    }))
+  }, [initialQuantity, initialDescription])
+
   // Persist form data to localStorage (excluding images)
   React.useEffect(() => {
     const savedData = localStorage.getItem("sell_form_progress")

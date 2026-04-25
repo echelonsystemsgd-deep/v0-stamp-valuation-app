@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   whatWeBuyExclusions,
   whatWeBuyIntro,
+  whatWeBuyCategories,
 } from "@/data/what-we-buy-catalog"
 import { buyingRates, getBuyingRateImageSrc } from "@/data/buying-rates"
 
@@ -28,7 +29,7 @@ export function WhatWeBuyIntroBlock() {
 export function WhatWeBuyCategoryGrid() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
-      {buyingRates.map((cat) => (
+      {whatWeBuyCategories.map((cat) => (
         <Card
           key={cat.id}
           id={cat.id}
@@ -36,8 +37,8 @@ export function WhatWeBuyCategoryGrid() {
         >
           <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
             <Image
-              src={getBuyingRateImageSrc(cat)}
-              alt={cat.name}
+              src={cat.image}
+              alt={cat.imageAlt}
               fill
               quality={90}
               className="object-cover transition-transform duration-300 group-hover/card:scale-105"
@@ -45,11 +46,20 @@ export function WhatWeBuyCategoryGrid() {
             />
           </div>
           <CardHeader className="pb-2">
-            <CardTitle className="font-serif text-xl md:text-2xl text-primary">{cat.name}</CardTitle>
+            <CardTitle className="font-serif text-xl md:text-2xl text-primary">{cat.title}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 pt-0 flex-1 flex flex-col">
             <p className="text-slate-600 leading-relaxed">{cat.description}</p>
-            <p className="font-bold text-forest-green text-lg">{cat.rate * 100}% of Face Value</p>
+            {cat.examples && (
+              <ul className="list-disc pl-5 text-sm text-slate-500 space-y-1">
+                {cat.examples.map((ex, i) => (
+                  <li key={i}>{ex}</li>
+                ))}
+              </ul>
+            )}
+            {cat.indicativeNote && (
+              <p className="text-sm italic text-slate-500">{cat.indicativeNote}</p>
+            )}
             
             <div className="pt-6 mt-auto border-t border-slate-100">
               <Button asChild className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 hover:gap-3 group">
