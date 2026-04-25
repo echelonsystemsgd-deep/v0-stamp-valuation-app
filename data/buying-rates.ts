@@ -32,7 +32,7 @@ export const buyingRates: BuyingRateItem[] = [
     faceValue: 1.35,
     rate: 0.55,
     isBarcoded: true,
-    imageUrl: "/images/stamp-1st-red.png",
+    imageUrl: "/images/stamp-1.70-purple.png",
   },
   {
     id: "1st-purple-complete-booklets-4-8",
@@ -42,7 +42,7 @@ export const buyingRates: BuyingRateItem[] = [
     faceValue: 1.35,
     rate: 0.55,
     isBarcoded: true,
-    imageUrl: "/images/stamp-1st-red.png",
+    imageUrl: "/images/stamp-1.70-purple.png",
   },
   {
     id: "1st-purple-incomplete-sheets-booklets",
@@ -52,7 +52,7 @@ export const buyingRates: BuyingRateItem[] = [
     faceValue: 1.35,
     rate: 0.525,
     isBarcoded: true,
-    imageUrl: "/images/stamp-1st-red.png",
+    imageUrl: "/images/stamp-1.70-purple.png",
   },
   {
     id: "1st-xmas-complete-sheets-booklets",
@@ -84,7 +84,7 @@ export const buyingRates: BuyingRateItem[] = [
     faceValue: 0.85,
     rate: 0.75,
     isBarcoded: true,
-    imageUrl: "/images/stamp-2nd-blue.png",
+    imageUrl: "/images/stamp-2.20-green.png",
   },
   {
     id: "2nd-green-complete-booklets-8",
@@ -94,7 +94,7 @@ export const buyingRates: BuyingRateItem[] = [
     faceValue: 0.85,
     rate: 0.725,
     isBarcoded: true,
-    imageUrl: "/images/stamp-2nd-blue.png",
+    imageUrl: "/images/stamp-2.20-green.png",
   },
   {
     id: "2nd-green-incomplete-sheets-booklets",
@@ -104,7 +104,7 @@ export const buyingRates: BuyingRateItem[] = [
     faceValue: 0.85,
     rate: 0.7,
     isBarcoded: true,
-    imageUrl: "/images/stamp-2nd-blue.png",
+    imageUrl: "/images/stamp-2.20-green.png",
   },
   {
     id: "2nd-xmas-complete-sheets-booklets",
@@ -194,7 +194,7 @@ export const buyingRates: BuyingRateItem[] = [
     faceValue: 1.15,
     rate: 0.7,
     isBarcoded: true,
-    imageUrl: "/images/stamp-2nd-blue.png",
+    imageUrl: "/images/stamp-2.20-green.png",
   },
   {
     id: "ll-2nd-green-incomplete-sheets-booklets",
@@ -205,7 +205,7 @@ export const buyingRates: BuyingRateItem[] = [
     faceValue: 1.15,
     rate: 0.675,
     isBarcoded: true,
-    imageUrl: "/images/stamp-2nd-blue.png",
+    imageUrl: "/images/stamp-2.20-green.png",
   },
   {
     id: "ll-2nd-xmas-complete-sheets-booklets",
