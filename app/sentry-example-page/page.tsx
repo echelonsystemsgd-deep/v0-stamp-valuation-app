@@ -84,9 +84,7 @@ export default function Page() {
                 }
               },
             );
-            throw new SentryExampleFrontendError(
-              "This error is raised on the frontend of the example page.",
-            );
+            myUndefinedFunction();
           }}
           disabled={!isConnected}
         >
