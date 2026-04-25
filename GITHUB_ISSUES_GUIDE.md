@@ -15,11 +15,7 @@ This guide establishes the workflow and discipline for managing the **Stamp Valu
 
 When starting a new task that doesn't have an issue, create one immediately.
 
-### 1. Title Format
-`[Category] Brief Descriptive Title`
-*Categories: Feature, Bug, Refactor, Design, Documentation, Optimization*
-
-### 2. Description Template
+### 📝 Description Template
 ```markdown
 ## 🎯 Objective
 Briefly describe what this issue aims to achieve.
@@ -36,23 +32,23 @@ Briefly describe what this issue aims to achieve.
 - Link to relevant IMPLEMENTATION_PLAN.md or documentation.
 ```
 
----
+### 🏷 Labels
 
-## 🏷 Labels & Milestones
+Apply these labels when creating/updating issues:
+- `enhancements`: New features or improvements.
+- `bug`: Errors or broken functionality.
+- `documentation`: Changes to README, guides, or code comments.
+- `refactor`: Code cleanup without logic changes.
+- `urgent`: Blocks critical workflows.
 
-### Priority Labels
-- `priority:high`: Immediate attention required (blockers, critical bugs).
-- `priority:medium`: Standard feature work.
-- `priority:low`: Polish, minor tweaks, non-essential improvements.
-
-### Status Labels
+### 🔄 Status Labels
 - `status:todo`: Not yet started.
 - `status:in-progress`: Currently being worked on.
 - `status:review`: Ready for verification.
 - `status:done`: Completed and verified.
 
-### Milestones
-Always assign issues to the current active Milestone (e.g., `v1.0-mvp`, `Q2-Polish-Audit`). If no milestone exists for a major phase, suggest creating one.
+### 📅 Milestones
+Always assign issues to the current active Milestone (e.g., `v1.0-mvp`).
 
 ---
 
