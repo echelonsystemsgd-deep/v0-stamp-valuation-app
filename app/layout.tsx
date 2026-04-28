@@ -26,21 +26,37 @@ export const metadata: Metadata = {
     template: '%s | UK Stamp Valuations',
   },
   description: 'Get expert valuations for your stamp collection from UK-based specialists. 25+ years experience, fair market prices, and no obligation to sell.',
-  keywords: ['stamp valuation', 'sell stamps UK', 'stamp collection', 'philately', 'Penny Black', 'stamp buyers'],
+  keywords: ['stamp valuation', 'sell stamps UK', 'stamp collection', 'philately', 'Penny Black', 'stamp buyers', 'Great Britain stamps'],
   authors: [{ name: 'UK Stamp Valuations' }],
+  creator: 'UK Stamp Valuations',
+  publisher: 'UK Stamp Valuations',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  icons: {
+    icon: [
+      { url: '/icon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   openGraph: {
     type: 'website',
     locale: 'en_GB',
     url: 'https://ukstampvaluations.co.uk',
     siteName: 'UK Stamp Valuations',
     title: 'UK Stamp Valuations | Professional Stamp Buying Service',
-    description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience.',
+    description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience. Get a fair price for your collection today.',
     images: [
       {
         url: '/opengraph-image.png',
         width: 1200,
         height: 630,
-        alt: 'UK Stamp Valuations',
+        alt: 'UK Stamp Valuations - Professional Stamp Buying Service',
       },
     ],
   },
@@ -48,7 +64,19 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'UK Stamp Valuations | Professional Stamp Buying Service',
     description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience.',
+    creator: '@UKStampVal',
     images: ['/twitter-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 }
 
