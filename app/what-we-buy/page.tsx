@@ -3,6 +3,7 @@ import { Header } from "@/components/layout/header"
 import { Button } from "@/components/ui/button"
 import { Footer } from "@/components/layout/footer"
 import { InlineSellCTA } from "@/components/sections/sell-cta"
+import type { Metadata } from "next"
 import {
   WhatWeBuyCategoryGrid,
   WhatWeBuyExclusionsSection,
@@ -12,6 +13,11 @@ import {
 import { HeroSlideshow } from "@/components/ui/hero-slideshow"
 import { whatWeBuySlideshow } from "@/data/slideshows"
 import { PackageSearch, Verified } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: 'What We Buy',
+  description: 'View the types of UK stamps and collections we purchase. From Penny Blacks to modern commemoratives, see what we are currently buying.',
+}
 
 export default function WhatWeBuyPage() {
   return (

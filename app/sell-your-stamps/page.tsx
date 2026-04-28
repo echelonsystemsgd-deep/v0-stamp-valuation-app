@@ -1,7 +1,13 @@
+import type { Metadata } from "next"
 import { Suspense } from "react"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { SellYourStampsView } from "./sell-your-stamps-view"
+
+export const metadata: Metadata = {
+  title: 'Sell Your Stamps',
+  description: 'Get a professional valuation and sell your stamp collection. Use our instant estimator or upload photos for a detailed appraisal.',
+}
 
 function SellYourStampsFallback() {
   return (

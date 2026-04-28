@@ -20,6 +20,7 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://ukstampvaluations.co.uk'),
   title: {
     default: 'UK Stamp Valuations | Professional Stamp Buying Service',
     template: '%s | UK Stamp Valuations',
@@ -30,7 +31,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
+    url: 'https://ukstampvaluations.co.uk',
     siteName: 'UK Stamp Valuations',
+    title: 'UK Stamp Valuations | Professional Stamp Buying Service',
+    description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience.',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'UK Stamp Valuations',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'UK Stamp Valuations | Professional Stamp Buying Service',
+    description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience.',
+    images: ['/twitter-image.png'],
   },
 }
 
