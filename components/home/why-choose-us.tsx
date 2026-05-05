@@ -123,38 +123,23 @@ export function WhyChooseUs() {
         {/* Existing CTA Section (Retained & gently adapted to flow after cards) */}
         <div className="mt-20 lg:mt-24 rounded-2xl border border-border bg-card shadow-sm overflow-hidden max-w-5xl mx-auto">
           <section aria-labelledby="comparison-followup-hook">
-            <div className="px-6 md:px-8 py-10 md:py-12 text-center">
-              <h4
-                id="comparison-followup-hook"
-                className="text-xl sm:text-2xl font-semibold text-primary tracking-tight"
-              >
-                Ready to sell your UK stamps?
-              </h4>
-              <p className="mt-3 text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
-                Free valuation · No obligation · UK-based specialists
-              </p>
-            </div>
-
-            <div className="px-6 md:px-8 py-10 bg-muted/50 border-t border-border">
-              <div className="max-w-3xl mx-auto">
-                <p className="text-base font-semibold text-primary">
-                  Send an enquiry—we&apos;re happy to help if you have questions.
+            <div className="px-6 md:px-8 py-10 lg:py-12 bg-muted/50">
+              <div className="max-w-3xl mx-auto text-center sm:text-left">
+                <h4
+                  id="comparison-followup-hook"
+                  className="text-2xl sm:text-3xl font-bold tracking-tight text-primary mb-4"
+                >
+                  Send an Enquiry
+                </h4>
+                <p className="mt-3 text-base text-muted-foreground leading-relaxed">
+                  If you have any questions, our team is always happy to assist.
                 </p>
                 <p className="mt-3 text-sm text-muted-foreground italic leading-relaxed">
-                  We focus on British decimal and modern UK material. Heavily damaged, non-UK, or
-                  unverifiable lots may be declined—{' '}
-                  <Link
-                    href="/what-we-buy"
-                    className="text-primary font-medium not-italic underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-                  >
-                    see what we buy
-                  </Link>{' '}
-                  for full detail.
+                  Please note, we do not purchase unsorted collections, non-GB stamps, pre-decimal issues, used stamps, or counterfeit items.
                 </p>
                 <div className="mt-6 border-l-4 border-forest-green pl-4">
                   <p className="text-sm text-foreground leading-relaxed">
-                    We aim for a fair, clear process and prompt payment once we agree a price on
-                    material that fits our buying profile.
+                    We are committed to providing a fair, efficient, and reliable service—ensuring a smooth process and prompt payment for your stamps.
                   </p>
                 </div>
                 <div className="mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
@@ -163,7 +148,7 @@ export function WhyChooseUs() {
                     size="lg"
                     className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-12 sm:h-14 px-8 text-base sm:text-lg w-full sm:w-auto"
                   >
-                    <Link href="/sell-your-stamps">Start your free appraisal</Link>
+                    <Link href="/sell-your-stamps">Sell Your Stamps Today</Link>
                   </Button>
                   <Button
                     asChild

@@ -14,8 +14,6 @@ interface InlineSellCTAProps {
 }
 
 export function InlineSellCTA({ 
-  title = "Ready to sell your stamps?", 
-  description = "Join thousands of satisfied UK collectors who've trusted us with their valuations. Get a free, expert assessment today.",
   variant = 'simple',
   className = ""
 }: InlineSellCTAProps) {
@@ -27,14 +25,18 @@ export function InlineSellCTA({
           <div className="absolute top-0 right-0 w-32 h-32 bg-forest-green/10 -rotate-45 translate-x-12 -translate-y-12 hidden sm:block" />
           <CardContent className="p-8 sm:p-12">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-forest-green/10 text-forest-green text-sm font-bold rounded-full mb-6">
-                <Tag className="h-4 w-4" />
-                No-Obligation Service
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-serif font-black text-primary mb-4 leading-tight">{title}</h2>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                {description}
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-primary mb-4 leading-tight">Send an Enquiry</h2>
+              <p className="text-lg text-muted-foreground mb-3 leading-relaxed">
+                If you have any questions, our team is always happy to assist.
               </p>
+              <p className="text-sm text-muted-foreground italic mb-6 leading-relaxed">
+                Please note, we do not purchase unsorted collections, non-GB stamps, pre-decimal issues, used stamps, or counterfeit items.
+              </p>
+              <div className="mb-8 border-l-4 border-forest-green pl-4">
+                <p className="text-sm text-foreground leading-relaxed">
+                  We are committed to providing a fair, efficient, and reliable service—ensuring a smooth process and prompt payment for your stamps.
+                </p>
+              </div>
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <Button
                   asChild
@@ -42,7 +44,7 @@ export function InlineSellCTA({
                   className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-8 group"
                 >
                   <Link href="/sell-your-stamps" className="flex items-center gap-2">
-                    Sell Your Stamps
+                    Sell Your Stamps Today
                     <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
@@ -77,15 +79,25 @@ export function InlineSellCTA({
     return (
       <section className={`my-12 ${className}`}>
         <div className="bg-primary rounded-2xl p-10 text-center text-white">
-          <h2 className="text-2xl sm:text-3xl font-serif font-bold mb-4">{title}</h2>
-          <p className="text-white/80 mb-8 max-w-xl mx-auto">{description}</p>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Send an Enquiry</h2>
+          <p className="text-white/80 mb-3 max-w-xl mx-auto">
+            If you have any questions, our team is always happy to assist.
+          </p>
+          <p className="text-white/60 text-sm italic mb-6 max-w-xl mx-auto">
+            Please note, we do not purchase unsorted collections, non-GB stamps, pre-decimal issues, used stamps, or counterfeit items.
+          </p>
+          <div className="mb-8 max-w-2xl mx-auto">
+            <p className="text-sm text-white/90 leading-relaxed">
+              We are committed to providing a fair, efficient, and reliable service—ensuring a smooth process and prompt payment for your stamps.
+            </p>
+          </div>
           <Button
             asChild
             variant="outline"
             size="lg"
             className="bg-forest-green border-none hover:bg-forest-green/90 text-white font-bold h-14 px-10"
           >
-            <Link href="/sell-your-stamps">Sell Your Stamps Now</Link>
+            <Link href="/sell-your-stamps">Sell Your Stamps Today</Link>
           </Button>
         </div>
       </section>
@@ -93,17 +105,27 @@ export function InlineSellCTA({
   }
 
   return (
-    <div className={`flex flex-col sm:flex-row items-center justify-between gap-6 p-8 bg-secondary rounded-xl border border-border ${className}`}>
-      <div className="max-w-xl text-center sm:text-left">
-        <h3 className="text-xl font-serif font-bold text-primary mb-2 line-clamp-1">{title}</h3>
-        <p className="text-muted-foreground text-sm line-clamp-2 md:line-clamp-none">{description}</p>
+    <div className={`flex flex-col items-center sm:items-start text-center sm:text-left gap-6 p-8 bg-secondary rounded-xl border border-border ${className}`}>
+      <div className="max-w-3xl w-full">
+        <h3 className="text-2xl font-bold text-primary mb-3">Send an Enquiry</h3>
+        <p className="text-muted-foreground mb-3">
+          If you have any questions, our team is always happy to assist.
+        </p>
+        <p className="text-sm text-muted-foreground italic mb-6">
+          Please note, we do not purchase unsorted collections, non-GB stamps, pre-decimal issues, used stamps, or counterfeit items.
+        </p>
+        <div className="mb-8 border-l-4 border-forest-green pl-4 text-left">
+          <p className="text-sm text-foreground leading-relaxed">
+            We are committed to providing a fair, efficient, and reliable service—ensuring a smooth process and prompt payment for your stamps.
+          </p>
+        </div>
+        <Button
+          asChild
+          className="w-full sm:w-auto shrink-0 bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-8 min-w-[200px]"
+        >
+          <Link href="/sell-your-stamps">Sell Your Stamps Today</Link>
+        </Button>
       </div>
-      <Button
-        asChild
-        className="shrink-0 bg-forest-green hover:bg-forest-green/90 text-white font-bold h-12 px-8 min-w-[180px]"
-      >
-        <Link href="/sell-your-stamps">Sell Now</Link>
-      </Button>
     </div>
   )
 }

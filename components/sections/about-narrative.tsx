@@ -45,7 +45,7 @@ export function AboutNarrative() {
             </div>
 
             <Button asChild size="lg" className="bg-forest-green hover:bg-forest-green/90 text-white font-bold h-11 md:h-14 px-6 md:px-10 text-base md:text-lg rounded-xl shadow-lg shadow-forest-green/20">
-              <Link href="/sell-your-stamps">Start Your Free Appraisal</Link>
+              <Link href="/sell-your-stamps">Sell Your Stamps Today</Link>
             </Button>
           </div>
 
