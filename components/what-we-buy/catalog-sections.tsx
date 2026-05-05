@@ -1,10 +1,9 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, ListChecks } from "lucide-react"
+import { ArrowRight, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
-  whatWeBuyExclusions,
   whatWeBuyIntro,
   whatWeBuyCategories,
 } from "@/data/what-we-buy-catalog"
@@ -78,26 +77,21 @@ export function WhatWeBuyCategoryGrid() {
 export function WhatWeBuyExclusionsSection() {
   return (
     <section className="mb-16" aria-labelledby="exclusions-heading">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
-          <ListChecks className="h-5 w-5 text-slate-600" aria-hidden />
+      <Card className="bg-amber-50/50 border-amber-200/60 ring-1 ring-amber-100/50 shadow-sm overflow-hidden">
+        <div className="flex flex-col sm:flex-row">
+          <div className="bg-amber-100/50 p-6 flex items-center justify-center sm:w-24 shrink-0">
+            <AlertCircle className="w-8 h-8 text-amber-700" aria-hidden />
+          </div>
+          <div className="p-6 md:p-8 flex-1 flex flex-col justify-center">
+            <h3 id="exclusions-heading" className="text-lg font-bold text-amber-900 mb-2">
+              Please note
+            </h3>
+            <p className="text-amber-800 leading-relaxed text-base">
+              We do not purchase franked, used, counterfeit, or non-UK stamps. We only accept genuine, unused Royal Mail postage stamps.
+            </p>
+          </div>
         </div>
-        <h2 id="exclusions-heading" className="text-2xl font-black text-slate-900 tracking-tight">
-          What we typically do not buy
-        </h2>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {whatWeBuyExclusions.map((item) => (
-          <Card key={item.title} className="bg-slate-50/80 border-slate-200/80">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base font-bold text-slate-800">{item.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-base text-slate-600 leading-relaxed">{item.description}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      </Card>
     </section>
   )
 }

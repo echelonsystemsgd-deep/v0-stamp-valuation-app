@@ -27,7 +27,7 @@ export default function WhatWeBuyPage() {
         <HeroSlideshow 
           images={whatWeBuySlideshow}
           title="What we buy"
-          subtitle="A straightforward list of UK stamp material we purchase. No calculator here—just clarity on fit, then you can value or sell when you are ready."
+          subtitle="A simple, reliable service designed to make selling your stamps as straightforward as possible."
         >
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
             <Button
