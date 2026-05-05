@@ -53,35 +53,35 @@ export function Header() {
         Skip to main content
       </a>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <nav className={cn("flex items-center justify-between transition-all duration-300", isScrolled ? "h-16 sm:h-20" : "h-20 sm:h-28")} aria-label="Main navigation">
+        <nav className="flex h-16 sm:h-20 items-center justify-between" aria-label="Main navigation">
           {/* Logo */}
           <Link 
             href="/" 
             onClick={(e) => handleLinkClick(e, '/')}
-            className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm group"
+            className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
           >
             <div className="flex flex-col">
-              <span className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary leading-tight transition-colors duration-300 group-hover:text-forest-green">
+              <span className="font-serif text-lg sm:text-xl font-bold text-primary leading-tight">
                 UK Stamp
               </span>
-              <span className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary leading-tight transition-colors duration-300 group-hover:text-forest-green">
+              <span className="font-serif text-lg sm:text-xl font-bold text-primary leading-tight">
                 Valuations
               </span>
-              <span className="mt-1 text-[11px] sm:text-xs font-bold uppercase tracking-[0.16em] text-forest-green/90">
+              <span className="mt-0.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-forest-green/80">
                 25+ Years Expertise
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex lg:items-center lg:gap-10">
+          <div className="hidden lg:flex lg:items-center lg:gap-8">
             {mainNavigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleLinkClick(e, item.href)}
                 className={cn(
-                  'text-lg font-medium transition-colors hover:text-forest-green focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm px-1 py-2',
+                  'text-base font-medium transition-colors hover:text-forest-green focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm px-1 py-2',
                   pathname === item.href
                     ? 'text-forest-green'
                     : 'text-foreground/80'
@@ -92,23 +92,23 @@ export function Header() {
             ))}
           </div>
 
-          <div className="hidden lg:flex items-center gap-6 xl:gap-8">
+          <div className="hidden lg:flex items-center gap-6">
             <div className="flex flex-col items-end mr-2">
-              <span className="text-sm uppercase tracking-wider text-muted-foreground font-semibold">
+              <span className="text-xs md:text-sm uppercase tracking-wider text-muted-foreground font-semibold">
                 Need Expert Advice?
               </span>
               <a 
                 href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} 
-                className="flex items-center gap-2.5 text-forest-green hover:text-forest-green/80 transition-colors group"
+                className="flex items-center gap-2 text-forest-green hover:text-forest-green/80 transition-colors group"
                 suppressHydrationWarning
               >
-                <PhoneCall className="h-5 w-5" />
-                <span className="font-bold tracking-tight text-xl">{contactInfo.phone}</span>
+                <PhoneCall className="h-4 w-4" />
+                <span className="font-bold tracking-tight text-lg">{contactInfo.phone}</span>
               </a>
             </div>
             <Button
               asChild
-              className="bg-forest-green hover:bg-forest-green/90 text-white font-bold px-8 h-12 text-base animate-pulse-subtle shadow-[0_0_0_0_rgba(45,106,79,0.4)] transition-transform hover:-translate-y-0.5"
+              className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold px-6 h-11 animate-pulse-subtle shadow-[0_0_0_0_rgba(45,106,79,0.4)]"
               suppressHydrationWarning
             >
               <Link href="/sell-your-stamps">Sell Your Stamps</Link>
