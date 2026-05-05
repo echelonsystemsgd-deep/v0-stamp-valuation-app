@@ -96,13 +96,13 @@ export function WhatWeBuyCategoryGrid() {
                 )}
               </div>
               
-              <div className="pt-8 mt-8 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <Button asChild size="lg" className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-8 text-base shadow-lg shadow-forest-green/20 transition-all duration-300 hover:-translate-y-0.5">
+              <div className="pt-8 mt-8 border-t border-slate-100 flex flex-wrap items-center justify-between gap-6">
+                <Button asChild size="lg" className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-8 text-base shadow-lg shadow-forest-green/20 transition-all duration-300 hover:-translate-y-0.5 shrink-0">
                   <Link href="/sell-your-stamps">Sell Your Stamps Now!</Link>
                 </Button>
                 
                 {cat.rateLabel && (
-                  <div className="text-left sm:text-right">
+                  <div className="text-left sm:text-right shrink-0">
                     <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-0.5">Best Prices Paid</p>
                     <p className="text-2xl lg:text-3xl font-black text-forest-green tracking-tight">{cat.rateLabel}</p>
                   </div>
