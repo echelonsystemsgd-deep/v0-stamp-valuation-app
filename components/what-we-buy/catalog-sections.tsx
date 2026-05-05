@@ -27,49 +27,65 @@ export function WhatWeBuyIntroBlock() {
 
 export function WhatWeBuyCategoryGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-8 mb-16">
-      {whatWeBuyCategories.map((cat) => (
-        <Card
-          key={cat.id}
-          id={cat.id}
-          className="overflow-hidden border-slate-100 shadow-lg shadow-slate-200/40 ring-1 ring-slate-100 scroll-mt-28 group/card flex flex-col h-full"
-        >
-          <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
-            <Image
-              src={cat.image}
-              alt={cat.imageAlt}
-              fill
-              quality={90}
-              className="object-cover transition-transform duration-300 group-hover/card:scale-105"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          </div>
-          <CardHeader className="pb-2">
-            <CardTitle className="font-serif text-xl md:text-2xl text-primary">{cat.title}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 pt-0 flex-1 flex flex-col">
-            <p className="text-slate-600 leading-relaxed">{cat.description}</p>
-            {cat.examples && (
-              <ul className="list-disc pl-5 text-sm text-slate-500 space-y-1">
-                {cat.examples.map((ex, i) => (
-                  <li key={i}>{ex}</li>
-                ))}
-              </ul>
-            )}
-            {cat.indicativeNote && (
-              <p className="text-sm italic text-slate-500">{cat.indicativeNote}</p>
-            )}
-            
-            <div className="pt-6 mt-auto border-t border-slate-100">
-              <Button asChild className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 hover:gap-3 group">
-                <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
-                  Sell your stamps <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Button>
+    <div className="space-y-8 lg:space-y-12 mb-16">
+      {whatWeBuyCategories.map((cat, index) => {
+        const isEven = index % 2 === 0;
+        const numberString = `0${index + 1}`;
+        
+        return (
+          <Card
+            key={cat.id}
+            id={cat.id}
+            className="overflow-hidden border-slate-100 shadow-xl shadow-slate-200/40 ring-1 ring-slate-100 scroll-mt-28 group/card flex flex-col md:flex-row bg-white"
+          >
+            {/* Image Side */}
+            <div className={`relative w-full md:w-5/12 lg:w-1/2 aspect-video md:aspect-auto ${isEven ? 'md:order-2' : 'md:order-1'}`}>
+              <div className="absolute inset-0 bg-slate-100">
+                <Image
+                  src={cat.image}
+                  alt={cat.imageAlt}
+                  fill
+                  quality={90}
+                  className="object-cover transition-transform duration-500 group-hover/card:scale-105"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      ))}
+
+            {/* Content Side */}
+            <div className={`w-full md:w-7/12 lg:w-1/2 p-6 md:p-8 lg:p-12 flex flex-col justify-center ${isEven ? 'md:order-1' : 'md:order-2'}`}>
+              <div className="flex items-start gap-4 mb-6">
+                <div className="bg-forest-green/10 text-forest-green font-black text-3xl md:text-4xl px-4 py-2 rounded-xl shrink-0">
+                  {numberString}
+                </div>
+                <div className="flex flex-col justify-center mt-1">
+                  <h3 className="font-black text-2xl md:text-3xl text-slate-900 tracking-tight leading-none mb-1.5">{cat.title}</h3>
+                  {cat.formatsSubtitle && (
+                    <p className="text-slate-500 font-medium">{cat.formatsSubtitle}</p>
+                  )}
+                </div>
+              </div>
+              
+              <div className="space-y-4 flex-1">
+                <p className="text-slate-600 leading-relaxed text-lg">{cat.description}</p>
+              </div>
+              
+              <div className="pt-8 mt-8 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <Button asChild size="lg" className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-8 text-base shadow-lg shadow-forest-green/20 transition-all duration-300 hover:-translate-y-0.5">
+                  <Link href="/sell-your-stamps">Sell Your Stamps Now!</Link>
+                </Button>
+                
+                {cat.rateLabel && (
+                  <div className="text-left sm:text-right">
+                    <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-0.5">Best Prices Paid</p>
+                    <p className="text-2xl lg:text-3xl font-black text-forest-green tracking-tight">{cat.rateLabel}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </Card>
+        )
+      })}
     </div>
   )
 }
