@@ -17,20 +17,20 @@ export function AboutNarrative() {
               <h2 id="about-heading" className="text-3xl md:text-5xl font-black tracking-tight text-primary">
                 About Us
               </h2>
-              <p className="text-lg md:text-2xl font-semibold text-forest-green italic">
-                A Heritage of Precision and Fairness
+              <p className="text-lg md:text-2xl font-semibold text-forest-green">
+                The UK’s leading choice for a straightforward, hassle-free service, with simple ways to help you sell your stamps.
               </p>
             </div>
             
             <div className="space-y-4 md:space-y-6 text-slate-700 leading-relaxed text-base md:text-lg lg:text-xl">
               <p>
-                UK Stamp Valuations was established over 25 years ago with a single mission: to provide collectors across the United Kingdom with a transparent, expert, and dignified way to discover the true value of their philatelic collections.
+                Our aim is to provide sellers with highly competitive rates for unused UK postage stamps. To do this, we’ve developed a process that is efficient and easy to follow for both our customers and our team.
               </p>
               <p>
-                Founded by James Thornton, a Fellow of the Royal Philatelic Society London, we have grown from a private consultancy into one of Britain&apos;s most trusted independent stamp buyers. We believe that every collection represents years of dedication, and it deserves to be handled with the utmost professional respect.
+                Providing precise counts, reviewing formats, issuing individual quotes, and offering tailored postage guidance can be time-intensive. As a result, this level of service is typically reserved for larger collections. For stamp quantities with a face value of £500 or less, we kindly ask sellers to follow the clear packaging and posting instructions available through our online forms.
               </p>
               <p>
-                Our independence is our strength. Unlike auction houses that charge seller fees and take months to settle, we provide instant valuations and direct payments, ensuring you receive the maximum value for your collection without the wait.
+                For collections exceeding £500 in face value, we still recommend using the online form, as it remains the quickest and most efficient way to proceed and receive payment. However, if you prefer to get in touch directly, you are welcome to email us, and we will respond as promptly as possible.
               </p>
             </div>
 
