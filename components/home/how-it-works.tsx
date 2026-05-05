@@ -1,26 +1,33 @@
-import { ClipboardList, Search, Banknote } from 'lucide-react'
+import { ClipboardList, Package, Banknote } from 'lucide-react'
 
 const steps = [
   {
     number: '1',
     icon: ClipboardList,
-    title: 'Tell Us About Your Collection',
-    description:
-      'Fill out our simple form with details about your stamps. Include photos if you have them for a more accurate valuation.',
+    title: 'Request a Valuation',
+    description: [
+      'Use our online form wherever possible—it’s the quickest and simplest way to get started. This works particularly well for standard and large letter barcoded booklets and sheets, including stamps received from swap-out schemes, surveys, compensation, or seasonal distributions.',
+      'Our form provides a fast, no-obligation estimate without the need for back-and-forth communication. For larger or more varied collections, you can still use the form, or contact us directly with as much detail as possible. This allows us to assess your stamps properly and respond with an accurate valuation.',
+      'Providing clear information from the outset helps us give you the most efficient service.'
+    ],
   },
   {
     number: '2',
-    icon: Search,
-    title: 'Receive Expert Valuation',
-    description:
-      'Our specialists will carefully review your submission and provide a detailed, fair market valuation within 48 hours.',
+    icon: Package,
+    title: 'Send Your Stamps',
+    description: [
+      'If you’re happy with the valuation, you can send your stamps to us for review. We recommend using Royal Mail services—particularly Special Delivery—so your items are fully insured and securely delivered.',
+      'This ensures your collection arrives safely and can be processed without delay.'
+    ],
   },
   {
     number: '3',
     icon: Banknote,
-    title: 'Get Paid Quickly',
-    description:
-      'Accept our offer and receive secure payment within 7 days. We handle all shipping and insurance arrangements.',
+    title: 'Receive Your Payment',
+    description: [
+      'Once your stamps arrive, we aim to review and process them promptly—often on the same day. Payments are typically issued shortly after, along with a confirmation email for your records.',
+      'Our goal is to make the entire process smooth, transparent, and reliable from start to finish.'
+    ],
   },
 ]
 
@@ -32,9 +39,6 @@ export function HowItWorks() {
           <h2 id="how-it-works-heading" className="text-primary">
             How It Works
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Selling your stamps has never been easier. Our straightforward process ensures you receive a fair valuation with minimal hassle.
-          </p>
         </div>
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
@@ -57,9 +61,11 @@ export function HowItWorks() {
               <h3 className="mt-6 text-xl font-semibold text-primary">
                 {step.title}
               </h3>
-              <p className="mt-3 text-muted-foreground leading-relaxed">
-                {step.description}
-              </p>
+              <div className="mt-4 text-muted-foreground leading-relaxed space-y-4">
+                {step.description.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
             </div>
           ))}
         </div>
