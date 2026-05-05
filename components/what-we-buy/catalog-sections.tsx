@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, AlertCircle } from "lucide-react"
+import { ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -31,6 +31,11 @@ export function WhatWeBuyCategoryGrid() {
       {whatWeBuyCategories.map((cat, index) => {
         const isEven = index % 2 === 0;
         const numberString = `0${index + 1}`;
+        
+        let relatedProducts: typeof buyingRates = [];
+        if (cat.id === "1st-class") relatedProducts = buyingRates.filter(r => r.group === "1st Class");
+        else if (cat.id === "2nd-class") relatedProducts = buyingRates.filter(r => r.group === "2nd Class");
+        else if (cat.id === "large-letter") relatedProducts = buyingRates.filter(r => r.group === "Large Letter");
         
         return (
           <Card
@@ -68,6 +73,27 @@ export function WhatWeBuyCategoryGrid() {
               
               <div className="space-y-4 flex-1">
                 <p className="text-slate-600 leading-relaxed text-lg">{cat.description}</p>
+                
+                {relatedProducts.length > 0 && (
+                  <div className="mt-8">
+                    <p className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                      Items we buy in this category:
+                    </p>
+                    <ul className="space-y-3">
+                      {relatedProducts.map(product => (
+                        <li key={product.id} className="flex items-start gap-3 text-sm">
+                          <CheckCircle2 className="w-5 h-5 text-forest-green shrink-0 mt-0.5" />
+                          <span className="text-slate-700 flex-1 leading-snug font-medium">
+                            {product.name}
+                          </span>
+                          <span className="font-bold text-forest-green shrink-0 bg-forest-green/10 px-2 py-0.5 rounded-md">
+                            {(product.rate * 100).toFixed(1).replace(/\.0$/, '')}%
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
               
               <div className="pt-8 mt-8 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
