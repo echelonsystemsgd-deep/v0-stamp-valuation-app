@@ -15,16 +15,14 @@ export function AboutSummary() {
           id="about-summary-heading"
           className="mt-3 font-serif text-3xl md:text-4xl font-bold text-primary text-balance"
         >
-          A quiet standard of expertise, built in Britain
+          We are one of the UK’s leading buyers and resellers of GB postage stamps.
         </h2>
         <div className="mt-8 space-y-6 text-lg text-muted-foreground leading-relaxed text-left md:text-center md:text-balance">
           <p>
-            For more than twenty-five years we have helped families and collectors across the UK
-            understand what their stamps are really worth—without pressure, jargon, or obligation.
+            Our aim is to remove the stress and uncertainty from selling your unused postage stamps. As a fully independent UK-based company, we provide a straightforward and efficient way to turn your stamps into value.
           </p>
           <p>
-            Our valuers combine deep philatelic knowledge with a straightforward buying service:
-            clear offers, insured handling, and the respect your collection deserves.
+            Rather than spending time on platforms like eBay or Amazon—dealing with fees, delays, and unreliable buyers—we offer a simple alternative: we purchase your stamps directly in one transaction, with prompt and secure payment.
           </p>
         </div>
         <Button
