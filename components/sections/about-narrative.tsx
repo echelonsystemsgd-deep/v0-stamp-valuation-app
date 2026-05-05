@@ -18,28 +18,19 @@ export function AboutNarrative() {
                 About Us
               </h2>
               <p className="text-lg md:text-2xl font-semibold text-forest-green italic">
-                A quiet standard of expertise, built in Britain
+                A Heritage of Precision and Fairness
               </p>
             </div>
             
             <div className="space-y-4 md:space-y-6 text-slate-700 leading-relaxed text-base md:text-lg lg:text-xl">
               <p>
-                For over twenty-five years, we have helped families and collectors across the UK understand the true value of their stamp collections—without pressure, jargon, or obligation.
+                UK Stamp Valuations was established over 25 years ago with a single mission: to provide collectors across the United Kingdom with a transparent, expert, and dignified way to discover the true value of their philatelic collections.
               </p>
               <p>
-                Our aim is simple: to provide a clear, reliable, and efficient way to have your stamps valued and, if you choose, sold. We combine traditional philatelic expertise with a straightforward modern process, designed to remove the uncertainty often associated with selling.
+                Founded by James Thornton, a Fellow of the Royal Philatelic Society London, we have grown from a private consultancy into one of Britain&apos;s most trusted independent stamp buyers. We believe that every collection represents years of dedication, and it deserves to be handled with the utmost professional respect.
               </p>
               <p>
-                For most collections, the easiest way to begin is through our online valuation form. By sharing a few details and, where possible, photographs, we can provide an initial assessment and guide you on the next steps.
-              </p>
-              <p>
-                For larger or more significant collections, we offer a more tailored approach, ensuring each item is carefully reviewed and handled with the attention it deserves.
-              </p>
-              <p>
-                Unlike online marketplaces, there are no listing fees, no negotiations with unknown buyers, and no unnecessary delays. We provide clear guidance, secure handling, and transparent offers—allowing you to make an informed decision at every stage.
-              </p>
-              <p>
-                Our approach remains consistent throughout: professional, respectful, and entirely without obligation.
+                Our independence is our strength. Unlike auction houses that charge seller fees and take months to settle, we provide instant valuations and direct payments, ensuring you receive the maximum value for your collection without the wait.
               </p>
             </div>
 

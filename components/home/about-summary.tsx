@@ -19,17 +19,12 @@ export function AboutSummary() {
         </h2>
         <div className="mt-8 space-y-6 text-lg text-muted-foreground leading-relaxed text-left md:text-center md:text-balance">
           <p>
-            For over twenty-five years, we have helped families and collectors across the UK
-            understand the true value of their stamp collections—without pressure, jargon, or obligation.
+            For more than twenty-five years we have helped families and collectors across the UK
+            understand what their stamps are really worth—without pressure, jargon, or obligation.
           </p>
           <p>
-            We are an independent UK-based valuation and buying service, offering a straightforward and reliable way to sell unwanted postage stamps. Whether you have a single album or a lifetime collection, our approach remains the same: careful assessment, clear communication, and fair market-based offers.
-          </p>
-          <p>
-            Unlike online marketplaces, there are no listing fees, no uncertainty, and no dealing with unknown buyers. We handle the process from start to finish—simply, securely, and professionally.
-          </p>
-          <p>
-            Our valuers combine deep philatelic knowledge with a practical, no-nonsense service: transparent pricing, fully insured handling, and the respect your collection deserves.
+            Our valuers combine deep philatelic knowledge with a straightforward buying service:
+            clear offers, insured handling, and the respect your collection deserves.
           </p>
         </div>
         <Button
