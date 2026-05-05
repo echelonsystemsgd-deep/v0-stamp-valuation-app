@@ -26,28 +26,36 @@ export const whatWeBuyIntro = {
 
 export const whatWeBuyCategories: WhatWeBuyCategory[] = [
   {
-    id: "everyday-postage",
-    title: "Everyday postage",
-    image: "/images/stamps/george-v.jpg",
-    imageAlt: "UK definitive portrait stamps from the George V era as an example of everyday issues",
+    id: "1st-class",
+    title: "1st Class Stamps",
+    image: "/images/stamp-1.70-purple.png",
+    imageAlt: "1st Class purple barcoded stamp",
     description:
-      "Current and recent unused postage, including 1st and 2nd class, standard, and large letter formats—both barcoded and older designs.",
+      "We buy 1st Class barcoded stamps, including standard purple issues and Christmas/festive designs in both sheets and booklets.",
   },
   {
-    id: "special-issues",
-    title: "Special issues",
-    image: "/images/stamps/fdc-commemorative.jpg",
-    imageAlt: "Commemorative first day cover with special UK stamps",
+    id: "2nd-class",
+    title: "2nd Class Stamps",
+    image: "/images/stamp-2.20-green.png",
+    imageAlt: "2nd Class green barcoded stamp",
     description:
-      "Unused Royal Mail commemorative sets, miniature sheets, and presentation packs.",
+      "We buy 2nd Class barcoded stamps, including standard green issues and Christmas/festive designs.",
+  },
+  {
+    id: "large-letter",
+    title: "Large Letter Formats",
+    image: "/images/stamps/fdc-commemorative.jpg",
+    imageAlt: "Commemorative large letter stamps",
+    description:
+      "We buy both 1st and 2nd Class Large Letter stamps, including barcoded, commemorative, and non-barcoded self-adhesive issues.",
   },
   {
     id: "collections",
-    title: "Collections and albums",
+    title: "Mixed Collections & Albums",
     image: "/images/stamps/complete-album.jpg",
     imageAlt: "Stamp album open showing a collection of UK stamps",
     description:
-      "Inherited albums, mixed lots, and stock books containing genuine, unused UK postage.",
+      "Have a large mixed lot? Instead of the calculator, use our appraisal form to get a custom offer.",
     indicativeNote: "Large or mixed lots are best submitted through our appraisal flow with photos.",
   },
 ]
