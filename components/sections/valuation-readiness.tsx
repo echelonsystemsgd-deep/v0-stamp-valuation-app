@@ -11,9 +11,12 @@ import {
   History,
   Ban,
   XCircle,
-  CheckCircle2
+  CheckCircle2,
+  ArrowRight
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 const readinessItems = [
   {
@@ -130,10 +133,17 @@ export const ValuationReadiness = () => {
                   ))}
                 </div>
                 <div className="mt-8 pt-6 border-t border-burgundy/10">
-                  <div className="flex items-center gap-2 text-forest-green font-bold">
-                    <CheckCircle2 className="w-5 h-5" />
-                    <span>Unsure? Send a photo for a quick expert assessment.</span>
-                  </div>
+                  <Button 
+                    asChild 
+                    variant="ghost" 
+                    className="group/btn h-auto p-0 hover:bg-transparent text-forest-green hover:text-forest-green/80 font-bold transition-all"
+                  >
+                    <Link href="/sell-your-stamps" className="flex items-center gap-2 group-hover/btn:gap-3 transition-all">
+                      <CheckCircle2 className="w-5 h-5" />
+                      <span>Unsure? Send a photo for a quick expert assessment.</span>
+                      <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover/btn:opacity-100 group-hover/btn:translate-x-0 transition-all" />
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>

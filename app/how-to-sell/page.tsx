@@ -6,7 +6,7 @@ import { ProcessTimeline } from '@/components/content/process-timeline'
 import { FAQAccordion, shippingFAQs, generalFAQs } from '@/components/content/faq-accordion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Shield, Clock, Award } from 'lucide-react'
+import { Shield, Clock, Award, ClipboardCheck, Truck, PoundsSterling, ShieldCheck, MessageCircle, ArrowRight } from 'lucide-react'
 import { HeroSlideshow } from '@/components/ui/hero-slideshow'
 import { howToSellSlideshow } from '@/data/slideshows'
 
@@ -68,6 +68,30 @@ export default function HowToSellPage() {
             No obligation to sell
           </p>
         </HeroSlideshow>
+<section className="py-12 bg-white border-b border-secondary/20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+              {[
+                { icon: ClipboardCheck, label: "1. Request", sub: "Expert Valuation" },
+                { icon: Truck, label: "2. Send", sub: "Fully Insured" },
+                { icon: PoundsSterling, label: "3. Get Paid", sub: "Fast Payout" }
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-6 group">
+                  <div className="w-16 h-16 rounded-2xl bg-secondary/50 flex items-center justify-center shrink-0 group-hover:bg-forest-green/10 transition-colors">
+                    <item.icon className="w-8 h-8 text-oxford-blue group-hover:text-forest-green transition-colors" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-oxford-blue">{item.label}</h3>
+                    <p className="text-muted-foreground font-medium">{item.sub}</p>
+                  </div>
+                  {i < 2 && (
+                    <ArrowRight className="hidden lg:block w-6 h-6 text-secondary ml-auto" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* Trust Points */}
         <section className="py-12 bg-secondary/50" aria-labelledby="trust-points-heading">
@@ -91,6 +115,21 @@ export default function HowToSellPage() {
 
         {/* Readiness Guide */}
         <ValuationReadiness />
+
+        {/* Trust Reassurance Banner */}
+        <section className="relative overflow-hidden bg-oxford-blue py-8">
+          <div className="absolute inset-0 bg-gradient-to-r from-forest-green/20 to-transparent" />
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-center md:text-left">
+              <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-7 h-7 text-gold" />
+              </div>
+              <p className="text-white text-lg md:text-xl font-medium">
+                Your collection is in safe hands. <span className="text-gold font-bold">Fully insured up to £50,000</span> via specialized transit.
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* Process Timeline */}
         <section className="py-16 lg:py-20 bg-secondary/30" aria-labelledby="process-heading">
@@ -137,6 +176,19 @@ export default function HowToSellPage() {
                     <FAQAccordion items={generalFAQs} />
                   </CardContent>
                 </Card>
+              </div>
+            </div>
+
+            <div className="mt-12 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/50 backdrop-blur-sm border border-secondary shadow-sm">
+                <MessageCircle className="w-5 h-5 text-forest-green" />
+                <p className="text-charcoal font-medium">
+                  Still have questions?{" "}
+                  <Link href="/contact" className="text-forest-green hover:text-forest-green/80 font-bold underline decoration-2 underline-offset-4 transition-colors">
+                    Contact our expert team
+                  </Link>{" "}
+                  for direct assistance.
+                </p>
               </div>
             </div>
           </div>
