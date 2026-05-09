@@ -18,7 +18,7 @@ This plan outlines the steps to improve the interactivity, trust, and structural
 
 - **Action:** Insert a new "Quick-View" section immediately after the `HeroSlideshow` and before `Trust Points`.
 - **Purpose:** Prime users with the 1-2-3 flow before they read the technical details.
-- **Content:** Three simple icons (e.g., `ClipboardCheck`, `Truck`, `PoundsSterling`) with brief labels: "Request", "Send", "Get Paid".
+- **Content:** Three simple icons (e.g., `ClipboardCheck`, `Truck`, `PoundSterling`) with brief labels: "Request", "Send", "Get Paid".
 
 ## 3. Implement Trust Reassurance Banner
 **File:** `app/how-to-sell/page.tsx`

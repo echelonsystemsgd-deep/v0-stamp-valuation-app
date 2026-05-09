@@ -6,7 +6,7 @@ import { ProcessTimeline } from '@/components/content/process-timeline'
 import { FAQAccordion, shippingFAQs, generalFAQs } from '@/components/content/faq-accordion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Shield, Clock, Award, ClipboardCheck, Truck, PoundsSterling, ShieldCheck, MessageCircle, ArrowRight } from 'lucide-react'
+import { Shield, Clock, Award, ClipboardCheck, Truck, PoundSterling, ShieldCheck, MessageCircle, ArrowRight } from 'lucide-react'
 import { HeroSlideshow } from '@/components/ui/hero-slideshow'
 import { howToSellSlideshow } from '@/data/slideshows'
 
@@ -74,7 +74,7 @@ export default function HowToSellPage() {
               {[
                 { icon: ClipboardCheck, label: "1. Request", sub: "Expert Valuation" },
                 { icon: Truck, label: "2. Send", sub: "Fully Insured" },
-                { icon: PoundsSterling, label: "3. Get Paid", sub: "Fast Payout" }
+                { icon: PoundSterling, label: "3. Get Paid", sub: "Fast Payout" }
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-6 group">
                   <div className="w-16 h-16 rounded-2xl bg-secondary/50 flex items-center justify-center shrink-0 group-hover:bg-forest-green/10 transition-colors">
