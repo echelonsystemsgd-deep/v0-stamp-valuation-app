@@ -132,16 +132,16 @@ export const ValuationReadiness = () => {
                     </div>
                   ))}
                 </div>
-                <div className="mt-8 pt-6 border-t border-burgundy/10">
+                <div className="mt-8 pt-6 border-t border-burgundy/10 flex justify-start">
                   <Button 
                     asChild 
-                    variant="ghost" 
-                    className="group/btn h-auto p-0 hover:bg-transparent text-forest-green hover:text-forest-green/80 font-bold transition-all"
+                    variant="outline" 
+                    className="group/btn h-12 px-6 border-forest-green/20 bg-forest-green/5 text-forest-green hover:bg-forest-green hover:text-white font-bold transition-all duration-300 rounded-xl"
                   >
-                    <Link href="/sell-your-stamps" className="flex items-center gap-2 group-hover/btn:gap-3 transition-all">
+                    <Link href="/sell-your-stamps" className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5" />
-                      <span>Unsure? Send a photo for a quick expert assessment.</span>
-                      <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover/btn:opacity-100 group-hover/btn:translate-x-0 transition-all" />
+                      <span>Unsure? Send a photo for a quick assessment</span>
+                      <ArrowRight className="w-4 h-4 opacity-70 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all" />
                     </Link>
                   </Button>
                 </div>
