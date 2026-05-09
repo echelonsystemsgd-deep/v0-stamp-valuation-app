@@ -90,7 +90,7 @@ export default function ContactPage() {
                     Need a Quick Valuation?
                   </h3>
                   <p className="text-muted-foreground mb-6">
-                    For the fastest service, use our specialized valuation form. It helps our experts provide a more accurate initial assessment.
+                    For the fastest service, use our specialised valuation form. It helps our experts provide a more accurate initial assessment.
                   </p>
                   <Link
                     href="/sell-your-stamps"

@@ -125,7 +125,7 @@ export default function HowToSellPage() {
                 <ShieldCheck className="w-7 h-7 text-gold" />
               </div>
               <p className="text-white text-lg md:text-xl font-medium">
-                Your collection is in safe hands. <span className="text-gold font-bold">Fully insured up to £50,000</span> via specialized transit.
+                Your collection is in safe hands. <span className="text-gold font-bold">Fully insured up to £50,000</span> via specialised transit.
               </p>
             </div>
           </div>

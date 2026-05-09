@@ -335,8 +335,8 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
           <p className="font-bold text-slate-800 dark:text-slate-200">Payment within 24 hours</p>
           <p className="leading-relaxed text-sm md:text-base">
             Once we receive and verify your stamps, payment is issued immediately via Bank Transfer or PayPal. 
-            Got specialized collections or high-value archive lots? 
-            Please <a href="/contact" className="text-primary font-bold hover:underline">contact our specialist team</a>.
+            Got specialised collections or high-value archive lots? 
+            Please <a href="/contact" className="text-primary font-bold hover:underline">contact our specialised team</a>.
           </p>
         </div>
       </div>

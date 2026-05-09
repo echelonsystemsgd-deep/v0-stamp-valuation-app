@@ -56,7 +56,7 @@ const readinessItems = [
   },
   {
     title: "Expert Valuation",
-    description: "Our philatelic experts provide a detailed breakdown of your collection's market value based on catalog rates.",
+    description: "Our philatelic experts provide a detailed breakdown of your collection's market value based on catalogue rates.",
     icon: History,
     color: "text-oxford-blue",
     bgColor: "bg-oxford-blue/10"
@@ -72,7 +72,7 @@ export const ValuationReadiness = () => {
             Getting the Best Value for Your Stamps
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-            Preparation is key to a smooth valuation. Use our expert readiness guide to ensure your collection is organized for the maximum possible payout.
+            Preparation is key to a smooth valuation. Use our expert readiness guide to ensure your collection is organised for the maximum possible payout.
           </p>
         </div>
 

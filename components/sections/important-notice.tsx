@@ -32,14 +32,14 @@ export function ImportantNotice() {
             />
             <NoticeCard 
               title="Non-decimal Restrictions"
-              description="Please note: We are currently not accepting non-UK or older non-decimal stamps. We maintain the highest standards by focusing on our specialization."
+              description="Please note: We are currently not accepting non-UK or older non-decimal stamps. We maintain the highest standards by focusing on our specialisation."
               delay="500ms"
               isWarning
             />
           </div>
 
           <p className="max-w-2xl text-center text-rose-900/60 font-medium text-base lg:text-lg animate-fade-in-up" style={{ animationDelay: '700ms' }}>
-            If you have specialized collections or high-archive value lots, please contact our experts directly before proceeding with the valuation tool.
+            If you have specialised collections or high-archive value lots, please contact our experts directly before proceeding with the valuation tool.
           </p>
         </div>
       </div>

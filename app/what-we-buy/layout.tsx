@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "What We Buy | UK Stamp Valuations",
     description:
-      "A clear catalog of stamp types we buy. For live rates and totals, use our buying rates desk or sell page.",
+      "A clear catalogue of stamp types we buy. For live rates and totals, use our buying rates desk or sell page.",
     type: "website",
   },
 }
