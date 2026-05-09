@@ -10,6 +10,8 @@
   --gold: oklch(0.75 0.15 85);
   --off-white: oklch(0.99 0.005 90);
   --charcoal: oklch(0.30 0 0);
+  --burgundy: oklch(0.40 0.15 20);
+  --burgundy-foreground: oklch(0.98 0 0);
   
   /* Design Tokens */
   --background: var(--off-white);
@@ -126,6 +128,8 @@
   --color-gold: var(--gold);
   --color-off-white: var(--off-white);
   --color-charcoal: var(--charcoal);
+  --color-burgundy: var(--burgundy);
+  --color-burgundy-foreground: var(--burgundy-foreground);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

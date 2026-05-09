@@ -34,6 +34,7 @@ const trustPoints = [
 ]
 
 import { InlineSellCTA } from '@/components/sections/sell-cta'
+import { ValuationReadiness } from '@/components/sections/valuation-readiness'
 
 export default function HowToSellPage() {
   return (
@@ -69,12 +70,12 @@ export default function HowToSellPage() {
         </HeroSlideshow>
 
         {/* Trust Points */}
-        <section className="py-12 bg-secondary" aria-labelledby="trust-points-heading">
+        <section className="py-12 bg-secondary/50" aria-labelledby="trust-points-heading">
           <h2 id="trust-points-heading" className="sr-only">Our Guarantees</h2>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {trustPoints.map((point) => (
-                <Card key={point.title} className="text-center">
+                <Card key={point.title} className="text-center border-none shadow-sm bg-white/60 backdrop-blur-sm">
                   <CardContent className="py-6">
                     <div className="w-12 h-12 rounded-full bg-forest-green/10 flex items-center justify-center mx-auto mb-4">
                       <point.icon className="w-6 h-6 text-forest-green" aria-hidden="true" />
@@ -88,8 +89,11 @@ export default function HowToSellPage() {
           </div>
         </section>
 
+        {/* Readiness Guide */}
+        <ValuationReadiness />
+
         {/* Process Timeline */}
-        <section className="py-16 lg:py-20" aria-labelledby="process-heading">
+        <section className="py-16 lg:py-20 bg-secondary/30" aria-labelledby="process-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl mb-12">
               <h2 id="process-heading" className="text-primary">The Selling Process</h2>
