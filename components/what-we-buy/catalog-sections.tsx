@@ -2,12 +2,12 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import {
   whatWeBuyIntro,
   whatWeBuyCategories,
 } from "@/data/what-we-buy-catalog"
-import { buyingRates, getBuyingRateImageSrc } from "@/data/buying-rates"
+import { buyingRates } from "@/data/buying-rates"
 
 export function WhatWeBuyIntroBlock() {
   return (

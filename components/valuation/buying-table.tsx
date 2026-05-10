@@ -77,7 +77,6 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             <Badge
               variant="outline"
               className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1 font-bold whitespace-nowrap"
-              suppressHydrationWarning
             >
               {(item.rate * 100).toFixed(item.rate % 0.01 === 0 ? 0 : 1)}%
             </Badge>
@@ -89,7 +88,6 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
                 size="icon"
                 className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-r"
                 onClick={() => updateQuantity(item.id, -1)}
-                suppressHydrationWarning
               >
                 <Minus className="h-4 w-4" />
               </Button>
@@ -99,14 +97,12 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
                 onChange={(e) => handleInputChange(item.id, e.target.value)}
                 className="h-10 w-16 border-0 bg-transparent text-center font-bold text-lg focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 placeholder="0"
-                suppressHydrationWarning
               />
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-l"
                 onClick={() => updateQuantity(item.id, 1)}
-                suppressHydrationWarning
               >
                 <Plus className="h-4 w-4" />
               </Button>
@@ -151,7 +147,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
               </div>
               <div className="space-y-1.5 pl-4">
                 <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black">Our Rate</span>
-                <div suppressHydrationWarning>
+                <div>
                   <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 font-bold px-3 py-0.5">
                     {(item.rate * 100).toFixed(item.rate % 0.01 === 0 ? 0 : 1)}%
                   </Badge>
@@ -166,7 +162,6 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
                   size="icon"
                   className="h-14 w-14 rounded-none text-muted-foreground border-r"
                   onClick={() => updateQuantity(item.id, -1)}
-                  suppressHydrationWarning
                 >
                   <Minus className="h-6 w-6" />
                 </Button>
@@ -176,14 +171,12 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
                   onChange={(e) => handleInputChange(item.id, e.target.value)}
                   className="h-14 w-20 border-0 bg-transparent text-center text-2xl font-black focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   placeholder="0"
-                  suppressHydrationWarning
                 />
                 <Button
                   variant="ghost"
                   size="icon"
                   className="h-14 w-14 rounded-none text-muted-foreground border-l"
                   onClick={() => updateQuantity(item.id, 1)}
-                  suppressHydrationWarning
                 >
                   <Plus className="h-6 w-6" />
                 </Button>
@@ -205,7 +198,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
     group === "Large Letter" ? "Large Letter Rates" : `${group} Rates`
 
   return (
-    <div className="w-full space-y-12" suppressHydrationWarning>
+    <div className="w-full space-y-12">
       {sections.map((section) => (
         <div key={section.group} className="space-y-6">
           <div className="flex items-center gap-3">

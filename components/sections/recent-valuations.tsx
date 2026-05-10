@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Clock, ExternalLink } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 
 const recentValuations = [
   {
@@ -58,8 +58,8 @@ export const RecentValuations = React.memo(function RecentValuations() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {recentValuations.map((val, index) => (
-            <Card key={index} className="group hover:border-forest-green/30 transition-all duration-300">
+          {recentValuations.map((val) => (
+            <Card key={val.item} className="group hover:border-forest-green/30 transition-all duration-300">
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <span className="text-xs font-black uppercase tracking-wider text-forest-green bg-forest-green/10 px-2 py-0.5 rounded">

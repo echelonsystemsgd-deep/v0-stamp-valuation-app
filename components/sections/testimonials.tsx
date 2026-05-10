@@ -12,7 +12,7 @@ import {
   CarouselPrevious 
 } from '@/components/ui/carousel'
 import { Star, Quote } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 const testimonials = [
   {

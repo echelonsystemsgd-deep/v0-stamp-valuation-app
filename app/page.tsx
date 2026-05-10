@@ -6,6 +6,12 @@ import { Testimonials } from '@/components/sections/testimonials'
 import { StampTypesPreview } from '@/components/home/stamp-types-preview'
 import { HowItWorks } from '@/components/home/how-it-works'
 import { WhyChooseUs } from '@/components/home/why-choose-us'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'UK Stamp Valuations | Professional Stamp Buying Service',
+  description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience. Get a fair price for your collection today.',
+}
 
 export default function HomePage() {
   return (

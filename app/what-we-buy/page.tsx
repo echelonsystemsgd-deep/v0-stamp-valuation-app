@@ -26,7 +26,7 @@ export default function WhatWeBuyPage() {
       <main id="main-content" className="flex-1 flex flex-col w-full bg-slate-50/50 dark:bg-slate-950/50">
         <HeroSlideshow 
           images={whatWeBuySlideshow}
-          title="What we buy"
+          title="What We Buy"
           subtitle="A simple, reliable service designed to make selling your stamps as straightforward as possible."
         >
           <div className="mt-10 flex flex-col sm:flex-row gap-4">

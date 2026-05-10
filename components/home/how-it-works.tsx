@@ -37,7 +37,7 @@ export function HowItWorks() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto">
           <h2 id="how-it-works-heading" className="text-primary">
-            How It Works
+            How to Sell Your Stamps
           </h2>
         </div>
 

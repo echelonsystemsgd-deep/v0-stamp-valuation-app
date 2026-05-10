@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -147,6 +148,9 @@ export function Header() {
                   <SheetTitle className="font-serif text-xl text-primary">
                     UK Stamp Valuations
                   </SheetTitle>
+                  <SheetDescription className="sr-only">
+                    Mobile navigation menu for UK Stamp Valuations
+                  </SheetDescription>
                 </SheetHeader>
                 <nav className="flex flex-col gap-1 mt-8" aria-label="Mobile navigation">
                   {mainNavigation.map((item) => (
