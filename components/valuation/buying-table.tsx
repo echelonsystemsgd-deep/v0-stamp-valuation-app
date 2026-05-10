@@ -257,7 +257,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
 
       {/* Sticky Floating Action Bar */}
       {isMounted && totalValue > 0 && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-auto max-w-lg z-50 animate-fade-in-up">
+        <div className="fixed bottom-20 sm:bottom-24 lg:bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-auto max-w-lg z-50 animate-fade-in-up">
           <div className="flex items-center justify-between gap-6 px-6 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 dark:border-slate-800/50 shadow-2xl shadow-primary/20 rounded-full">
             <div className="flex flex-col">
               <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Total Est. Payout</span>
