@@ -82,22 +82,31 @@ export default function AboutUsPage() {
         </section>
 
         {/* Our Commitment */}
-        <section className="py-16 lg:py-20 bg-oxford-blue" aria-labelledby="commitment-heading">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section className="py-20 lg:py-24 bg-oxford-blue relative overflow-hidden" aria-labelledby="commitment-heading">
+          {/* Subtle texture overlay */}
+          <div className="absolute inset-0 opacity-10 bg-grainy-paper pointer-events-none" />
+          
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <h2 id="commitment-heading" className="text-white">Our Commitment to You</h2>
-                <p className="mt-4 text-lg text-white/80 leading-relaxed">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 border border-gold/20 mb-6">
+                  <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+                  <span className="text-gold text-sm font-semibold tracking-wider uppercase">Our Promise</span>
+                </div>
+                <h2 id="commitment-heading" className="text-white text-4xl lg:text-5xl font-bold mb-6">Our Commitment to You</h2>
+                <p className="text-xl text-white/80 leading-relaxed max-w-xl">
                   When you choose Sell Your Stamps UK, you&apos;re working with a team that genuinely 
                   cares about philately and respects the effort that goes into building a collection.
                 </p>
               </div>
-              <div>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 lg:p-10 border border-white/10 shadow-2xl">
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {commitments.map((commitment) => (
-                    <li key={commitment} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-gold shrink-0 mt-0.5" aria-hidden="true" />
-                      <span className="text-white/90">{commitment}</span>
+                    <li key={commitment} className="flex items-start gap-4 group">
+                      <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-gold/30 transition-colors">
+                        <CheckCircle className="w-4 h-4 text-gold" aria-hidden="true" />
+                      </div>
+                      <span className="text-white/90 font-medium leading-snug">{commitment}</span>
                     </li>
                   ))}
                 </ul>
