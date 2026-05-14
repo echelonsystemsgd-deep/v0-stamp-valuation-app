@@ -53,7 +53,7 @@ function IconIndicator({ type }: { type: boolean | 'partial' }) {
 
 export function WhyChooseUs() {
   return (
-    <section className="py-20 lg:py-24 bg-secondary" aria-labelledby="why-choose-heading">
+    <section className="py-28 lg:py-32 bg-secondary" aria-labelledby="why-choose-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl text-center mx-auto mb-16 lg:mb-20">
           <h2 id="why-choose-heading" className="text-3xl font-bold tracking-tight text-primary sm:text-4xl text-balance">

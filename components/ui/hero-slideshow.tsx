@@ -62,16 +62,17 @@ export const HeroSlideshow = React.memo(function HeroSlideshow({
       ))}
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-navy/70" />
+      <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/60 to-transparent" />
+      <div className="absolute inset-0 bg-navy/20" />
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 w-full">
         <div className="max-w-2xl">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight text-balance">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-[1.1] text-balance animate-fade-in-up opacity-0 [animation-delay:200ms]">
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-6 text-xl md:text-2xl text-white/90 leading-relaxed">
+            <p className="mt-8 text-xl md:text-2xl text-white/90 leading-relaxed animate-fade-in-up opacity-0 [animation-delay:400ms]">
               {subtitle}
             </p>
           )}

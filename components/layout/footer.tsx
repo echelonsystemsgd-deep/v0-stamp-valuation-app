@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Phone, Mail, Clock } from 'lucide-react'
+import { Phone, Mail, Clock, Landmark } from 'lucide-react'
 import { footerNavigation, contactInfo } from '@/data/navigation'
 
 export function Footer() {
@@ -25,10 +25,20 @@ export function Footer() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {/* Brand Column */}
             <div className="lg:col-span-1">
-              <Link href="/" onClick={(e) => handleLinkClick(e, '/')} className="inline-block group focus:outline-none focus:ring-2 focus:ring-gold rounded-sm px-1 -mx-1">
-                <span className="font-serif text-2xl font-bold text-primary-foreground group-hover:text-gold transition-colors">
-                  Sell Your Stamps UK
-                </span>
+              <Link 
+                href="/" 
+                onClick={(e) => handleLinkClick(e, '/')} 
+                className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-heritage-gold rounded-sm group transition-all"
+              >
+                <div className="bg-heritage-gold/20 p-2 rounded-lg text-heritage-gold group-hover:scale-110 transition-transform duration-300">
+                  <Landmark className="h-6 w-6" />
+                </div>
+                <div className="flex flex-col leading-tight">
+                  <span className="font-serif text-xl font-light text-primary-foreground">
+                    Sell Your Stamps
+                    <span className="font-bold ml-1.5 text-heritage-gold">UK</span>
+                  </span>
+                </div>
               </Link>
               <p className="mt-4 text-base text-primary-foreground/80 leading-relaxed">
                 The UK's most trusted stamp valuation and buying service. 
@@ -84,7 +94,7 @@ export function Footer() {
               <address className="not-italic flex flex-col gap-4">
 
                 <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-gold shrink-0" aria-hidden="true" />
+                  <Phone className="h-5 w-5 text-heritage-gold shrink-0" aria-hidden="true" />
                   <a
                     href={`tel:${contactInfo.phone.replace(/\s/g, '')}`}
                     className="text-base text-primary-foreground/80 hover:text-gold transition-colors"
@@ -93,7 +103,7 @@ export function Footer() {
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Mail className="h-5 w-5 text-gold shrink-0" aria-hidden="true" />
+                  <Mail className="h-5 w-5 text-heritage-gold shrink-0" aria-hidden="true" />
                   <a
                     href={`mailto:${contactInfo.email}`}
                     className="text-base text-primary-foreground/80 hover:text-gold transition-colors break-all"
@@ -102,7 +112,7 @@ export function Footer() {
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Clock className="h-5 w-5 text-gold shrink-0" aria-hidden="true" />
+                  <Clock className="h-5 w-5 text-heritage-gold shrink-0" aria-hidden="true" />
                   <span className="text-base text-primary-foreground/80">
                     {contactInfo.hours}
                   </span>

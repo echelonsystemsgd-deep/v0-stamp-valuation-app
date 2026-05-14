@@ -48,12 +48,12 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="py-14 md:py-20 bg-slate-50" aria-labelledby="testimonials-heading">
+    <section className="py-24 md:py-32 bg-[#F9F7F2] border-y border-border/40" aria-labelledby="testimonials-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
-          <h2 id="testimonials-heading" className="text-primary">What Our Clients Say</h2>
-          <p className="mt-3 md:mt-4 text-base sm:text-lg md:text-xl text-muted-foreground font-medium">
-            Join hundreds of satisfied collectors who have trusted us with their valuations.
+        <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24 animate-fade-in-up opacity-0">
+          <h2 id="testimonials-heading" className="text-primary font-serif">Trust & Excellence</h2>
+          <p className="mt-4 text-lg md:text-xl text-muted-foreground font-medium leading-relaxed">
+            Join the hundreds of satisfied collectors who have secured fair, professional valuations for their heritage collections.
           </p>
         </div>
 
@@ -72,7 +72,7 @@ export function Testimonials() {
                     <CardContent className="p-5 sm:p-6 md:p-8 flex flex-col h-full">
                       <div className="flex gap-1 mb-4">
                         {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 md:w-5 md:h-5 fill-gold text-gold" />
+                          <Star key={i} className="w-4 h-4 md:w-5 md:h-5 fill-heritage-gold text-heritage-gold" />
                         ))}
                       </div>
                       

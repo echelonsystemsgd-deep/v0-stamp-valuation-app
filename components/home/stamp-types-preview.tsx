@@ -7,7 +7,7 @@ import { buyingRates, getBuyingRateImageSrc } from '@/data/buying-rates'
 
 export function StampTypesPreview() {
   return (
-    <section className="py-20 lg:py-24" aria-labelledby="stamp-types-heading">
+    <section className="py-28 lg:py-32" aria-labelledby="stamp-types-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>

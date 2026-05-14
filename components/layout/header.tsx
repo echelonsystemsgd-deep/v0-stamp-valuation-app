@@ -4,7 +4,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
-import { Menu, PhoneCall } from 'lucide-react'
+import { Menu, PhoneCall, Landmark } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -41,9 +41,9 @@ export function Header() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 w-full transition-all duration-300',
+        'sticky top-0 z-50 w-full transition-all duration-500',
         isScrolled
-          ? 'bg-background/80 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.03)] border-b border-border'
+          ? 'bg-white/70 dark:bg-navy/70 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] border-b border-white/20'
           : 'bg-transparent'
       )}
     >
@@ -63,21 +63,32 @@ export function Header() {
           <Link 
             href="/" 
             onClick={(e) => handleLinkClick(e, '/')}
-            className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+            className="flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm group"
           >
-            <Image 
-              src="/SellYourStampsUK-logo.jpeg" 
-              alt="Sell Your Stamps UK" 
-              width={200} 
-              height={60} 
-              className={cn(
-                "w-auto object-contain transition-all duration-300 origin-left",
-                isScrolled 
-                  ? "h-8 sm:h-10 scale-90 brightness-[1.02]" 
-                  : "h-10 sm:h-12 scale-100"
-              )}
-              priority
-            />
+            <div className={cn(
+              "flex items-center justify-center rounded-lg bg-heritage-gold/10 text-heritage-gold transition-all duration-500",
+              isScrolled ? "p-1.5" : "p-2"
+            )}>
+              <Landmark className={cn(
+                "transition-all duration-500",
+                isScrolled ? "h-6 w-6" : "h-8 w-8"
+              )} />
+            </div>
+            <div className="flex flex-col leading-tight">
+              <span className={cn(
+                "font-serif transition-all duration-500",
+                isScrolled ? "text-lg" : "text-xl"
+              )}>
+                <span className="font-light">Sell Your Stamps</span>
+                <span className="font-bold ml-1.5 text-heritage-gold">UK</span>
+              </span>
+              <span className={cn(
+                "text-[10px] uppercase tracking-[0.2em] font-semibold text-muted-foreground transition-all duration-500 overflow-hidden",
+                isScrolled ? "h-0 opacity-0" : "h-3 opacity-100 mt-0.5"
+              )}>
+                Professional Philately
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
