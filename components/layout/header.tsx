@@ -63,32 +63,22 @@ export function Header() {
           <Link 
             href="/" 
             onClick={(e) => handleLinkClick(e, '/')}
-            className="flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm group"
+            className="flex items-center gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm group relative"
           >
             <div className={cn(
-              "flex items-center justify-center rounded-lg bg-heritage-gold/10 text-heritage-gold transition-all duration-500",
-              isScrolled ? "p-1.5" : "p-2"
+              "relative transition-all duration-500 ease-in-out",
+              isScrolled ? "w-40 sm:w-48" : "w-48 sm:w-64"
             )}>
-              <Landmark className={cn(
-                "transition-all duration-500",
-                isScrolled ? "h-6 w-6" : "h-8 w-8"
-              )} />
+              <Image
+                src="/SellYourStampsUK-logo.jpeg"
+                alt="Sell Your Stamps UK - Expert Valuations, Fair Prices, Trusted Buyers"
+                width={300}
+                height={100}
+                className="w-full h-auto object-contain"
+                priority
+              />
             </div>
-            <div className="flex flex-col leading-tight">
-              <span className={cn(
-                "font-serif transition-all duration-500",
-                isScrolled ? "text-lg" : "text-xl"
-              )}>
-                <span className="font-light">Sell Your Stamps</span>
-                <span className="font-bold ml-1.5 text-heritage-gold">UK</span>
-              </span>
-              <span className={cn(
-                "text-[10px] uppercase tracking-[0.2em] font-semibold text-muted-foreground transition-all duration-500 overflow-hidden",
-                isScrolled ? "h-0 opacity-0" : "h-3 opacity-100 mt-0.5"
-              )}>
-                Professional Philately
-              </span>
-            </div>
+            <span className="sr-only">Sell Your Stamps UK</span>
           </Link>
 
           {/* Desktop Navigation */}

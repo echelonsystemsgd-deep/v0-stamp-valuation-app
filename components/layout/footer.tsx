@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 import { Phone, Mail, Clock, Landmark } from 'lucide-react'
 import { footerNavigation, contactInfo } from '@/data/navigation'
 
@@ -30,14 +31,14 @@ export function Footer() {
                 onClick={(e) => handleLinkClick(e, '/')} 
                 className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-heritage-gold rounded-sm group transition-all"
               >
-                <div className="bg-heritage-gold/20 p-2 rounded-lg text-heritage-gold group-hover:scale-110 transition-transform duration-300">
-                  <Landmark className="h-6 w-6" />
-                </div>
-                <div className="flex flex-col leading-tight">
-                  <span className="font-serif text-xl font-light text-primary-foreground">
-                    Sell Your Stamps
-                    <span className="font-bold ml-1.5 text-heritage-gold">UK</span>
-                  </span>
+                <div className="bg-white p-2 rounded-lg group-hover:scale-105 transition-transform duration-300">
+                  <Image
+                    src="/SellYourStampsUK-logo.jpeg"
+                    alt="Sell Your Stamps UK"
+                    width={200}
+                    height={60}
+                    className="h-auto w-40 object-contain"
+                  />
                 </div>
               </Link>
               <p className="mt-4 text-base text-primary-foreground/80 leading-relaxed">

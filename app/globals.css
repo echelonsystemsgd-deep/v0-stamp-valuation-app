@@ -5,13 +5,13 @@
 
 :root {
   /* Brand Colors - Sell Your Stamps UK */
-  --navy: #0D1B2A;
-  --forest-green: #1F6F50;
-  --gold: #B89352;
-  --off-white: #F7F5F0;
-  --charcoal: #1F2937;
-  --postal-grey: #E5E7EB;
-  --oxford-blue: #001C3D;
+  --navy: #0B1D2E; /* Refined Midnight Navy */
+  --forest-green: #14452F; /* Richer, darker forest green to match logo */
+  --gold: #C5A059; /* Heritage gold */
+  --off-white: #FBFBF9; /* Cleaner off-white */
+  --charcoal: #1A1A1A;
+  --postal-grey: #E8EBE9;
+  --oxford-blue: #0A1929;
   --heritage-gold: #C5A059;
   --heritage-gold-dark: #A6823D;
   

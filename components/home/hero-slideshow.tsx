@@ -27,7 +27,7 @@ export const HeroSlideshow = React.memo(function HeroSlideshow() {
     <BaseHeroSlideshow
       images={heroImages}
       title="Sell Your Stamps UK"
-      subtitle="The UK's most trusted stamp valuation and buying service. Expert-led, heritage-focused, and committed to fair market prices."
+      subtitle="EXPERT VALUATIONS. FAIR PRICES. TRUSTED BUYERS. The UK's most trusted stamp valuation and buying service. Expert-led and heritage-focused."
       minHeight="min-h-[600px] lg:min-h-[700px]"
     >
       <div className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in-up opacity-0 [animation-delay:600ms]">

@@ -22,10 +22,10 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://sellyourstamps.co.uk'),
   title: {
-    default: 'Sell Your Stamps UK | Professional Stamp Valuation & Buying',
+    default: 'Sell Your Stamps UK | Expert Valuations. Fair Prices. Trusted Buyers.',
     template: '%s | Sell Your Stamps UK',
   },
-  description: 'The UK\'s most trusted stamp valuation and buying service. Heritage-focused, expert-led, and committed to fair pricing for your stamp collection.',
+  description: 'The UK\'s most trusted stamp valuation and buying service. Expert valuations, fair prices, and trusted buyers for your stamp collection.',
   keywords: ['sell stamps UK', 'stamp valuation', 'stamp buyers', 'Great Britain stamps', 'professional philately', 'stamp collection value'],
   authors: [{ name: 'Sell Your Stamps UK' }],
   creator: 'Sell Your Stamps UK',

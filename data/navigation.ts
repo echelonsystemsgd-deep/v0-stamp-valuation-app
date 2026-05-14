@@ -29,4 +29,5 @@ export const contactInfo = {
   phone: '+44 (0)20 1234 5678',
   email: 'info@sellyourstamps.co.uk',
   hours: 'Monday - Friday: 9am - 5pm',
+  tagline: 'EXPERT VALUATIONS. FAIR PRICES. TRUSTED BUYERS.',
 } as const
