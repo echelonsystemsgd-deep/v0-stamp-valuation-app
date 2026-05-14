@@ -38,8 +38,8 @@ export function Logo({ variant = 'light', scrolled = false, className }: LogoPro
           Sell Your Stamps UK
         </span>
         <span className={cn(
-          "font-sans uppercase tracking-[0.25em] md:tracking-[0.4em] font-bold transition-all duration-500 whitespace-nowrap",
-          scrolled ? "text-[7px] md:text-[9px] mt-1" : "text-[9px] md:text-[11px] mt-1.5",
+          "font-sans uppercase tracking-[0.2em] md:tracking-[0.4em] font-bold transition-all duration-500 whitespace-nowrap",
+          scrolled ? "text-[6px] md:text-[8px] mt-0.5 tracking-[0.2em]" : "text-[9px] md:text-[11px] mt-1.5",
           variant === 'light' ? "text-white/70" : "text-muted-foreground"
         )}>
           Expert Valuations • Fair Prices • Trusted Buyers
