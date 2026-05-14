@@ -31,13 +31,13 @@ export function Footer() {
                 onClick={(e) => handleLinkClick(e, '/')} 
                 className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-heritage-gold rounded-sm group transition-all"
               >
-                <div className="bg-white p-2 rounded-lg group-hover:scale-105 transition-transform duration-300">
+                <div className="p-0 group-hover:scale-105 transition-transform duration-300">
                   <Image
                     src="/SellYourStampsUK-logo.jpeg"
                     alt="Sell Your Stamps UK"
                     width={200}
                     height={60}
-                    className="h-auto w-40 object-contain"
+                    className="h-auto w-48 object-contain brightness-0 invert opacity-90"
                   />
                 </div>
               </Link>

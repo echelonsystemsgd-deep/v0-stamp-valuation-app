@@ -67,14 +67,17 @@ export function Header() {
           >
             <div className={cn(
               "relative transition-all duration-500 ease-in-out",
-              isScrolled ? "w-40 sm:w-48" : "w-48 sm:w-64"
+              isScrolled ? "w-12 h-12" : "w-48 sm:w-64"
             )}>
               <Image
-                src="/SellYourStampsUK-logo.jpeg"
-                alt="Sell Your Stamps UK - Expert Valuations, Fair Prices, Trusted Buyers"
-                width={300}
-                height={100}
-                className="w-full h-auto object-contain"
+                src={isScrolled ? "/brand-mark.svg" : "/SellYourStampsUK-logo.jpeg"}
+                alt="Sell Your Stamps UK"
+                width={isScrolled ? 48 : 300}
+                height={isScrolled ? 48 : 100}
+                className={cn(
+                  "h-auto object-contain transition-all duration-500",
+                  isScrolled ? "w-12" : "w-full"
+                )}
                 priority
               />
             </div>

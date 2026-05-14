@@ -170,15 +170,16 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif text-primary;
     line-height: 1.2;
+    letter-spacing: -0.01em;
   }
   h1 {
     @apply text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
     line-height: 1.1;
   }
   h2 {
     @apply text-3xl md:text-5xl font-bold tracking-tight mb-8;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     line-height: 1.2;
   }
   h3 {
@@ -242,16 +243,33 @@
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   }
 
-  @keyframes pulseSubtle {
-    0% {
-      box-shadow: 0 0 0 0 rgba(45, 106, 79, 0.4);
-    }
-    70% {
-      box-shadow: 0 0 0 10px rgba(45, 106, 79, 0);
-    }
-    100% {
-      box-shadow: 0 0 0 0 rgba(45, 106, 79, 0);
-    }
+  .stamp-edge {
+    --size: 12px;
+    --dot: 6px;
+    background: white;
+    padding: 1.5rem;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    mask: 
+      radial-gradient(var(--dot) at 50% 0, #0000 98%, #000) 50% calc(var(--size) / -2) / var(--size) 100%,
+      radial-gradient(var(--dot) at 50% 100%, #0000 98%, #000) 50% calc(var(--size) / 2) / var(--size) 100%,
+      radial-gradient(var(--dot) at 0 50%, #0000 98%, #000) calc(var(--size) / -2) 50% / 100% var(--size),
+      radial-gradient(var(--dot) at 100% 50%, #0000 98%, #000) calc(var(--size) / 2) 50% / 100% var(--size);
+    mask-composite: intersect;
+  }
+
+  .paper-texture {
+    position: relative;
+  }
+  
+  .paper-texture::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 1;
   }
 
   .animate-pulse-subtle {

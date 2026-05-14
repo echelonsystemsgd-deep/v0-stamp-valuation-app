@@ -48,7 +48,7 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="py-24 md:py-32 bg-[#F9F7F2] border-y border-border/40" aria-labelledby="testimonials-heading">
+    <section className="py-24 md:py-32 bg-[#F9F7F2] border-y border-border/40 paper-texture" aria-labelledby="testimonials-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24 animate-fade-in-up opacity-0">
           <h2 id="testimonials-heading" className="text-primary font-serif">Trust & Excellence</h2>
@@ -67,35 +67,35 @@ export function Testimonials() {
           >
             <CarouselContent>
               {testimonials.map((testimonial, index) => (
-                <CarouselItem key={index} className="md:col-span-1 lg:basis-1/2 xl:basis-1/3 pl-4 md:pl-6">
-                  <Card className="h-full border-none shadow-md hover:shadow-xl transition-shadow duration-300">
-                    <CardContent className="p-5 sm:p-6 md:p-8 flex flex-col h-full">
-                      <div className="flex gap-1 mb-4">
+                <CarouselItem key={index} className="md:col-span-1 lg:basis-1/2 xl:basis-1/3 pl-4 md:pl-6 h-full py-4">
+                  <div className="stamp-edge h-full flex flex-col hover:shadow-xl transition-shadow duration-300">
+                    <div className="p-2 sm:p-3 md:p-4 flex flex-col h-full">
+                      <div className="flex gap-1 mb-3">
                         {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 md:w-5 md:h-5 fill-heritage-gold text-heritage-gold" />
+                          <Star key={i} className="w-3.5 h-3.5 md:w-4 md:h-4 fill-heritage-gold text-heritage-gold" />
                         ))}
                       </div>
                       
-                      <div className="relative mb-6">
-                        <Quote className="absolute -top-2 -left-2 w-8 h-8 md:w-10 md:h-10 text-forest-green/10 -z-10" />
-                        <p className="text-base md:text-lg italic text-slate-700 leading-relaxed relative z-10">
+                      <div className="relative mb-4 flex-grow">
+                        <Quote className="absolute -top-1 -left-1 w-6 h-6 md:w-8 md:h-8 text-forest-green/10 -z-10" />
+                        <p className="text-sm md:text-base italic text-slate-700 leading-relaxed relative z-10">
                           "{testimonial.content}"
                         </p>
                       </div>
 
-                      <div className="mt-auto flex items-center gap-4 border-t border-slate-100 pt-6">
-                        <Avatar className="h-12 w-12 border-2 border-forest-green/20">
-                          <AvatarFallback className="bg-forest-green text-white font-bold">
+                      <div className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-4">
+                        <Avatar className="h-10 w-10 border-2 border-forest-green/20">
+                          <AvatarFallback className="bg-forest-green text-white font-bold text-xs">
                             {testimonial.initials}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-serif font-bold text-primary">{testimonial.name}</p>
-                          <p className="text-sm text-muted-foreground">{testimonial.location}</p>
+                          <p className="font-serif font-bold text-primary text-sm">{testimonial.name}</p>
+                          <p className="text-[12px] text-muted-foreground">{testimonial.location}</p>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
