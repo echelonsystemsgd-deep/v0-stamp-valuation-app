@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { Phone, Mail, Clock, Landmark } from 'lucide-react'
 import { footerNavigation, contactInfo } from '@/data/navigation'
+import { Logo } from '@/components/layout/logo'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -29,17 +30,9 @@ export function Footer() {
               <Link 
                 href="/" 
                 onClick={(e) => handleLinkClick(e, '/')} 
-                className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-heritage-gold rounded-sm group transition-all"
+                className="flex items-center focus:outline-none focus:ring-2 focus:ring-heritage-gold rounded-sm group transition-all"
               >
-                <div className="p-0 group-hover:scale-105 transition-transform duration-300">
-                  <Image
-                    src="/SellYourStampsUK-logo.jpeg"
-                    alt="Sell Your Stamps UK"
-                    width={200}
-                    height={60}
-                    className="h-auto w-48 object-contain brightness-0 invert opacity-90"
-                  />
-                </div>
+                <Logo variant="light" className="scale-75 origin-left" />
               </Link>
               <p className="mt-4 text-base text-primary-foreground/80 leading-relaxed">
                 The UK's most trusted stamp valuation and buying service. 
