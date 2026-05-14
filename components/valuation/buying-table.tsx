@@ -108,7 +108,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
               </Button>
             </div>
           </div>
-          <div className="text-right font-extrabold text-2xl text-primary font-mono whitespace-nowrap">
+          <div className="text-right font-extrabold text-2xl text-navy font-mono whitespace-nowrap">
             £{calculateSubtotal(item).toFixed(2)}
           </div>
         </div>
@@ -211,7 +211,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
               <div className="hidden lg:block overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
                 <div className="w-full overflow-x-auto">
                   <div className="min-w-[1000px]">
-                    <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-muted/40 p-6 font-semibold text-muted-foreground text-sm uppercase tracking-wider">
+                    <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-navy p-6 font-bold text-white text-sm uppercase tracking-wider">
                       <div>Product</div>
                       <div>Description</div>
                       <div className="text-right">Face Price</div>
@@ -235,7 +235,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
                   <div className="hidden lg:block overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
                     <div className="w-full overflow-x-auto">
                       <div className="min-w-[1000px]">
-                        <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-muted/40 p-6 font-semibold text-muted-foreground text-sm uppercase tracking-wider">
+                        <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-navy p-6 font-bold text-white text-sm uppercase tracking-wider">
                           <div>Product</div>
                           <div>Description</div>
                           <div className="text-right">Face Price</div>
@@ -268,7 +268,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             <Button 
               size="default" 
               onClick={() => onAction && onAction(quantities, totalValue)}
-              className="bg-primary hover:bg-primary/90 text-white font-bold h-12 px-6 sm:px-8 rounded-full shadow-lg shadow-primary/30 transition-all hover:scale-105 active:scale-95 group shrink-0"
+              className="bg-forest-green hover:bg-forest-green/90 text-white font-bold h-12 px-6 sm:px-8 rounded-full shadow-lg shadow-forest-green/30 transition-all hover:scale-105 active:scale-95 group shrink-0"
             >
               Submit <span className="hidden sm:inline">&nbsp;for Valuation</span>
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -278,9 +278,9 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
       )}
 
       {/* Summary Section */}
-      <section className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden ring-1 ring-white/10 animate-slide-in-right">
+      <section className="bg-navy text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden ring-1 ring-white/10 animate-slide-in-right">
         {/* Background Accents */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 blur-[120px] -mr-48 -mt-48 rounded-full animate-pulse" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-forest-green/20 blur-[120px] -mr-48 -mt-48 rounded-full animate-pulse" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 blur-[100px] -ml-32 -mb-32 rounded-full" />
         
         <div className="relative z-10 flex flex-col xl:flex-row xl:items-center justify-between gap-8">
@@ -310,7 +310,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             <Button 
               size="lg" 
               onClick={() => onAction && onAction(quantities, totalValue)}
-              className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-black text-xl h-20 px-12 rounded-2xl shadow-2xl shadow-primary/40 transition-all duration-300 hover:scale-105 active:scale-95 group"
+              className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white font-black text-xl h-20 px-12 rounded-2xl shadow-2xl shadow-forest-green/40 transition-all duration-300 hover:scale-105 active:scale-95 group"
             >
               Submit for Valuation
               <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-1" />

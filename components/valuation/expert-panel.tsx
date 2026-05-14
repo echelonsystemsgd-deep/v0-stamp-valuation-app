@@ -65,7 +65,7 @@ export function SupportPanel() {
               </div>
               <div>
                 <p className="font-black text-sm tracking-tight leading-tight uppercase italic">Expert Support</p>
-                <p className="text-[10px] text-white/50 uppercase font-black tracking-widest mt-0.5">UK Stamp Valuations</p>
+                <p className="text-[10px] text-white/50 uppercase font-black tracking-widest mt-0.5">Sell Your Stamps UK</p>
               </div>
             </div>
             <button
@@ -161,7 +161,7 @@ export function SupportPanel() {
                   </div>
                   <div>
                     <p className="font-black text-xs tracking-tight leading-tight uppercase italic">Expert Support</p>
-                    <p className="text-[10px] text-white/50 uppercase font-black tracking-widest mt-0.5">UK Stamp Valuations</p>
+                    <p className="text-[10px] text-white/50 uppercase font-black tracking-widest mt-0.5">Sell Your Stamps UK</p>
                   </div>
                 </div>
                 <button

@@ -15,16 +15,16 @@ export function JsonLd({ type, data }: JsonLdProps) {
   if (type === 'LocalBusiness') {
     schema = {
       ...schema,
-      name: 'UK Stamp Valuations',
-      image: 'https://www.ukstampvaluations.co.uk/logo.png',
-      '@id': 'https://www.ukstampvaluations.co.uk',
-      url: 'https://www.ukstampvaluations.co.uk',
-      telephone: '+44 (0) 20 1234 5678',
+      name: 'Sell Your Stamps UK',
+      image: 'https://sellyourstamps.co.uk/logo.png',
+      '@id': 'https://sellyourstamps.co.uk',
+      url: 'https://sellyourstamps.co.uk',
+      telephone: '+44 01234 567890',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: '123 Philately House',
+        streetAddress: '123 Philatelic Way',
         addressLocality: 'London',
-        postalCode: 'EC1A 1AA',
+        postalCode: 'SW1A 1AA',
         addressCountry: 'GB',
       },
       geo: {

@@ -12,7 +12,7 @@ import { contactUsHero } from '@/data/slideshows'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Get in touch with UK Stamp Valuations. Contact us for stamp valuations, selling enquiries, or general questions.',
+  description: 'Get in touch with Sell Your Stamps UK. Contact us for stamp valuations, selling enquiries, or general questions.',
 }
 
 const contactDetails = [

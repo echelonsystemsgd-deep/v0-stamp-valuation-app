@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/footer"
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How UK Stamp Valuations collects, uses, and protects your personal information.",
+  description: "How Sell Your Stamps UK collects, uses, and protects your personal information.",
 }
 
 export default function PrivacyPage() {
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
           </p>
           <div className="prose prose-slate max-w-none space-y-6 text-foreground/90">
             <p>
-              This policy describes how <strong>UK Stamp Valuations</strong> handles information you provide when you use
+              This policy describes how <strong>Sell Your Stamps UK</strong> handles information you provide when you use
               our website, contact forms, and valuation services. It is a general template—replace with your final legal
               text and your ICO registration details where required.
             </p>

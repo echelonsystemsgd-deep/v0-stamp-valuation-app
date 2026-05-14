@@ -185,10 +185,10 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
     return (
       <Card className="max-w-2xl mx-auto">
         <CardContent className="py-12 text-center">
-          <div className="w-16 h-16 rounded-full bg-forest-green/10 flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-8 h-8 text-forest-green" />
+          <div className="w-20 h-20 rounded-full bg-forest-green/10 flex items-center justify-center mx-auto mb-8 border-2 border-forest-green/20">
+            <CheckCircle className="w-10 h-10 text-forest-green" />
           </div>
-          <h2 className="text-2xl font-serif font-bold text-primary mb-4">
+          <h2 className="text-3xl font-serif font-bold text-navy mb-4">
             Thank You for Your Submission
           </h2>
           <p className="text-muted-foreground mb-6 max-w-md mx-auto">
@@ -210,8 +210,9 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Main Form */}
       <div className="lg:col-span-2">
-        <Card>
-          <CardContent className="pt-6">
+        <Card className="bg-grainy-paper border-gold/20 shadow-sm overflow-hidden relative">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gold/30" />
+          <CardContent className="pt-8 px-6 sm:px-8">
             <StepIndicator currentStep={currentStep} totalSteps={3} steps={steps} />
             
             <form onSubmit={handleSubmit}>

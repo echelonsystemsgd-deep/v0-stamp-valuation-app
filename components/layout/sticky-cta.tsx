@@ -43,11 +43,11 @@ export function StickyCTA() {
           <Button
             asChild
             className="group h-10 px-4 text-sm font-bold bg-forest-green text-white hover:bg-forest-green/90"
-            aria-label="Sell Your Stamps"
+            aria-label="Request a Free Valuation"
           >
             <Link href="/sell-your-stamps" className="flex items-center gap-2">
               <Tag className="h-4 w-4" />
-              <span>Sell Your Stamps</span>
+              <span>Free Valuation</span>
             </Link>
           </Button>
         </div>
@@ -88,8 +88,8 @@ export function StickyCTA() {
               className="group bg-forest-green px-6 font-bold text-white hover:bg-forest-green/90"
             >
               <Link href="/sell-your-stamps" className="flex items-center gap-2">
-                <span className="xl:hidden">Sell now</span>
-                <span className="hidden xl:inline">Sell Your Stamps Now</span>
+                <span className="xl:hidden">Valuation</span>
+                <span className="hidden xl:inline">Request a Free Valuation</span>
                 <ArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>

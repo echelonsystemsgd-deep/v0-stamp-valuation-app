@@ -62,7 +62,7 @@ export const HeroSlideshow = React.memo(function HeroSlideshow({
       ))}
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-oxford-blue/70" />
+      <div className="absolute inset-0 bg-navy/70" />
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 w-full">

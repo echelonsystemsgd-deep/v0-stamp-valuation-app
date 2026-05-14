@@ -25,7 +25,7 @@ const testimonials = [
   {
     name: 'Elizabeth Thompson',
     location: 'Edinburgh, Scotland',
-    content: 'Inherited a large collection and didn\'t know where to start. UK Stamp Valuations guided me through the entire process. Their expertise is evident and their service is stellar.',
+    content: 'Inherited a large collection and didn\'t know where to start. Sell Your Stamps UK guided me through the entire process. Their expertise is evident and their service is stellar.',
     rating: 5,
     initials: 'ET'
   },

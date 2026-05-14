@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "What We Buy | UK Stamp Valuations",
+  title: "What We Buy | Sell Your Stamps UK",
   description:
-    "Browse the UK stamp material we purchase: modern definitives, commemoratives, FDCs, and collections. Indicative reference only—get a valuation on our sell page.",
+    "Browse the types of stamps we buy, including Great Britain, British Commonwealth, and Worldwide collections.",
   openGraph: {
-    title: "What We Buy | UK Stamp Valuations",
+    title: "What We Buy | Sell Your Stamps UK",
     description:
       "A clear catalogue of stamp types we buy. For live rates and totals, use our buying rates desk or sell page.",
     type: "website",

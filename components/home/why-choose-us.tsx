@@ -74,7 +74,7 @@ export function WhyChooseUs() {
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-forest-green/10 text-forest-green rounded-full text-xs font-semibold tracking-wide uppercase mb-4">
                 Recommended Choice
               </div>
-              <h3 className="text-2xl font-bold text-primary">UK Stamp Valuations</h3>
+              <h3 className="text-2xl font-bold text-primary">Sell Your Stamps UK</h3>
               <p className="text-sm text-muted-foreground mt-2 text-balance">A seamless, fully transparent selling experience</p>
             </div>
             

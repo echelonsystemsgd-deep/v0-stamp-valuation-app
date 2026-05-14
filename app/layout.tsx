@@ -20,16 +20,16 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://ukstampvaluations.co.uk'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://sellyourstamps.co.uk'),
   title: {
-    default: 'UK Stamp Valuations | Professional Stamp Buying Service',
-    template: '%s | UK Stamp Valuations',
+    default: 'Sell Your Stamps UK | Professional Stamp Valuation & Buying',
+    template: '%s | Sell Your Stamps UK',
   },
-  description: 'Get expert valuations for your stamp collection from UK-based specialists. 25+ years experience, fair market prices, and no obligation to sell.',
-  keywords: ['stamp valuation', 'sell stamps UK', 'stamp collection', 'philately', 'Penny Black', 'stamp buyers', 'Great Britain stamps'],
-  authors: [{ name: 'UK Stamp Valuations' }],
-  creator: 'UK Stamp Valuations',
-  publisher: 'UK Stamp Valuations',
+  description: 'The UK\'s most trusted stamp valuation and buying service. Heritage-focused, expert-led, and committed to fair pricing for your stamp collection.',
+  keywords: ['sell stamps UK', 'stamp valuation', 'stamp buyers', 'Great Britain stamps', 'professional philately', 'stamp collection value'],
+  authors: [{ name: 'Sell Your Stamps UK' }],
+  creator: 'Sell Your Stamps UK',
+  publisher: 'Sell Your Stamps UK',
   formatDetection: {
     email: false,
     address: false,
@@ -47,24 +47,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: 'https://ukstampvaluations.co.uk',
-    siteName: 'UK Stamp Valuations',
-    title: 'UK Stamp Valuations | Professional Stamp Buying Service',
+    url: 'https://sellyourstamps.co.uk',
+    siteName: 'Sell Your Stamps UK',
+    title: 'Sell Your Stamps UK | Professional Stamp Valuation & Buying',
     description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience. Get a fair price for your collection today.',
     images: [
       {
         url: '/opengraph-image.png',
         width: 1200,
         height: 630,
-        alt: 'UK Stamp Valuations - Professional Stamp Buying Service',
+        alt: 'Sell Your Stamps UK - Professional Stamp Buying Service',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'UK Stamp Valuations | Professional Stamp Buying Service',
+    title: 'Sell Your Stamps UK | Professional Stamp Valuation & Buying',
     description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience.',
-    creator: '@UKStampVal',
+    creator: '@SellYourStampsUK',
     images: ['/twitter-image.png'],
   },
   robots: {

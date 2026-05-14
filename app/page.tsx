@@ -9,8 +9,8 @@ import { WhyChooseUs } from '@/components/home/why-choose-us'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'UK Stamp Valuations | Professional Stamp Buying Service',
-  description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience. Get a fair price for your collection today.',
+  title: 'Sell Your Stamps UK | Expert Stamp Valuation & Buying',
+  description: "The UK's most trusted stamp valuation and buying service. Heritage-focused, expert-led, and committed to fair market prices.",
 }
 
 export default function HomePage() {

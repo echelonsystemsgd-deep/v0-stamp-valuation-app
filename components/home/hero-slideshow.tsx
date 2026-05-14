@@ -24,8 +24,8 @@ export const HeroSlideshow = React.memo(function HeroSlideshow() {
   return (
     <BaseHeroSlideshow
       images={heroImages}
-      title="Professional Stamp Valuations"
-      subtitle="Expert UK-based valuations for your collection. Receive fair market prices from trusted specialists with over 25 years of experience."
+      title="Sell Your Stamps UK"
+      subtitle="The UK's most trusted stamp valuation and buying service. Expert-led, heritage-focused, and committed to fair market prices."
       minHeight="min-h-[600px] lg:min-h-[700px]"
     >
       <div className="mt-10 flex flex-col sm:flex-row gap-4">
@@ -40,9 +40,9 @@ export const HeroSlideshow = React.memo(function HeroSlideshow() {
           asChild
           variant="outline"
           size="lg"
-          className="border-white text-white hover:bg-white hover:text-oxford-blue font-semibold h-14 px-8 text-lg bg-transparent"
+          className="border-white text-white hover:bg-white hover:text-navy font-semibold h-14 px-8 text-lg bg-transparent"
         >
-          <Link href="/what-we-buy">View What We Buy</Link>
+          <Link href="/sell-your-stamps">Request a Free Valuation</Link>
         </Button>
       </div>
       <p className="mt-6 text-base text-white/70 flex items-center gap-2">

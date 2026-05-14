@@ -13,7 +13,7 @@ import { InlineSellCTA } from '@/components/sections/sell-cta'
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about UK Stamp Valuations - over 25 years of expertise in stamp valuation and philately. Meet our team of expert valuers.',
+  description: 'Learn about Sell Your Stamps UK - over 25 years of expertise in stamp valuation and philately. Meet our team of expert valuers.',
 }
 
 const values = [
@@ -62,7 +62,7 @@ export default function AboutUsPage() {
             <div className="text-center max-w-2xl mx-auto mb-12">
               <h2 id="values-heading" className="text-primary">Our Values</h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                These principles guide everything we do at UK Stamp Valuations.
+                These principles guide everything we do at Sell Your Stamps UK.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -88,7 +88,7 @@ export default function AboutUsPage() {
               <div>
                 <h2 id="commitment-heading" className="text-white">Our Commitment to You</h2>
                 <p className="mt-4 text-lg text-white/80 leading-relaxed">
-                  When you choose UK Stamp Valuations, you&apos;re working with a team that genuinely 
+                  When you choose Sell Your Stamps UK, you&apos;re working with a team that genuinely 
                   cares about philately and respects the effort that goes into building a collection.
                 </p>
               </div>

@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/footer"
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "Terms and conditions for using UK Stamp Valuations website and services.",
+  description: "Terms and conditions for using Sell Your Stamps UK website and services.",
 }
 
 export default function TermsPage() {
@@ -20,7 +20,7 @@ export default function TermsPage() {
           </p>
           <div className="prose prose-slate max-w-none space-y-6 text-foreground/90">
             <p>
-              These terms govern your use of the <strong>UK Stamp Valuations</strong> website and related services. This
+              These terms govern your use of the <strong>Sell Your Stamps UK</strong> website and related services. This
               is a general template—have it reviewed by a solicitor before publication.
             </p>
             <h2 className="font-serif text-xl font-semibold text-primary mt-10">Use of the site</h2>
@@ -30,7 +30,7 @@ export default function TermsPage() {
             </p>
             <h2 className="font-serif text-xl font-semibold text-primary mt-10">Intellectual property</h2>
             <p>
-              Content on this site (text, design, logos) is owned by UK Stamp Valuations or its licensors unless
+              Content on this site (text, design, logos) is owned by Sell Your Stamps UK or its licensors unless
               otherwise stated. You may not copy or reuse it without permission.
             </p>
             <h2 className="font-serif text-xl font-semibold text-primary mt-10">Limitation of liability</h2>

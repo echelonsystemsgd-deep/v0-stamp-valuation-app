@@ -27,12 +27,12 @@ export function Footer() {
             <div className="lg:col-span-1">
               <Link href="/" onClick={(e) => handleLinkClick(e, '/')} className="inline-block group focus:outline-none focus:ring-2 focus:ring-gold rounded-sm px-1 -mx-1">
                 <span className="font-serif text-2xl font-bold text-primary-foreground group-hover:text-gold transition-colors">
-                  UK Stamp Valuations
+                  Sell Your Stamps UK
                 </span>
               </Link>
               <p className="mt-4 text-base text-primary-foreground/80 leading-relaxed">
-                Professional stamp valuations from UK-based experts. 
-                Over 25 years of experience helping collectors receive fair prices for their collections.
+                The UK's most trusted stamp valuation and buying service. 
+                Heritage-focused, expert-led, and committed to fair pricing for your stamp collection.
               </p>
             </div>
 

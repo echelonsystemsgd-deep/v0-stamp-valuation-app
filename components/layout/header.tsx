@@ -3,6 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 import { Menu, PhoneCall } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -61,17 +62,14 @@ export function Header() {
             onClick={(e) => handleLinkClick(e, '/')}
             className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
           >
-            <div className="flex flex-col">
-              <span className="font-serif text-lg sm:text-xl font-bold text-primary leading-tight">
-                UK Stamp
-              </span>
-              <span className="font-serif text-lg sm:text-xl font-bold text-primary leading-tight">
-                Valuations
-              </span>
-              <span className="mt-0.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-forest-green/80">
-                25+ Years Expertise
-              </span>
-            </div>
+            <Image 
+              src="/SellYourStampsUK-logo.jpeg" 
+              alt="Sell Your Stamps UK" 
+              width={200} 
+              height={60} 
+              className="h-10 sm:h-12 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -146,10 +144,10 @@ export function Header() {
               <SheetContent side="right" className="w-full sm:max-w-sm">
                 <SheetHeader>
                   <SheetTitle className="font-serif text-xl text-primary">
-                    UK Stamp Valuations
+                    Sell Your Stamps UK
                   </SheetTitle>
                   <SheetDescription className="sr-only">
-                    Mobile navigation menu for UK Stamp Valuations
+                    Mobile navigation menu for Sell Your Stamps UK
                   </SheetDescription>
                 </SheetHeader>
                 <nav className="flex flex-col gap-1 mt-8" aria-label="Mobile navigation">

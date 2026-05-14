@@ -30,9 +30,9 @@ export function CTASection() {
               asChild
               variant="outline"
               size="lg"
-              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold h-14 px-8 text-lg"
+              className="border-navy text-navy hover:bg-navy hover:text-white font-semibold h-14 px-8 text-lg"
             >
-              <Link href="/how-to-sell">Learn How to Sell</Link>
+              <Link href="/sell-your-stamps">Request a Free Valuation</Link>
             </Button>
           </div>
         </div>

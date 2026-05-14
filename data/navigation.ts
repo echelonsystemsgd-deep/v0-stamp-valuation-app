@@ -19,9 +19,9 @@ export const footerNavigation = {
 } as const
 
 export const contactInfo = {
-  businessName: 'UK Stamp Valuations Ltd',
+  businessName: 'Sell Your Stamps UK Ltd',
   address: '123 Philately House, London, EC1A 1AA',
   phone: '+44 (0)20 1234 5678',
-  email: 'info@ukstampvaluations.co.uk',
+  email: 'info@sellyourstamps.co.uk',
   hours: 'Monday - Friday: 9am - 5pm',
 } as const

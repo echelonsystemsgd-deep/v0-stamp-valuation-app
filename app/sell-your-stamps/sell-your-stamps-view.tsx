@@ -93,12 +93,12 @@ export function SellYourStampsView() {
       <main id="main-content" className="flex-1 flex flex-col w-full bg-slate-50/50 dark:bg-slate-950/50">
         <HeroSlideshow 
           images={sellYourStampsHero}
-          title="Sell Your Modern Stamps"
-          subtitle="The fastest way to de-stash your collection. Calculate an instant estimate below or request a full appraisal for large lots."
+          title="Sell Your Stamps UK"
+          subtitle="The fastest way to de-stash your collection. Calculate an instant estimate or request a professional appraisal from our heritage experts."
         >
           <div className="mt-8">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 text-white border border-white/30 text-xs font-black uppercase tracking-widest backdrop-blur-sm shadow-sm">
-              <Verified className="h-4 w-4 text-gold" /> Trusted UK Stamp Dealer
+              <Verified className="h-4 w-4 text-gold" /> Trusted British Stamp Dealer
             </span>
           </div>
         </HeroSlideshow>
@@ -112,13 +112,13 @@ export function SellYourStampsView() {
                 <TabsList className="h-14 sm:h-16 p-1 bg-white shadow-2xl shadow-indigo-100/50 border border-slate-100 rounded-2xl w-full max-w-xl">
                   <TabsTrigger
                     value="calculate"
-                    className="flex-1 h-full rounded-xl gap-2 sm:gap-3 text-sm sm:text-base font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all"
+                    className="flex-1 h-full rounded-xl gap-2 sm:gap-3 text-sm sm:text-base font-bold data-[state=active]:bg-navy data-[state=active]:text-white transition-all"
                   >
                     <Calculator className="h-4 w-4 sm:h-5 sm:w-5" /> Instant Calculator
                   </TabsTrigger>
                   <TabsTrigger
                     value="form"
-                    className="flex-1 h-full rounded-xl gap-2 sm:gap-3 text-sm sm:text-base font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all"
+                    className="flex-1 h-full rounded-xl gap-2 sm:gap-3 text-sm sm:text-base font-bold data-[state=active]:bg-navy data-[state=active]:text-white transition-all"
                   >
                     <FileText className="h-4 w-4 sm:h-5 sm:w-5" /> Request Appraisal
                   </TabsTrigger>
@@ -140,8 +140,9 @@ export function SellYourStampsView() {
               <TabsContent value="form" className="mt-0 outline-none focus-visible:ring-0">
                 <div
                   id="appraisal-form-header"
-                  className="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 ring-1 ring-slate-100"
+                  className="max-w-4xl mx-auto bg-grainy-paper p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-gold/10 ring-1 ring-gold/5 relative overflow-hidden"
                 >
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gold/30" />
                   <div className="mb-10 text-center">
                     <h2 className="text-3xl font-black text-slate-900 mb-3">Professional Stamp Valuation</h2>
                     <p className="text-slate-500 text-lg">
