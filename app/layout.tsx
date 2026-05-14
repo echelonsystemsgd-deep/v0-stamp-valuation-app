@@ -4,7 +4,6 @@ import { Analytics } from '@vercel/analytics/next'
 import { BackToTop } from '@/components/layout/back-to-top'
 import { StickyCTA } from '@/components/layout/sticky-cta'
 import { JsonLd } from '@/components/seo/json-ld'
-import { SupportPanel } from '@/components/valuation/expert-panel'
 import { ConciergeWidget } from '@/components/layout/concierge-widget'
 import './globals.css'
 
@@ -100,7 +99,6 @@ export default function RootLayout({
       <body className="font-sans antialiased min-h-screen flex flex-col">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
-        <SupportPanel />
         <ConciergeWidget />
         <StickyCTA />
         <BackToTop />

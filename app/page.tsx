@@ -6,6 +6,7 @@ import { Testimonials } from '@/components/sections/testimonials'
 import { StampTypesPreview } from '@/components/home/stamp-types-preview'
 import { HowItWorks } from '@/components/home/how-it-works'
 import { WhyChooseUs } from '@/components/home/why-choose-us'
+import { InlineSellCTA } from '@/components/sections/sell-cta'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -24,6 +25,13 @@ export default function HomePage() {
         <StampTypesPreview />
         <HowItWorks />
         <WhyChooseUs />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-20 lg:mb-24">
+          <InlineSellCTA 
+            variant="featured" 
+            title="Ready to Value Your Collection?"
+            description="Our expert team is standing by to provide a professional assessment of your stamps. Get started with a fair, no-obligation valuation today."
+          />
+        </div>
       </main>
       <Footer />
     </>

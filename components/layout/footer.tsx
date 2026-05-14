@@ -22,7 +22,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="py-12 lg:py-16">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
             {/* Brand Column */}
             <div className="lg:col-span-1">
               <Link 
@@ -73,6 +73,26 @@ export function Footer() {
               </h3>
               <ul className="flex flex-col gap-3" role="list">
                 {footerNavigation.company.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={(e) => handleLinkClick(e, item.href)}
+                      className="text-base text-primary-foreground/80 hover:text-gold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded-sm"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Quick Support */}
+            <div>
+              <h3 className="font-serif text-lg font-semibold text-primary-foreground mb-4">
+                Quick Support
+              </h3>
+              <ul className="flex flex-col gap-3" role="list">
+                {footerNavigation.support.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}

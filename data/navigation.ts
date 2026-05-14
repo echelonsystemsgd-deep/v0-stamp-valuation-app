@@ -16,6 +16,11 @@ export const footerNavigation = {
     { label: 'About Us', href: '/about-us' },
     { label: 'Contact', href: '/contact' },
   ],
+  support: [
+    { label: 'Instant Estimate', href: '/sell-your-stamps' },
+    { label: 'Selling Guide', href: '/how-to-sell' },
+    { label: 'Direct Inquiry', href: '/contact' },
+  ],
 } as const
 
 export const contactInfo = {
