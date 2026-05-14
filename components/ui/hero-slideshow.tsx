@@ -66,7 +66,7 @@ export const HeroSlideshow = React.memo(function HeroSlideshow({
       <div className="absolute inset-0 bg-navy/20" />
 
       {/* Content */}
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 w-full">
+      <div className="relative z-10 mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-12 py-20 w-full">
         <div className="max-w-2xl">
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-[1.1] text-balance animate-fade-in-up opacity-0 [animation-delay:200ms]">
             {title}

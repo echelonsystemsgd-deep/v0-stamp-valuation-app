@@ -41,10 +41,10 @@ export function Header() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 w-full transition-all duration-500',
+        'fixed top-0 z-50 w-full transition-all duration-500',
         isScrolled
           ? 'bg-white/80 dark:bg-navy/80 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.06)] border-b border-white/20'
-          : 'bg-transparent'
+          : 'bg-gradient-to-b from-black/20 to-transparent'
       )}
     >
       <a
