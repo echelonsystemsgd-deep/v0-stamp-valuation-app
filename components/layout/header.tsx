@@ -43,7 +43,7 @@ export function Header() {
       className={cn(
         'sticky top-0 z-50 w-full transition-all duration-300',
         isScrolled
-          ? 'bg-background/95 backdrop-blur-sm shadow-sm border-b border-border'
+          ? 'bg-background/80 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.03)] border-b border-border'
           : 'bg-transparent'
       )}
     >
@@ -55,7 +55,10 @@ export function Header() {
         Skip to main content
       </a>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <nav className="flex h-16 sm:h-20 items-center justify-between" aria-label="Main navigation">
+        <nav className={cn(
+          "flex items-center justify-between transition-all duration-300",
+          isScrolled ? "h-14 sm:h-16" : "h-16 sm:h-20"
+        )} aria-label="Main navigation">
           {/* Logo */}
           <Link 
             href="/" 
@@ -67,7 +70,12 @@ export function Header() {
               alt="Sell Your Stamps UK" 
               width={200} 
               height={60} 
-              className="h-10 sm:h-12 w-auto object-contain"
+              className={cn(
+                "w-auto object-contain transition-all duration-300 origin-left",
+                isScrolled 
+                  ? "h-8 sm:h-10 scale-90 brightness-[1.02]" 
+                  : "h-10 sm:h-12 scale-100"
+              )}
               priority
             />
           </Link>
