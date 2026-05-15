@@ -6,14 +6,16 @@ interface LogoProps {
   variant?: 'light' | 'dark'
   scrolled?: boolean
   className?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
-export function Logo({ variant = 'light', scrolled = false, className }: LogoProps) {
+export function Logo({ variant = 'light', scrolled = false, className, size }: LogoProps) {
   return (
     <div className={cn("flex items-center gap-3 md:gap-4 group", className)}>
       {/* Icon/Mark */}
       <div className={cn(
         "relative transition-all duration-500 ease-in-out flex-shrink-0",
+        size === 'sm' ? "w-8 h-8 md:w-10 md:h-10" : 
         scrolled ? "w-10 h-10 md:w-12 md:h-12" : "w-12 h-12 md:w-16 md:h-16"
       )}>
         <Image
@@ -32,6 +34,7 @@ export function Logo({ variant = 'light', scrolled = false, className }: LogoPro
       <div className="flex flex-col justify-center">
         <span className={cn(
           "font-serif font-bold leading-none tracking-tight transition-all duration-500",
+          size === 'sm' ? "text-lg md:text-xl" :
           scrolled ? "text-lg md:text-xl" : "text-lg sm:text-xl md:text-2xl lg:text-3xl",
           variant === 'light' ? "text-white drop-shadow-sm" : "text-primary"
         )}>
@@ -39,6 +42,7 @@ export function Logo({ variant = 'light', scrolled = false, className }: LogoPro
         </span>
         <span className={cn(
           "font-sans uppercase tracking-[0.2em] md:tracking-[0.4em] font-bold transition-all duration-500 whitespace-nowrap",
+          size === 'sm' ? "text-[6px] md:text-[8px] mt-0.5 tracking-[0.2em]" :
           scrolled ? "text-[6px] md:text-[8px] mt-0.5 tracking-[0.2em]" : "text-[9px] md:text-[11px] mt-1.5",
           variant === 'light' ? "text-white/70" : "text-muted-foreground",
           "hidden xl:block" // Hide tagline on narrow screens to prevent crowding

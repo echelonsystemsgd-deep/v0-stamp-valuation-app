@@ -22,7 +22,7 @@ export function ConciergeWidget() {
   return (
     <div 
       className={cn(
-        "fixed bottom-8 left-8 z-[60] transition-all duration-700 transform",
+        "fixed bottom-24 lg:bottom-32 left-8 z-[60] transition-all duration-700 transform",
         isVisible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0 pointer-events-none"
       )}
     >

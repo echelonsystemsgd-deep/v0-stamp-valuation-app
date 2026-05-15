@@ -24,15 +24,15 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="py-16 lg:py-24">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
             {/* Brand Column */}
-            <div className="lg:col-span-2 xl:col-span-1">
+            <div className="lg:col-span-2 xl:col-span-2">
               <Link 
                 href="/" 
                 onClick={(e) => handleLinkClick(e, '/')} 
                 className="flex items-center focus:outline-none focus:ring-2 focus:ring-heritage-gold rounded-sm group transition-all"
               >
-                <Logo variant="light" className="origin-left" />
+                <Logo variant="light" size="sm" className="origin-left" />
               </Link>
               <p className="mt-6 text-base text-primary-foreground/80 leading-relaxed max-w-xs">
                 The UK's most trusted stamp valuation and buying service. 
@@ -51,7 +51,7 @@ export function Footer() {
                     <Link
                       href={item.href}
                       onClick={(e) => handleLinkClick(e, item.href)}
-                      className="text-base text-primary-foreground/80 hover:text-gold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded-sm"
+                      className="text-base text-primary-foreground/80 hover:text-gold hover:translate-x-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded-sm inline-block"
                     >
                       {item.label}
                     </Link>
@@ -71,7 +71,7 @@ export function Footer() {
                     <Link
                       href={item.href}
                       onClick={(e) => handleLinkClick(e, item.href)}
-                      className="text-base text-primary-foreground/80 hover:text-gold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded-sm"
+                      className="text-base text-primary-foreground/80 hover:text-gold hover:translate-x-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded-sm inline-block"
                     >
                       {item.label}
                     </Link>
@@ -91,7 +91,7 @@ export function Footer() {
                     <Link
                       href={item.href}
                       onClick={(e) => handleLinkClick(e, item.href)}
-                      className="text-base text-primary-foreground/80 hover:text-gold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded-sm"
+                      className="text-base text-primary-foreground/80 hover:text-gold hover:translate-x-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded-sm inline-block"
                     >
                       {item.label}
                     </Link>
