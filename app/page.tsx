@@ -25,7 +25,7 @@ export default function HomePage() {
         <StampTypesPreview />
         <HowItWorks />
         <WhyChooseUs />
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-20 lg:mb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-24 mb-20 lg:mt-32 lg:mb-24">
           <InlineSellCTA 
             variant="featured" 
             title="Ready to Value Your Collection?"

@@ -70,7 +70,7 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex lg:items-center lg:gap-14 xl:gap-16">
+          <div className="hidden lg:flex lg:items-center lg:gap-6 xl:gap-14">
             {mainNavigation.map((item) => (
               <Link
                 key={item.href}
@@ -93,7 +93,7 @@ export function Header() {
             ))}
           </div>
 
-          <div className="hidden lg:flex items-center gap-10 xl:gap-12 flex-shrink-0">
+          <div className="hidden lg:flex items-center gap-6 xl:gap-10 flex-shrink-0">
             <div className="flex flex-col items-end mr-2 whitespace-nowrap">
               <span className={cn(
                 "text-[10px] uppercase tracking-widest font-bold transition-colors duration-500 mb-0.5",

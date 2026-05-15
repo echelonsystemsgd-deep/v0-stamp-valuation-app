@@ -23,18 +23,18 @@ export function Footer() {
     <footer className="bg-primary text-primary-foreground" role="contentinfo">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
-        <div className="py-12 lg:py-16">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
+        <div className="py-16 lg:py-24">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
             {/* Brand Column */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-2 xl:col-span-1">
               <Link 
                 href="/" 
                 onClick={(e) => handleLinkClick(e, '/')} 
                 className="flex items-center focus:outline-none focus:ring-2 focus:ring-heritage-gold rounded-sm group transition-all"
               >
-                <Logo variant="light" className="scale-75 origin-left" />
+                <Logo variant="light" className="origin-left" />
               </Link>
-              <p className="mt-4 text-base text-primary-foreground/80 leading-relaxed">
+              <p className="mt-6 text-base text-primary-foreground/80 leading-relaxed max-w-xs">
                 The UK's most trusted stamp valuation and buying service. 
                 Heritage-focused, expert-led, and committed to fair pricing for your stamp collection.
               </p>
@@ -105,9 +105,9 @@ export function Footer() {
               <h3 className="font-serif text-lg font-semibold text-primary-foreground mb-4">
                 Contact Us
               </h3>
-              <address className="not-italic flex flex-col gap-4">
+              <address className="not-italic flex flex-col gap-5">
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <Phone className="h-5 w-5 text-heritage-gold shrink-0" aria-hidden="true" />
                   <a
                     href={`tel:${contactInfo.phone.replace(/\s/g, '')}`}
@@ -116,7 +116,7 @@ export function Footer() {
                     {contactInfo.phone}
                   </a>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <Mail className="h-5 w-5 text-heritage-gold shrink-0" aria-hidden="true" />
                   <a
                     href={`mailto:${contactInfo.email}`}
@@ -125,7 +125,7 @@ export function Footer() {
                     {contactInfo.email}
                   </a>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <Clock className="h-5 w-5 text-heritage-gold shrink-0" aria-hidden="true" />
                   <span className="text-base text-primary-foreground/80">
                     {contactInfo.hours}

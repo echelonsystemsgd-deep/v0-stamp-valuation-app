@@ -32,7 +32,7 @@ export function Logo({ variant = 'light', scrolled = false, className }: LogoPro
       <div className="flex flex-col justify-center">
         <span className={cn(
           "font-serif font-bold leading-none tracking-tight transition-all duration-500",
-          scrolled ? "text-lg md:text-xl" : "text-xl md:text-2xl lg:text-3xl",
+          scrolled ? "text-lg md:text-xl" : "text-lg sm:text-xl md:text-2xl lg:text-3xl",
           variant === 'light' ? "text-white drop-shadow-sm" : "text-primary"
         )}>
           Sell Your Stamps UK
@@ -40,7 +40,8 @@ export function Logo({ variant = 'light', scrolled = false, className }: LogoPro
         <span className={cn(
           "font-sans uppercase tracking-[0.2em] md:tracking-[0.4em] font-bold transition-all duration-500 whitespace-nowrap",
           scrolled ? "text-[6px] md:text-[8px] mt-0.5 tracking-[0.2em]" : "text-[9px] md:text-[11px] mt-1.5",
-          variant === 'light' ? "text-white/70" : "text-muted-foreground"
+          variant === 'light' ? "text-white/70" : "text-muted-foreground",
+          "hidden xl:block" // Hide tagline on narrow screens to prevent crowding
         )}>
           Expert Valuations • Fair Prices • Trusted Buyers
         </span>
