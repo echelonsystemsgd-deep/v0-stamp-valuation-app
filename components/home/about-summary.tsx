@@ -4,16 +4,17 @@ import { Button } from '@/components/ui/button'
 export function AboutSummary() {
   return (
     <section
-      className="py-28 lg:py-32 bg-white border-b border-border/60 overflow-hidden"
+      className="py-28 lg:py-32 bg-white border-b border-border/60 overflow-hidden relative"
       aria-labelledby="about-summary-heading"
     >
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+      <div className="absolute inset-0 bg-cancellation-lines opacity-5 pointer-events-none" />
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <p className="text-sm font-semibold uppercase tracking-widest text-forest-green">
-          About us
+          Our Heritage
         </p>
         <h2
           id="about-summary-heading"
-          className="mt-3 font-serif text-3xl md:text-4xl font-bold text-primary text-balance"
+          className="mt-3 font-serif text-3xl md:text-4xl font-bold text-navy text-balance"
         >
           We are one of the UK’s leading buyers and resellers of GB postage stamps.
         </h2>
@@ -28,7 +29,7 @@ export function AboutSummary() {
         <Button
           asChild
           variant="outline"
-          className="mt-10 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+          className="mt-10 border-navy text-navy hover:bg-navy hover:text-white"
         >
           <Link href="/about-us">Read our full story</Link>
         </Button>

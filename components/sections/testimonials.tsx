@@ -48,10 +48,14 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="py-24 md:py-32 bg-[#F9F7F2] border-y border-border/40 paper-texture" aria-labelledby="testimonials-heading">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24 animate-fade-in-up opacity-0">
-          <h2 id="testimonials-heading" className="text-primary font-serif">Trust & Excellence</h2>
+    <section className="py-24 md:py-32 bg-off-white border-y border-border/40 relative overflow-hidden" aria-labelledby="testimonials-heading">
+      <div className="absolute inset-0 bg-cancellation-lines opacity-[0.03] pointer-events-none" />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24 animate-fade-in-up">
+          <p className="text-sm font-semibold uppercase tracking-widest text-forest-green mb-3">
+            Client Success
+          </p>
+          <h2 id="testimonials-heading" className="text-navy font-serif">Trust & Excellence</h2>
           <p className="mt-4 text-lg md:text-xl text-muted-foreground font-medium leading-relaxed">
             Join the hundreds of satisfied collectors who have secured fair, professional valuations for their heritage collections.
           </p>
@@ -90,7 +94,7 @@ export function Testimonials() {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-serif font-bold text-primary text-sm">{testimonial.name}</p>
+                          <p className="font-serif font-bold text-navy text-sm">{testimonial.name}</p>
                           <p className="text-[12px] text-muted-foreground">{testimonial.location}</p>
                         </div>
                       </div>

@@ -37,11 +37,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/icon.png', sizes: '32x32', type: 'image/png' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/brand-mark.svg', type: 'image/svg+xml' },
     ],
     apple: [
-      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/brand-mark.svg', sizes: '180x180', type: 'image/svg+xml' },
     ],
   },
   openGraph: {
@@ -86,7 +85,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#1B263B',
+  themeColor: '#0B1D2E',
 }
 
 export default function RootLayout({

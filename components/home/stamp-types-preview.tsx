@@ -11,7 +11,7 @@ export function StampTypesPreview() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <h2 id="stamp-types-heading" className="text-primary">
+            <h2 id="stamp-types-heading" className="text-navy">
               What We Buy
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
@@ -21,7 +21,7 @@ export function StampTypesPreview() {
           <Button
             asChild
             variant="outline"
-            className="shrink-0 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+            className="shrink-0 border-navy text-navy hover:bg-navy hover:text-white"
           >
             <Link href="/what-we-buy">
               View All Categories
@@ -36,7 +36,8 @@ export function StampTypesPreview() {
               key={product.id}
               className="group flex flex-col h-full overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg"
             >
-              <div className="relative aspect-4/3 overflow-hidden bg-muted">
+              <div className="relative aspect-4/3 overflow-hidden bg-muted m-2">
+                <div className="absolute inset-0 stamp-edge z-10 pointer-events-none opacity-50" />
                 <Image
                   src={getBuyingRateImageSrc(product)}
                   alt={product.name}
@@ -47,7 +48,7 @@ export function StampTypesPreview() {
                 />
               </div>
               <CardContent className="p-5 flex flex-col flex-1">
-                <h3 className="font-serif text-lg font-semibold text-primary group-hover:text-forest-green transition-colors">
+                <h3 className="font-serif text-lg font-semibold text-navy group-hover:text-forest-green transition-colors">
                   {product.name}
                 </h3>
                 <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
