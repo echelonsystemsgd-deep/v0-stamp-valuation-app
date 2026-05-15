@@ -30,6 +30,8 @@ export default function HomePage() {
             variant="featured" 
             title="Ready to Value Your Collection?"
             description="Our expert team is standing by to provide a professional assessment of your stamps. Get started with a fair, no-obligation valuation today."
+            showSecondaryActions={true}
+            showContactAction={true}
           />
         </div>
       </main>

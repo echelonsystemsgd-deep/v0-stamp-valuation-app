@@ -120,57 +120,7 @@ export function WhyChooseUs() {
           </div>
         </div>
 
-        {/* Existing CTA Section (Retained & gently adapted to flow after cards) */}
-        <div className="mt-20 lg:mt-24 rounded-2xl border border-border bg-card shadow-sm overflow-hidden max-w-5xl mx-auto">
-          <section aria-labelledby="comparison-followup-hook">
-            <div className="px-6 md:px-8 py-10 lg:py-12 bg-muted/50">
-              <div className="max-w-3xl mx-auto text-center sm:text-left">
-                <h4
-                  id="comparison-followup-hook"
-                  className="text-2xl sm:text-3xl font-bold tracking-tight text-primary mb-4"
-                >
-                  Send an Enquiry
-                </h4>
-                <p className="mt-3 text-base text-muted-foreground leading-relaxed">
-                  If you have any questions, our team is always happy to assist.
-                </p>
-                <p className="mt-3 text-sm text-muted-foreground italic leading-relaxed">
-                  Please note, we do not purchase unsorted collections, non-GB stamps, pre-decimal issues, used stamps, or counterfeit items.
-                </p>
-                <div className="mt-6 border-l-4 border-forest-green pl-4">
-                  <p className="text-sm text-foreground leading-relaxed">
-                    We are committed to providing a fair, efficient, and reliable service—ensuring a smooth process and prompt payment for your stamps.
-                  </p>
-                </div>
-                <div className="mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
-                  <Button
-                    asChild
-                    size="lg"
-                    className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-12 sm:h-14 px-8 text-base sm:text-lg w-full sm:w-auto"
-                  >
-                    <Link href="/sell-your-stamps">Sell Your Stamps Today</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="lg"
-                    className="h-12 sm:h-14 px-6 text-base font-semibold w-full sm:w-auto border-forest-green/40 text-primary hover:bg-forest-green/5"
-                  >
-                    <Link href="/what-we-buy">See what we buy</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="lg"
-                    className="h-12 sm:h-14 px-6 text-base font-semibold w-full sm:w-auto border-forest-green/40 text-primary hover:bg-forest-green/5"
-                  >
-                    <Link href="/contact">Contact</Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
+        {/* CTA section removed to avoid redundancy with InlineSellCTA on the landing page */}
       </div>
     </section>
   )

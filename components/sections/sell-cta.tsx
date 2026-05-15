@@ -11,13 +11,22 @@ interface InlineSellCTAProps {
   description?: string
   variant?: 'simple' | 'featured' | 'dark'
   className?: string
+  showSecondaryActions?: boolean
+  showContactAction?: boolean
 }
 
 export function InlineSellCTA({ 
   variant = 'simple',
-  className = ""
+  className = "",
+  title,
+  description,
+  showSecondaryActions = false,
+  showContactAction = false
 }: InlineSellCTAProps) {
   
+  const defaultTitle = "Send an Enquiry"
+  const defaultDescription = "If you have any questions, our team is always happy to assist."
+
   if (variant === 'featured') {
     return (
       <section className={`my-12 ${className}`}>
@@ -25,9 +34,11 @@ export function InlineSellCTA({
           <div className="absolute top-0 right-0 w-32 h-32 bg-forest-green/10 -rotate-45 translate-x-12 -translate-y-12 hidden sm:block" />
           <CardContent className="p-8 sm:p-12">
             <div className="max-w-3xl">
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-primary mb-4 leading-tight">Send an Enquiry</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-primary mb-4 leading-tight">
+                {title || defaultTitle}
+              </h2>
               <p className="text-lg text-muted-foreground mb-3 leading-relaxed">
-                If you have any questions, our team is always happy to assist.
+                {description || defaultDescription}
               </p>
               <p className="text-sm text-muted-foreground italic mb-6 leading-relaxed">
                 Please note, we do not purchase unsorted collections, non-GB stamps, pre-decimal issues, used stamps, or counterfeit items.
@@ -37,7 +48,7 @@ export function InlineSellCTA({
                   We are committed to providing a fair, efficient, and reliable service—ensuring a smooth process and prompt payment for your stamps.
                 </p>
               </div>
-              <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4">
                 <Button
                   asChild
                   size="lg"
@@ -48,12 +59,37 @@ export function InlineSellCTA({
                     <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
-                <Link 
-                  href="/how-to-sell" 
-                  className="text-primary font-semibold hover:text-forest-green transition-colors py-2 flex items-center gap-1 underline underline-offset-4 decoration-primary/30"
-                >
-                  See how the process works
-                </Link>
+
+                {showSecondaryActions && (
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto h-14 px-8 border-forest-green/40 text-primary hover:bg-forest-green/5 font-semibold"
+                  >
+                    <Link href="/what-we-buy">See what we buy</Link>
+                  </Button>
+                )}
+
+                {showContactAction && (
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto h-14 px-8 border-forest-green/40 text-primary hover:bg-forest-green/5 font-semibold"
+                  >
+                    <Link href="/contact">Contact</Link>
+                  </Button>
+                )}
+
+                {!showSecondaryActions && !showContactAction && (
+                  <Link 
+                    href="/how-to-sell" 
+                    className="text-primary font-semibold hover:text-forest-green transition-colors py-2 flex items-center gap-1 underline underline-offset-4 decoration-primary/30"
+                  >
+                    See how the process works
+                  </Link>
+                )}
               </div>
             </div>
             
@@ -79,9 +115,9 @@ export function InlineSellCTA({
     return (
       <section className={`my-12 ${className}`}>
         <div className="bg-primary rounded-2xl p-10 text-center text-white">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Send an Enquiry</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">{title || defaultTitle}</h2>
           <p className="text-white/80 mb-3 max-w-xl mx-auto">
-            If you have any questions, our team is always happy to assist.
+            {description || defaultDescription}
           </p>
           <p className="text-white/60 text-sm italic mb-6 max-w-xl mx-auto">
             Please note, we do not purchase unsorted collections, non-GB stamps, pre-decimal issues, used stamps, or counterfeit items.
@@ -107,9 +143,9 @@ export function InlineSellCTA({
   return (
     <div className={`flex flex-col items-center sm:items-start text-center sm:text-left gap-6 p-8 bg-secondary rounded-xl border border-border ${className}`}>
       <div className="max-w-3xl w-full">
-        <h3 className="text-2xl font-bold text-primary mb-3">Send an Enquiry</h3>
+        <h3 className="text-2xl font-bold text-primary mb-3">{title || defaultTitle}</h3>
         <p className="text-muted-foreground mb-3">
-          If you have any questions, our team is always happy to assist.
+          {description || defaultDescription}
         </p>
         <p className="text-sm text-muted-foreground italic mb-6">
           Please note, we do not purchase unsorted collections, non-GB stamps, pre-decimal issues, used stamps, or counterfeit items.
