@@ -85,8 +85,8 @@ export function WhyChooseUs() {
                     <IconIndicator type={feature.usIcon} />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-primary text-sm">{feature.title}</h4>
-                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed transition-colors duration-200 group-hover:text-primary">
+                    <h4 className="font-semibold text-primary text-base">{feature.title}</h4>
+                    <p className="text-base text-muted-foreground mt-1 leading-relaxed transition-colors duration-200 group-hover:text-primary">
                       {feature.us}
                     </p>
                   </div>
@@ -98,7 +98,7 @@ export function WhyChooseUs() {
           {/* Them Section */}
           <div className="flex flex-col gap-6 p-6 sm:p-8 rounded-2xl bg-muted/30 border border-border">
             <div className="mb-2">
-              <h3 className="text-xl font-semibold text-foreground">Typical Auction / Dealer</h3>
+              <h3 className="text-2xl font-bold text-foreground">Typical Auction / Dealer</h3>
               <p className="text-sm text-muted-foreground mt-1">The traditional route with hidden costs & wait times</p>
             </div>
             
@@ -109,8 +109,8 @@ export function WhyChooseUs() {
                     <IconIndicator type={feature.themIcon} />
                   </div>
                   <div>
-                    <h4 className="font-medium text-foreground text-sm">{feature.title}</h4>
-                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed transition-colors duration-200">
+                    <h4 className="font-semibold text-foreground text-base">{feature.title}</h4>
+                    <p className="text-base text-muted-foreground mt-1 leading-relaxed transition-colors duration-200">
                       {feature.them}
                     </p>
                   </div>

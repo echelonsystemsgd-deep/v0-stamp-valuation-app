@@ -55,8 +55,8 @@ export function Testimonials() {
           <p className="text-sm font-semibold uppercase tracking-widest text-forest-green mb-3">
             Client Success
           </p>
-          <h2 id="testimonials-heading" className="text-navy font-serif">Trust & Excellence</h2>
-          <p className="mt-4 text-lg md:text-xl text-muted-foreground font-medium leading-relaxed">
+          <h2 id="testimonials-heading" className="text-3xl sm:text-4xl font-bold text-navy font-serif">Trust &amp; Excellence</h2>
+          <p className="mt-4 text-lg text-muted-foreground font-medium leading-relaxed">
             Join the hundreds of satisfied collectors who have secured fair, professional valuations for their heritage collections.
           </p>
         </div>
@@ -82,7 +82,7 @@ export function Testimonials() {
                       
                       <div className="relative mb-4 flex-grow">
                         <Quote className="absolute -top-1 -left-1 w-6 h-6 md:w-8 md:h-8 text-forest-green/10 -z-10" />
-                        <p className="text-sm md:text-base italic text-slate-700 leading-relaxed relative z-10">
+                        <p className="text-base italic text-slate-700 leading-relaxed relative z-10">
                           "{testimonial.content}"
                         </p>
                       </div>
@@ -94,8 +94,8 @@ export function Testimonials() {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-serif font-bold text-navy text-sm">{testimonial.name}</p>
-                          <p className="text-[12px] text-muted-foreground">{testimonial.location}</p>
+                          <p className="font-serif font-bold text-navy text-base">{testimonial.name}</p>
+                          <p className="text-xs text-muted-foreground">{testimonial.location}</p>
                         </div>
                       </div>
                     </div>

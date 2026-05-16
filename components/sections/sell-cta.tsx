@@ -115,7 +115,7 @@ export function InlineSellCTA({
     return (
       <section className={`my-12 ${className}`}>
         <div className="bg-primary rounded-2xl p-10 text-center text-white">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">{title || defaultTitle}</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">{title || defaultTitle}</h2>
           <p className="text-white/80 mb-3 max-w-xl mx-auto">
             {description || defaultDescription}
           </p>

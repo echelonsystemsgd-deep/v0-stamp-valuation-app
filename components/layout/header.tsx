@@ -96,7 +96,7 @@ export function Header() {
           <div className="hidden lg:flex items-center gap-6 xl:gap-10 flex-shrink-0">
             <div className="flex flex-col items-end mr-2 whitespace-nowrap">
               <span className={cn(
-                "text-[10px] uppercase tracking-widest font-bold transition-colors duration-500 mb-0.5",
+                "text-xs uppercase tracking-widest font-bold transition-colors duration-500 mb-0.5",
                 isScrolled ? "text-muted-foreground" : "text-white/60"
               )}>
                 Need Expert Advice?
@@ -140,7 +140,7 @@ export function Header() {
               suppressHydrationWarning
             >
               <PhoneCall className="h-4 w-4" />
-              <span className="text-sm font-bold tracking-tight">
+              <span className="text-base font-bold tracking-tight">
                 {contactInfo.phone}
               </span>
             </a>

@@ -139,21 +139,21 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/20 py-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-base text-primary-foreground/60">
+            <p className="text-sm text-primary-foreground/60">
               &copy; {currentYear} {contactInfo.businessName}. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <Link
                 href="/privacy"
                 onClick={(e) => handleLinkClick(e, '/privacy')}
-                className="text-base text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms"
                 onClick={(e) => handleLinkClick(e, '/terms')}
-                className="text-base text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors"
               >
                 Terms of Service
               </Link>
