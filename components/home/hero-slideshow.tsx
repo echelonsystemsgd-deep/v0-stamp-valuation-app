@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { HeroSlideshow as BaseHeroSlideshow } from '@/components/ui/hero-slideshow'
 import { Magnetic } from '@/components/ui/magnetic'
-import { ShieldCheck, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 
 const heroImages = [
   {
@@ -57,16 +57,6 @@ export const HeroSlideshow = React.memo(function HeroSlideshow() {
 
       {/* Floating Trust Badges */}
       <div className="absolute top-1/2 -right-4 lg:right-20 -translate-y-1/2 hidden md:flex flex-col gap-6 z-20">
-        <div className="glassmorphism p-4 rounded-2xl flex items-center gap-3 animate-float shadow-xl border-white/20 bg-white/10">
-          <div className="bg-heritage-gold/20 p-2 rounded-xl">
-            <ShieldCheck className="h-6 w-6 text-heritage-gold" />
-          </div>
-          <div>
-            <p className="text-white font-bold text-sm leading-tight">Verified Philatelic</p>
-            <p className="text-white/70 text-xs font-medium">Industry Experts</p>
-          </div>
-        </div>
-
         <div className="glassmorphism p-4 rounded-2xl flex items-center gap-3 animate-float [animation-delay:1s] shadow-xl border-white/20 bg-white/10">
           <div className="bg-heritage-gold/20 p-2 rounded-xl">
             <div className="flex gap-0.5">
