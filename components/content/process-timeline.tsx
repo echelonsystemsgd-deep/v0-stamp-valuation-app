@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { ClipboardList, Search, MessageSquare, Truck, ShieldCheck, Banknote, ArrowRight } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
+import { ClipboardList, Search, MessageSquare, Truck, ShieldCheck, Banknote, ArrowRight, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const timelineSteps = [
@@ -13,7 +12,6 @@ const timelineSteps = [
       'Mention any stamps you believe may be particularly valuable',
       'Include how the collection was stored over the years',
     ],
-    ctaText: 'Start Your Submission',
   },
   {
     icon: Search,
@@ -24,7 +22,6 @@ const timelineSteps = [
       'We may request additional photos if needed',
       'All valuations are provided free of charge',
     ],
-    ctaText: 'Request Your Valuation',
   },
   {
     icon: MessageSquare,
@@ -35,7 +32,6 @@ const timelineSteps = [
       'Ask us anything about the valuation',
       'Request a detailed breakdown if needed',
     ],
-    ctaText: 'Sell Your Stamps',
   },
   {
     icon: Truck,
@@ -46,7 +42,6 @@ const timelineSteps = [
       'Fully insured up to £50,000',
       'Track your shipment online',
     ],
-    ctaText: 'Arrange Collection',
   },
   {
     icon: ShieldCheck,
@@ -57,7 +52,6 @@ const timelineSteps = [
       'Final valuation confirmed within 2 working days',
       'We only adjust downward if condition was misrepresented',
     ],
-    ctaText: 'Sell Your Stamps',
   },
   {
     icon: Banknote,
@@ -68,58 +62,91 @@ const timelineSteps = [
       'No hidden fees or deductions',
       'Full payment confirmation provided',
     ],
-    ctaText: 'Start Selling Today',
   },
 ]
 
 export function ProcessTimeline() {
   return (
     <div className="relative">
-      {/* Timeline Line */}
-      <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-border hidden md:block" aria-hidden="true" />
+      {/* Gradient timeline line */}
+      <div
+        className="absolute left-8 top-8 bottom-8 w-0.5 hidden md:block"
+        style={{ background: 'linear-gradient(to bottom, var(--color-forest-green, #2d6a4f), transparent)' }}
+        aria-hidden="true"
+      />
 
-      <div className="flex flex-col gap-8">
-        {timelineSteps.map((step, index) => (
-          <div key={step.title} className="relative flex gap-6">
-            {/* Step Number Circle */}
-            <div className="relative z-10 shrink-0">
-              <div className="w-16 h-16 rounded-full bg-oxford-blue flex items-center justify-center shadow-lg">
-                <step.icon className="w-7 h-7 text-gold" aria-hidden="true" />
-              </div>
-              <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-forest-green text-white text-sm font-bold flex items-center justify-center">
-                {index + 1}
-              </span>
-            </div>
+      <div className="flex flex-col gap-6">
+        {timelineSteps.map((step, index) => {
+          const isLast = index === timelineSteps.length - 1
+          return (
+            <div key={step.title} className="relative flex gap-6 group">
 
-            {/* Content */}
-            <Card className="flex-1">
-              <CardContent className="p-6">
-                <h3 className="font-serif text-xl font-semibold text-primary mb-3">
-                  {step.title}
-                </h3>
-                <p className="text-muted-foreground mb-4 leading-relaxed">
-                  {step.description}
-                </p>
-                <ul className="flex flex-col gap-2">
-                  {step.tips.map((tip) => (
-                    <li key={tip} className="flex items-start gap-2 text-sm">
-                      <span className="w-1.5 h-1.5 rounded-full bg-forest-green mt-2 shrink-0" aria-hidden="true" />
-                      <span className="text-muted-foreground">{tip}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="mt-6 pt-6 border-t border-border/50">
-                  <Button asChild className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 hover:gap-3 group">
-                    <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
-                      Sell Your Stamps Now <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </Button>
+              {/* Icon circle */}
+              <div className="relative z-10 shrink-0">
+                <div className="w-16 h-16 rounded-full bg-oxford-blue flex items-center justify-center shadow-lg ring-4 ring-background group-hover:ring-forest-green/20 transition-all duration-300">
+                  <step.icon className="w-7 h-7 text-heritage-gold" aria-hidden="true" />
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        ))}
+                {/* Step number badge */}
+                <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-forest-green text-white text-xs font-bold flex items-center justify-center shadow-md">
+                  {index + 1}
+                </span>
+              </div>
+
+              {/* Card */}
+              <div
+                className={`flex-1 rounded-xl border bg-card shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:-translate-y-0.5 overflow-hidden ${
+                  isLast
+                    ? 'border-forest-green/30 bg-forest-green/5'
+                    : 'border-border'
+                }`}
+              >
+                {/* Coloured left accent bar */}
+                <div className={`h-1 w-full ${isLast ? 'bg-forest-green' : 'bg-oxford-blue/20 group-hover:bg-forest-green/40 transition-colors duration-300'}`} />
+
+                <div className="p-6">
+                  {/* Step label */}
+                  <p className="text-xs font-bold uppercase tracking-widest text-forest-green mb-1">
+                    Step {index + 1}
+                  </p>
+
+                  <h3 className="font-serif text-xl font-bold text-primary mb-3">
+                    {step.title}
+                  </h3>
+
+                  <p className="text-muted-foreground leading-relaxed mb-5">
+                    {step.description}
+                  </p>
+
+                  {/* Tips */}
+                  <ul className="flex flex-col gap-2.5">
+                    {step.tips.map((tip) => (
+                      <li key={tip} className="flex items-start gap-3 text-sm">
+                        <span className="mt-0.5 shrink-0 w-4 h-4 rounded-full bg-forest-green/10 flex items-center justify-center" aria-hidden="true">
+                          <Check className="w-2.5 h-2.5 text-forest-green" strokeWidth={3} />
+                        </span>
+                        <span className="text-muted-foreground">{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Single CTA at the bottom */}
+      <div className="mt-10 flex justify-start pl-[5.5rem]">
+        <Button
+          asChild
+          size="lg"
+          className="bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-8 shadow-lg shadow-forest-green/20 group"
+        >
+          <Link href="/sell-your-stamps" className="flex items-center gap-2">
+            Start Selling Today
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </Button>
       </div>
     </div>
   )
