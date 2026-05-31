@@ -22,31 +22,64 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
     setIsMounted(true)
   }, [])
 
-  const [quantities, setQuantities] = useState<Record<string, number>>(() =>
-    buyingRates.reduce((acc, p) => ({ ...acc, [p.id]: 0 }), {})
+  const [quantities, setQuantities] = useState<Record<string, string | number>>(() =>
+    buyingRates.reduce((acc, p) => ({ ...acc, [p.id]: "" }), {})
   )
 
-  const updateQuantity = (id: string, delta: number) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: Math.max(0, (prev[id] || 0) + delta),
-    }))
+  const getNumericQty = (id: string) => {
+    const val = quantities[id]
+    if (val === undefined || val === null || val === "") return 0
+    const parsed = typeof val === "string" ? parseFloat(val) : val
+    return isNaN(parsed) ? 0 : parsed
   }
 
-  const handleInputChange = (id: string, value: string) => {
-    const num = parseInt(value)
-    if (!isNaN(num) && num >= 0) {
-      setQuantities((prev) => ({ ...prev, [id]: num }))
-    } else if (value === "") {
-      setQuantities((prev) => ({ ...prev, [id]: 0 }))
+  const updateQuantity = (id: string, delta: number) => {
+    setQuantities((prev) => {
+      const val = prev[id]
+      const current = typeof val === "string" ? parseFloat(val) : (val as number || 0)
+      const newVal = Math.max(0, (isNaN(current) ? 0 : current) + delta)
+      return {
+        ...prev,
+        [id]: newVal,
+      }
+    })
+  }
+
+  const handleInputChange = (id: string, value: string, allowDecimal = false) => {
+    if (value === "") {
+      setQuantities((prev) => ({ ...prev, [id]: "" }))
+      return
+    }
+
+    if (allowDecimal) {
+      if (/^\d*\.?\d*$/.test(value)) {
+        setQuantities((prev) => ({ ...prev, [id]: value }))
+      }
+    } else {
+      if (/^\d*$/.test(value)) {
+        setQuantities((prev) => ({ ...prev, [id]: value }))
+      }
     }
   }
 
   const calculateSubtotal = (item: BuyingRateItem) => {
-    return calculatePurchaseTotal(item.faceValue, quantities[item.id] || 0, item.rate)
+    return calculatePurchaseTotal(item.faceValue, getNumericQty(item.id), item.rate)
   }
 
   const totalValue = buyingRates.reduce((acc, item) => acc + calculateSubtotal(item), 0)
+
+  const handleActionTrigger = () => {
+    if (onAction) {
+      const cleanQuantities: Record<string, number> = {}
+      for (const item of buyingRates) {
+        const qty = getNumericQty(item.id)
+        if (qty > 0) {
+          cleanQuantities[item.id] = qty
+        }
+      }
+      onAction(cleanQuantities, totalValue)
+    }
+  }
 
   const sections = React.useMemo(() => getBuyingRateSections(), [])
 
@@ -82,31 +115,46 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             </Badge>
           </div>
           <div className="flex justify-center">
-            <div className="flex items-center rounded-xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-r"
-                onClick={() => updateQuantity(item.id, -1)}
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-              <Input
-                type="number"
-                value={quantities[item.id] || ""}
-                onChange={(e) => handleInputChange(item.id, e.target.value)}
-                className="h-10 w-16 border-0 bg-transparent text-center font-bold text-lg focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                placeholder="0"
-              />
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-l"
-                onClick={() => updateQuantity(item.id, 1)}
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
+            {item.allowDecimal ? (
+              <div className="flex items-center rounded-xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors px-2">
+                <span className="text-muted-foreground font-bold text-base mr-1 font-mono">£</span>
+                <Input
+                  type="text"
+                  inputMode="decimal"
+                  value={quantities[item.id] || ""}
+                  onChange={(e) => handleInputChange(item.id, e.target.value, true)}
+                  className="h-10 w-24 border-0 bg-transparent text-left font-bold text-lg focus-visible:ring-0 focus-visible:ring-offset-0 p-0"
+                  placeholder="0.00"
+                />
+              </div>
+            ) : (
+              <div className="flex items-center rounded-xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-r"
+                  onClick={() => updateQuantity(item.id, -1)}
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  value={quantities[item.id] || ""}
+                  onChange={(e) => handleInputChange(item.id, e.target.value, false)}
+                  className="h-10 w-16 border-0 bg-transparent text-center font-bold text-lg focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  placeholder="0"
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-10 w-10 rounded-none text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors border-l"
+                  onClick={() => updateQuantity(item.id, 1)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </div>
           <div className="text-right font-extrabold text-2xl text-navy font-mono whitespace-nowrap">
             £{calculateSubtotal(item).toFixed(2)}
@@ -156,31 +204,46 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             </div>
 
             <div className="flex items-center justify-between gap-6 pt-2">
-              <div className="flex items-center rounded-2xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-14 w-14 rounded-none text-muted-foreground border-r"
-                  onClick={() => updateQuantity(item.id, -1)}
-                >
-                  <Minus className="h-6 w-6" />
-                </Button>
-                <Input
-                  type="number"
-                  value={quantities[item.id] || ""}
-                  onChange={(e) => handleInputChange(item.id, e.target.value)}
-                  className="h-14 w-20 border-0 bg-transparent text-center text-2xl font-black focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  placeholder="0"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-14 w-14 rounded-none text-muted-foreground border-l"
-                  onClick={() => updateQuantity(item.id, 1)}
-                >
-                  <Plus className="h-6 w-6" />
-                </Button>
-              </div>
+              {item.allowDecimal ? (
+                <div className="flex items-center rounded-2xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors px-3">
+                  <span className="text-muted-foreground font-black text-xl mr-1 font-mono">£</span>
+                  <Input
+                    type="text"
+                    inputMode="decimal"
+                    value={quantities[item.id] || ""}
+                    onChange={(e) => handleInputChange(item.id, e.target.value, true)}
+                    className="h-14 w-32 border-0 bg-transparent text-left text-2xl font-black focus-visible:ring-0 focus-visible:ring-offset-0 p-0"
+                    placeholder="0.00"
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center rounded-2xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-14 w-14 rounded-none text-muted-foreground border-r"
+                    onClick={() => updateQuantity(item.id, -1)}
+                  >
+                    <Minus className="h-6 w-6" />
+                  </Button>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    value={quantities[item.id] || ""}
+                    onChange={(e) => handleInputChange(item.id, e.target.value, false)}
+                    className="h-14 w-20 border-0 bg-transparent text-center text-2xl font-black focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    placeholder="0"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-14 w-14 rounded-none text-muted-foreground border-l"
+                    onClick={() => updateQuantity(item.id, 1)}
+                  >
+                    <Plus className="h-6 w-6" />
+                  </Button>
+                </div>
+              )}
               <div className="text-right">
                 <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black block mb-1">Subtotal</span>
                 <div className="text-3xl sm:text-4xl font-black text-primary font-mono tracking-tighter">
@@ -236,7 +299,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             </div>
             <Button 
               size="default" 
-              onClick={() => onAction && onAction(quantities, totalValue)}
+              onClick={handleActionTrigger}
               className="bg-forest-green hover:bg-forest-green/90 text-white font-bold h-12 px-6 sm:px-8 rounded-full shadow-lg shadow-forest-green/30 transition-all hover:scale-105 active:scale-95 group shrink-0"
             >
               Submit <span className="hidden sm:inline">&nbsp;for Valuation</span>
@@ -278,7 +341,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             </div>
             <Button 
               size="lg" 
-              onClick={() => onAction && onAction(quantities, totalValue)}
+              onClick={handleActionTrigger}
               className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white font-black text-xl h-20 px-12 rounded-2xl shadow-2xl shadow-forest-green/40 transition-all duration-300 hover:scale-105 active:scale-95 group"
             >
               Submit for Valuation

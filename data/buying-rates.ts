@@ -2,7 +2,8 @@ export type BuyingRateGroup =
   | "1st Class"
   | "1st Class Large"
   | "2nd Class"
-  | "2nd Class Large";
+  | "2nd Class Large"
+  | "Barcoded Values";
 
 export interface BuyingRateItem {
   id: string;
@@ -14,6 +15,7 @@ export interface BuyingRateItem {
   rate: number; // 0.55 for 55%
   imageUrl?: string;
   isBarcoded: boolean;
+  allowDecimal?: boolean;
 }
 
 export const BUYING_RATE_GROUP_ORDER: BuyingRateGroup[] = [
@@ -21,6 +23,7 @@ export const BUYING_RATE_GROUP_ORDER: BuyingRateGroup[] = [
   "1st Class Large",
   "2nd Class",
   "2nd Class Large",
+  "Barcoded Values",
 ];
 
 export const buyingRates: BuyingRateItem[] = [
@@ -210,6 +213,52 @@ export const buyingRates: BuyingRateItem[] = [
     rate: 0.67,
     isBarcoded: true,
     imageUrl: "/images/stamps/fdc-definitive.jpg",
+  },
+
+  // —— Barcoded Values ——
+  {
+    id: "barcoded-1-5-complete-sheets-25",
+    name: "£1 - £5 Barcoded, Complete Sheets 25",
+    group: "Barcoded Values",
+    description: "Enter total face value, decimal, without £ sign:",
+    faceValue: 1.00,
+    rate: 0.55,
+    isBarcoded: true,
+    allowDecimal: true,
+    imageUrl: "/images/stamp-1.70-purple.png",
+  },
+  {
+    id: "barcoded-1-5-incomplete-sheets-individual",
+    name: "£1 - £5 Barcoded, Incomplete Sheets, Individual Stamps",
+    group: "Barcoded Values",
+    description: "Enter total face value, decimal, without £ sign:",
+    faceValue: 1.00,
+    rate: 0.50,
+    isBarcoded: true,
+    allowDecimal: true,
+    imageUrl: "/images/stamp-1.70-purple.png",
+  },
+  {
+    id: "barcoded-5p-50p-complete-sheets-25",
+    name: "5p - 50p Barcoded, Complete Sheets 25 (NOT 1p or 2p sorry!)",
+    group: "Barcoded Values",
+    description: "Enter total face value, decimal, without £ sign:",
+    faceValue: 1.00,
+    rate: 0.50,
+    isBarcoded: true,
+    allowDecimal: true,
+    imageUrl: "/images/stamp-2.20-green.png",
+  },
+  {
+    id: "barcoded-5p-50p-incomplete-sheets-individual",
+    name: "5p - 50p Barcoded, Incomplete Sheets, Individual Stamps (NOT 1p or 2p sorry!)",
+    group: "Barcoded Values",
+    description: "Enter total face value, decimal, without £ sign:",
+    faceValue: 1.00,
+    rate: 0.45,
+    isBarcoded: true,
+    allowDecimal: true,
+    imageUrl: "/images/stamp-2.20-green.png",
   },
 ];
 

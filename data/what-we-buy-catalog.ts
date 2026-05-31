@@ -60,6 +60,16 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
     rateLabel: "Up to 75%",
   },
   {
+    id: "barcoded-values",
+    title: "Barcoded Face Values",
+    formatsSubtitle: "5p - 50p & £1 - £5 Stamps",
+    image: "/images/stamp-1.70-purple.png",
+    imageAlt: "Barcoded face value stamps",
+    description:
+      "We buy barcoded definitive stamps of various face values, from 5p to 50p (excluding 1p and 2p) and £1 to £5 denominations, in complete sheets or incomplete/loose condition.",
+    rateLabel: "Up to 55%",
+  },
+  {
     id: "collections",
     title: "Mixed Collections & Albums",
     formatsSubtitle: "Albums, Stock Books & Dealer Lots",

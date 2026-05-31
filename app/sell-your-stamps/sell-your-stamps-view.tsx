@@ -66,7 +66,11 @@ export function SellYourStampsView() {
         if (qty > 0) {
           const item = buyingRates.find((b) => b.id === id)
           if (item) {
-            calculationText += `- ${qty}x ${item.name}\n`
+            if (item.allowDecimal) {
+              calculationText += `- £${qty.toFixed(2)} Face Value of ${item.name}\n`
+            } else {
+              calculationText += `- ${qty}x ${item.name}\n`
+            }
           }
         }
       }

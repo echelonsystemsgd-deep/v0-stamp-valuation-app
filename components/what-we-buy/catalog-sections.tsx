@@ -36,6 +36,7 @@ export function WhatWeBuyCategoryGrid() {
         if (cat.id === "1st-class") relatedProducts = buyingRates.filter(r => r.group === "1st Class");
         else if (cat.id === "2nd-class") relatedProducts = buyingRates.filter(r => r.group === "2nd Class");
         else if (cat.id === "large-letter") relatedProducts = buyingRates.filter(r => r.group === "1st Class Large" || r.group === "2nd Class Large");
+        else if (cat.id === "barcoded-values") relatedProducts = buyingRates.filter(r => r.group === "Barcoded Values");
         
         return (
           <Card
