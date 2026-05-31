@@ -1,16 +1,22 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
+import { ArrowRight, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { buyingRates, getBuyingRateImageSrc, BUYING_RATE_GROUP_ORDER } from '@/data/buying-rates'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
 export function StampTypesPreview() {
-  const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
-
   // Group all buying rates
   const groups = BUYING_RATE_GROUP_ORDER.map((group) => {
     const items = buyingRates.filter((item) => item.group === group)
@@ -21,10 +27,6 @@ export function StampTypesPreview() {
       items,
     }
   })
-
-  const toggleGroup = (group: string) => {
-    setExpandedGroup(expandedGroup === group ? null : group)
-  }
 
   return (
     <section className="py-28 lg:py-32 bg-slate-50/50 dark:bg-slate-950/50" aria-labelledby="stamp-types-heading">
@@ -52,7 +54,6 @@ export function StampTypesPreview() {
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {groups.map(({ group, bestItem, items }) => {
-            const isExpanded = expandedGroup === group
             const displayTitle = group === "Barcoded Values" ? "Barcoded Face Values" : `${group} Stamps`
             
             return (
@@ -86,37 +87,37 @@ export function StampTypesPreview() {
                     Looking to sell your {group.toLowerCase()} stamps? We offer the best rates in the UK for sheets, booklets, and loose collections.
                   </p>
 
-                  <div className="mt-4 pt-4 border-t border-border flex-1">
-                    <button
-                      onClick={() => toggleGroup(group)}
-                      className="flex items-center justify-between w-full text-sm font-bold text-navy hover:text-forest-green transition-colors py-2 cursor-pointer"
-                    >
-                      <span>{isExpanded ? 'Hide Live Rates' : 'View Live Rates'}</span>
-                      {isExpanded ? (
-                        <ChevronUp className="w-4 h-4 text-forest-green" />
-                      ) : (
-                        <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                      )}
-                    </button>
-
-                    <div
-                      className={`overflow-hidden transition-all duration-300 ${
-                        isExpanded ? 'max-h-[300px] opacity-100 mt-2' : 'max-h-0 opacity-0'
-                      }`}
-                    >
-                      <ul className="space-y-2.5 max-h-[220px] overflow-y-auto pr-1 py-1">
-                        {items.map((item) => (
-                          <li key={item.id} className="flex justify-between items-start gap-3 text-xs bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg border border-slate-100 dark:border-slate-800/80">
-                            <span className="font-medium text-slate-700 dark:text-slate-300 leading-snug flex-1">
-                              {item.name}
-                            </span>
-                            <span className="font-bold text-forest-green bg-forest-green/10 dark:bg-forest-green/20 px-2 py-0.5 rounded shrink-0">
-                              {(item.rate * 100).toFixed(0)}%
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                  <div className="mt-4 pt-4 border-t border-border flex-1 flex flex-col justify-end">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button className="flex items-center justify-between w-full text-sm font-bold text-navy hover:text-forest-green transition-colors py-2 cursor-pointer">
+                          <span>View Live Rates</span>
+                          <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle className="font-serif text-2xl text-navy">{displayTitle} - Live Rates</DialogTitle>
+                          <DialogDescription className="text-muted-foreground text-sm">
+                            Current payout rates for {group.toLowerCase()} stamps.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="mt-4">
+                          <ul className="space-y-2.5 max-h-[350px] overflow-y-auto pr-1 py-1">
+                            {items.map((item) => (
+                              <li key={item.id} className="flex justify-between items-start gap-3 text-xs bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800/80 animate-fade-in-up">
+                                <span className="font-medium text-slate-700 dark:text-slate-300 leading-snug flex-1">
+                                  {item.name}
+                                </span>
+                                <span className="font-bold text-forest-green bg-forest-green/10 dark:bg-forest-green/20 px-2 py-0.5 rounded shrink-0">
+                                  {(item.rate * 100).toFixed(0)}%
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
 
                   <div className="pt-4 mt-4 border-t border-border">
