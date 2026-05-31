@@ -35,7 +35,7 @@ export function WhatWeBuyCategoryGrid() {
         let relatedProducts: typeof buyingRates = [];
         if (cat.id === "1st-class") relatedProducts = buyingRates.filter(r => r.group === "1st Class");
         else if (cat.id === "2nd-class") relatedProducts = buyingRates.filter(r => r.group === "2nd Class");
-        else if (cat.id === "large-letter") relatedProducts = buyingRates.filter(r => r.group === "Large Letter");
+        else if (cat.id === "large-letter") relatedProducts = buyingRates.filter(r => r.group === "1st Class Large" || r.group === "2nd Class Large");
         
         return (
           <Card

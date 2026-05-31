@@ -37,7 +37,7 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
     imageAlt: "1st Class purple barcoded stamp",
     description:
       "We buy 1st Class barcoded stamps, including standard purple issues and Christmas/festive designs in both sheets and booklets.",
-    rateLabel: "Up to 55%",
+    rateLabel: "Up to 57%",
   },
   {
     id: "2nd-class",
@@ -47,7 +47,7 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
     imageAlt: "2nd Class green barcoded stamp",
     description:
       "We buy 2nd Class barcoded stamps, including standard green issues and Christmas/festive designs.",
-    rateLabel: "Up to 75%",
+    rateLabel: "Up to 78%",
   },
   {
     id: "large-letter",
@@ -57,7 +57,7 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
     imageAlt: "Commemorative large letter stamps",
     description:
       "We buy both 1st and 2nd Class Large Letter stamps, including barcoded, commemorative, and non-barcoded self-adhesive issues.",
-    rateLabel: "Up to 70%",
+    rateLabel: "Up to 75%",
   },
   {
     id: "collections",

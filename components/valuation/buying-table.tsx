@@ -194,8 +194,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
     </div>
   )
 
-  const sectionHeading = (group: string) =>
-    group === "Large Letter" ? "Large Letter Rates" : `${group} Rates`
+  const sectionHeading = (group: string) => group;
 
   return (
     <div className="w-full space-y-12">
@@ -206,52 +205,22 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             <div className="h-px flex-1 bg-slate-200" />
           </div>
 
-          {section.kind === "flat" ? (
-            <>
-              <div className="hidden lg:block overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
-                <div className="w-full overflow-x-auto">
-                  <div className="min-w-[1000px]">
-                    <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-navy p-6 font-bold text-white text-sm uppercase tracking-wider">
-                      <div>Product</div>
-                      <div>Description</div>
-                      <div className="text-right">Face Price</div>
-                      <div className="text-right">Buy Rate %</div>
-                      <div className="text-center">Quantity</div>
-                      <div className="text-right">Subtotal Offer</div>
-                    </div>
-                    {renderDesktopRows(section.items)}
-                  </div>
+          <div className="hidden lg:block overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
+            <div className="w-full overflow-x-auto">
+              <div className="min-w-[1000px]">
+                <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-navy p-6 font-bold text-white text-sm uppercase tracking-wider">
+                  <div>Product</div>
+                  <div>Description</div>
+                  <div className="text-right">Face Price</div>
+                  <div className="text-right">Buy Rate %</div>
+                  <div className="text-center">Quantity</div>
+                  <div className="text-right">Subtotal Offer</div>
                 </div>
+                {renderDesktopRows(section.items)}
               </div>
-              {renderMobileCards(section.items)}
-            </>
-          ) : (
-            <div className="space-y-10">
-              {section.subgroups.map((sub) => (
-                <div key={sub.title} className="space-y-4">
-                  <h4 className="text-lg font-bold text-slate-700 tracking-tight border-l-4 border-primary pl-3">
-                    {sub.title}
-                  </h4>
-                  <div className="hidden lg:block overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
-                    <div className="w-full overflow-x-auto">
-                      <div className="min-w-[1000px]">
-                        <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-navy p-6 font-bold text-white text-sm uppercase tracking-wider">
-                          <div>Product</div>
-                          <div>Description</div>
-                          <div className="text-right">Face Price</div>
-                          <div className="text-right">Buy Rate %</div>
-                          <div className="text-center">Quantity</div>
-                          <div className="text-right">Subtotal Offer</div>
-                        </div>
-                        {renderDesktopRows(sub.items)}
-                      </div>
-                    </div>
-                  </div>
-                  {renderMobileCards(sub.items)}
-                </div>
-              ))}
             </div>
-          )}
+          </div>
+          {renderMobileCards(section.items)}
         </div>
       ))}
 
