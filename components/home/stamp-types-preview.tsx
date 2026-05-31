@@ -1,59 +1,41 @@
+'use client'
+
+import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { buyingRates, getBuyingRateImageSrc, BUYING_RATE_GROUP_ORDER, type BuyingRateGroup } from '@/data/buying-rates'
-
-/**
- * Pick the single best-rate (non-decimal) item from each group to show on the homepage.
- * This ensures we show the highest/most attractive rate per category rather than
- * an arbitrary raw slice which can include lower-rate Christmas items.
- */
-function getBestItemPerGroup() {
-  const seen = new Set<BuyingRateGroup | string>();
-  const result = [];
-  // Define order for groups and subgroups
-  const GROUP_ORDER = [
-    "1st Class",
-    "1st Class Large",
-    "2nd Class",
-    "2nd Class Large",
-    "Barcoded Values",
-  ];
-  // Sort by rate descending, then apply grouping based on subgroup if present
-  const sorted = [...buyingRates]
-    .filter(item => !item.allowDecimal) // exclude decimal items
-    .sort((a, b) => b.rate - a.rate);
-
-  for (const item of sorted) {
-    const key = (item as any).subgroup || item.group; // use subgroup when defined
-    if (!seen.has(key)) {
-      seen.add(key);
-      result.push(item);
-    }
-  }
-  // Re-sort by the defined order for consistent display
-  return result.sort((a, b) => {
-    const aKey = (a as any).subgroup || a.group;
-    const bKey = (b as any).subgroup || b.group;
-    return GROUP_ORDER.indexOf(aKey) - GROUP_ORDER.indexOf(bKey);
-  });
-}
-
-const previewItems = getBestItemPerGroup()
+import { buyingRates, getBuyingRateImageSrc, BUYING_RATE_GROUP_ORDER } from '@/data/buying-rates'
 
 export function StampTypesPreview() {
+  const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
+
+  // Group all buying rates
+  const groups = BUYING_RATE_GROUP_ORDER.map((group) => {
+    const items = buyingRates.filter((item) => item.group === group)
+    const bestItem = [...items].sort((a, b) => b.rate - a.rate)[0]
+    return {
+      group,
+      bestItem,
+      items,
+    }
+  })
+
+  const toggleGroup = (group: string) => {
+    setExpandedGroup(expandedGroup === group ? null : group)
+  }
+
   return (
-    <section className="py-28 lg:py-32" aria-labelledby="stamp-types-heading">
+    <section className="py-28 lg:py-32 bg-slate-50/50 dark:bg-slate-950/50" aria-labelledby="stamp-types-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <h2 id="stamp-types-heading" className="text-navy">
-              What We Buy
+            <h2 id="stamp-types-heading" className="text-navy text-3xl font-black tracking-tight md:text-4xl">
+              What We Buy & Live Rates
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
-              From modern unused postage to complete sheet collections, we purchase a wide variety of UK stamps at fair market percentages.
+              From modern unused postage to complete sheets, we purchase a wide variety of UK stamps at top market percentages. Compare our live rates below.
             </p>
           </div>
           <Button
@@ -69,48 +51,89 @@ export function StampTypesPreview() {
         </div>
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {previewItems.map((product) => (
-            <Card
-              key={product.id}
-              className="group flex flex-col h-full overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg"
-            >
-              <div className="relative aspect-4/3 overflow-hidden bg-muted m-2">
-                <div className="absolute inset-0 stamp-edge z-10 pointer-events-none opacity-50" />
-                <Image
-                  src={getBuyingRateImageSrc(product)}
-                  alt={product.name}
-                  fill
-                  quality={90}
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-              </div>
-              <CardContent className="p-5 flex flex-col flex-1">
-                <p className="text-xs font-bold uppercase tracking-widest text-forest-green/70 mb-1">
-                  {product.group}
-                </p>
-                <h3 className="font-serif text-lg font-semibold text-navy group-hover:text-forest-green transition-colors">
-                  {product.name}
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
-                  {product.description}
-                </p>
-                <p className="mt-3 mb-4 text-base font-semibold text-forest-green">
-                  Up to {product.rate * 100}% of Face Value
-                </p>
-                <div className="pt-4 mt-auto border-t border-border">
-                  <Button asChild className="w-full bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 group/btn">
-                    <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
-                      Sell your stamps
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                    </Link>
-                  </Button>
+          {groups.map(({ group, bestItem, items }) => {
+            const isExpanded = expandedGroup === group
+            const displayTitle = group === "Barcoded Values" ? "Barcoded Face Values" : `${group} Stamps`
+            
+            return (
+              <Card
+                key={group}
+                className="group flex flex-col h-full overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg bg-white dark:bg-slate-900"
+              >
+                <div className="relative aspect-4/3 overflow-hidden bg-muted m-2 rounded-xl">
+                  <div className="absolute inset-0 stamp-edge z-10 pointer-events-none opacity-50" />
+                  <Image
+                    src={getBuyingRateImageSrc(bestItem)}
+                    alt={displayTitle}
+                    fill
+                    quality={90}
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    unoptimized
+                  />
+                  <div className="absolute top-3 right-3 z-20 bg-forest-green text-white font-bold px-3 py-1 rounded-full text-xs shadow-md">
+                    Up to {(bestItem.rate * 100).toFixed(0)}% Rate
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+                <CardContent className="p-5 flex flex-col flex-1">
+                  <p className="text-xs font-bold uppercase tracking-widest text-forest-green/70 mb-1">
+                    {group}
+                  </p>
+                  <h3 className="font-serif text-lg font-semibold text-navy group-hover:text-forest-green transition-colors">
+                    {displayTitle}
+                  </h3>
+                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                    Looking to sell your {group.toLowerCase()} stamps? We offer the best rates in the UK for sheets, booklets, and loose collections.
+                  </p>
+
+                  <div className="mt-4 pt-4 border-t border-border flex-1">
+                    <button
+                      onClick={() => toggleGroup(group)}
+                      className="flex items-center justify-between w-full text-sm font-bold text-navy hover:text-forest-green transition-colors py-2 cursor-pointer"
+                    >
+                      <span>{isExpanded ? 'Hide Live Rates' : 'View Live Rates'}</span>
+                      {isExpanded ? (
+                        <ChevronUp className="w-4 h-4 text-forest-green" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </button>
+
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ${
+                        isExpanded ? 'max-h-[300px] opacity-100 mt-2' : 'max-h-0 opacity-0'
+                      }`}
+                    >
+                      <ul className="space-y-2.5 max-h-[220px] overflow-y-auto pr-1 py-1">
+                        {items.map((item) => (
+                          <li key={item.id} className="flex justify-between items-start gap-3 text-xs bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg border border-slate-100 dark:border-slate-800/80">
+                            <span className="font-medium text-slate-700 dark:text-slate-300 leading-snug flex-1">
+                              {item.name}
+                            </span>
+                            <span className="font-bold text-forest-green bg-forest-green/10 dark:bg-forest-green/20 px-2 py-0.5 rounded shrink-0">
+                              {(item.rate * 100).toFixed(0)}%
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 mt-4 border-t border-border">
+                    <Button asChild className="w-full bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 group/btn">
+                      <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
+                        Go to Sell Calculator
+                        <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                      </Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })}
         </div>
       </div>
     </section>
   )
 }
+

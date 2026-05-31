@@ -38,6 +38,12 @@ export function WhatWeBuyCategoryGrid() {
         else if (cat.id === "large-letter") relatedProducts = buyingRates.filter(r => r.group === "1st Class Large" || r.group === "2nd Class Large");
         else if (cat.id === "barcoded-values") relatedProducts = buyingRates.filter(r => r.group === "Barcoded Values");
         
+        let displayRateLabel = cat.rateLabel;
+        if (relatedProducts.length > 0) {
+          const maxRate = Math.max(...relatedProducts.map(p => p.rate));
+          displayRateLabel = `Up to ${(maxRate * 100).toFixed(0)}%`;
+        }
+
         return (
           <Card
             key={cat.id}
@@ -54,6 +60,7 @@ export function WhatWeBuyCategoryGrid() {
                   quality={90}
                   className="object-cover transition-transform duration-500 group-hover/card:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  unoptimized
                 />
               </div>
             </div>
@@ -82,13 +89,13 @@ export function WhatWeBuyCategoryGrid() {
                     </p>
                     <ul className="space-y-3">
                       {relatedProducts.map(product => (
-                        <li key={product.id} className="flex items-start gap-3 text-sm">
+                        <li key={product.id} className="flex items-start gap-3 text-sm animate-fade-in-up">
                           <CheckCircle2 className="w-5 h-5 text-forest-green shrink-0 mt-0.5" />
                           <span className="text-slate-700 flex-1 leading-snug font-medium">
                             {product.name}
                           </span>
                           <span className="font-bold text-forest-green shrink-0 bg-forest-green/10 px-2 py-0.5 rounded-md">
-                            {(product.rate * 100).toFixed(1).replace(/\.0$/, '')}%
+                            {(product.rate * 100).toFixed(0)}%
                           </span>
                         </li>
                       ))}
@@ -102,10 +109,10 @@ export function WhatWeBuyCategoryGrid() {
                   <Link href="/sell-your-stamps">Sell Your Stamps Now!</Link>
                 </Button>
                 
-                {cat.rateLabel && (
+                {displayRateLabel && (
                   <div className="text-left sm:text-right shrink-0">
                     <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-0.5">Best Prices Paid</p>
-                    <p className="text-2xl lg:text-3xl font-black text-forest-green tracking-tight">{cat.rateLabel}</p>
+                    <p className="text-2xl lg:text-3xl font-black text-forest-green tracking-tight">{displayRateLabel}</p>
                   </div>
                 )}
               </div>
