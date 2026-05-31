@@ -11,23 +11,34 @@ import { buyingRates, getBuyingRateImageSrc, BUYING_RATE_GROUP_ORDER, type Buyin
  * an arbitrary raw slice which can include lower-rate Christmas items.
  */
 function getBestItemPerGroup() {
-  const seen = new Set<BuyingRateGroup>()
-  const result = []
-  // Sort by rate descending within each group, pick first occurrence of each group
+  const seen = new Set<BuyingRateGroup | string>();
+  const result = [];
+  // Define order for groups and subgroups
+  const GROUP_ORDER = [
+    "1st Class",
+    "1st Class Large",
+    "2nd Class",
+    "2nd Class Large",
+    "Barcoded Values",
+  ];
+  // Sort by rate descending, then apply grouping based on subgroup if present
   const sorted = [...buyingRates]
-    .filter(item => !item.allowDecimal) // exclude face-value decimal items
-    .sort((a, b) => b.rate - a.rate)
+    .filter(item => !item.allowDecimal) // exclude decimal items
+    .sort((a, b) => b.rate - a.rate);
 
   for (const item of sorted) {
-    if (!seen.has(item.group)) {
-      seen.add(item.group)
-      result.push(item)
+    const key = (item as any).subgroup || item.group; // use subgroup when defined
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push(item);
     }
   }
-  // Re-sort by group order for consistent display
-  return result.sort((a, b) =>
-    BUYING_RATE_GROUP_ORDER.indexOf(a.group) - BUYING_RATE_GROUP_ORDER.indexOf(b.group)
-  )
+  // Re-sort by the defined order for consistent display
+  return result.sort((a, b) => {
+    const aKey = (a as any).subgroup || a.group;
+    const bKey = (b as any).subgroup || b.group;
+    return GROUP_ORDER.indexOf(aKey) - GROUP_ORDER.indexOf(bKey);
+  });
 }
 
 const previewItems = getBestItemPerGroup()
