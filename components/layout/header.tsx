@@ -41,10 +41,10 @@ export function Header() {
   return (
     <header
       className={cn(
-        'fixed top-0 z-50 w-full transition-all duration-500',
+        'fixed top-0 z-50 w-full transition-all duration-300',
         isScrolled
-          ? 'bg-white/80 dark:bg-navy/80 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.06)] border-b border-white/20'
-          : 'bg-gradient-to-b from-black/20 to-transparent'
+          ? 'bg-white/95 dark:bg-navy/95 backdrop-blur-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] border-b border-slate-200/80 dark:border-white/10'
+          : 'bg-white/90 dark:bg-navy/90 backdrop-blur-md shadow-[0_2px_15px_rgba(0,0,0,0.02)] border-b border-slate-100 dark:border-slate-800/40'
       )}
     >
       <a
@@ -56,8 +56,8 @@ export function Header() {
       </a>
       <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-12">
         <nav className={cn(
-          "flex items-center justify-between transition-all duration-500",
-          isScrolled ? "h-16 sm:h-20" : "h-20 sm:h-32"
+          "flex items-center justify-between transition-all duration-300",
+          isScrolled ? "h-16 sm:h-18" : "h-20 sm:h-24"
         )} aria-label="Main navigation">
           {/* Logo */}
           <Link 
@@ -65,7 +65,7 @@ export function Header() {
             onClick={(e) => handleLinkClick(e, '/')}
             className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm group relative flex-shrink-0"
           >
-            <Logo variant={isScrolled ? 'dark' : 'light'} scrolled={isScrolled} />
+            <Logo variant="dark" scrolled={isScrolled} />
             <span className="sr-only">Sell Your Stamps UK</span>
           </Link>
 
@@ -78,15 +78,14 @@ export function Header() {
                 onClick={(e) => handleLinkClick(e, item.href)}
                 className={cn(
                   'text-base font-semibold transition-all duration-300 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm px-1 py-2 relative group/nav whitespace-nowrap',
-                  isScrolled 
-                    ? (pathname === item.href ? 'text-forest-green' : 'text-foreground/70 hover:text-forest-green')
-                    : (pathname === item.href ? 'text-white' : 'text-white/70 hover:text-white')
+                  pathname === item.href 
+                    ? 'text-forest-green dark:text-gold' 
+                    : 'text-slate-700 dark:text-slate-300 hover:text-forest-green dark:hover:text-gold'
                 )}
               >
                 {item.label}
                 <span className={cn(
-                  "absolute bottom-0 left-1 right-1 h-0.5 transition-all duration-300 transform scale-x-0 group-hover/nav:scale-x-100 origin-left",
-                  isScrolled ? "bg-forest-green" : "bg-white",
+                  "absolute bottom-0 left-1 right-1 h-0.5 transition-all duration-300 transform scale-x-0 group-hover/nav:scale-x-100 origin-left bg-forest-green dark:bg-gold",
                   pathname === item.href && "scale-x-100"
                 )} />
               </Link>
@@ -95,32 +94,21 @@ export function Header() {
 
           <div className="hidden lg:flex items-center gap-6 xl:gap-10 flex-shrink-0">
             <div className="flex flex-col items-end mr-2 whitespace-nowrap">
-              <span className={cn(
-                "text-xs uppercase tracking-widest font-bold transition-colors duration-500 mb-0.5",
-                isScrolled ? "text-muted-foreground" : "text-white/60"
-              )}>
+              <span className="text-xs uppercase tracking-widest font-bold mb-0.5 text-slate-500 dark:text-slate-400">
                 Need Expert Advice?
               </span>
               <a 
                 href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} 
-                className={cn(
-                  "flex items-center gap-2.5 transition-all duration-300 group font-serif whitespace-nowrap",
-                  isScrolled ? "text-forest-green hover:text-forest-green/80" : "text-white hover:text-white/80"
-                )}
+                className="flex items-center gap-2.5 transition-all duration-300 group font-serif whitespace-nowrap text-forest-green dark:text-gold hover:opacity-85"
                 suppressHydrationWarning
               >
-                <PhoneCall className={cn("h-4 w-4", !isScrolled && "text-heritage-gold")} />
+                <PhoneCall className="h-4 w-4 text-forest-green dark:text-gold" />
                 <span className="font-bold tracking-tight text-xl">{contactInfo.phone}</span>
               </a>
             </div>
             <Button
               asChild
-              className={cn(
-                "font-bold px-8 h-12 transition-all duration-500 shadow-lg whitespace-nowrap",
-                isScrolled 
-                  ? "bg-forest-green hover:bg-forest-green/90 text-white shadow-forest-green/20" 
-                  : "bg-white text-forest-green hover:bg-white/90 shadow-white/10"
-              )}
+              className="font-bold px-8 h-12 transition-all duration-300 shadow-lg whitespace-nowrap bg-forest-green hover:bg-forest-green/90 text-white shadow-forest-green/20"
               suppressHydrationWarning
             >
               <Link href="/sell-your-stamps">Sell Your Stamps</Link>
@@ -130,12 +118,7 @@ export function Header() {
           <div className="flex items-center gap-2 lg:hidden">
             <a 
               href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} 
-              className={cn(
-                "flex items-center gap-1.5 px-3 py-2 rounded-full transition-all duration-500 min-h-11 border",
-                isScrolled 
-                  ? "text-forest-green bg-forest-green/10 border-forest-green/10" 
-                  : "text-white bg-white/10 border-white/20 backdrop-blur-md"
-              )}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-full transition-all duration-300 min-h-11 border text-forest-green bg-forest-green/10 border-forest-green/10 dark:text-gold dark:bg-gold/10 dark:border-gold/10"
               aria-label={`Call us on ${contactInfo.phone}`}
               suppressHydrationWarning
             >
@@ -149,10 +132,7 @@ export function Header() {
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className={cn(
-                    "h-11 w-11 rounded-full transition-colors",
-                    isScrolled ? "text-foreground" : "text-white hover:bg-white/10"
-                  )}
+                  className="h-11 w-11 rounded-full transition-colors text-slate-700 hover:bg-slate-100 dark:text-white dark:hover:bg-white/10"
                   aria-label="Open menu"
                   suppressHydrationWarning
                 >
