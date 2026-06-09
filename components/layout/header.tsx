@@ -195,7 +195,14 @@ export function Header() {
           </div>
         </nav>
       </div>
-      <PageBreadcrumbs />
+      <div className={cn(
+        "transition-all duration-500 ease-in-out overflow-hidden origin-top",
+        isScrolled 
+          ? "max-h-0 opacity-0 pointer-events-none transform -translate-y-2" 
+          : "max-h-16 opacity-100 transform translate-y-0"
+      )}>
+        <PageBreadcrumbs />
+      </div>
     </header>
   )
 }

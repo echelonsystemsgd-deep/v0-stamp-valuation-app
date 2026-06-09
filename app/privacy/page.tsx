@@ -13,7 +13,7 @@ export default function PrivacyPage() {
     <>
       <Header />
       <main id="main-content" className="flex-1 flex flex-col w-full bg-slate-50/50">
-        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-3xl px-4 pt-32 pb-16 sm:px-6 lg:px-8 lg:pt-40 lg:pb-24">
           <h1 className="font-serif text-4xl font-bold text-primary mb-4">Privacy Policy</h1>
           <p className="text-muted-foreground text-sm mb-10">
             Last updated: {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
