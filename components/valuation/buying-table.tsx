@@ -116,14 +116,13 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
           </div>
           <div className="flex justify-center">
             {item.allowDecimal ? (
-              <div className="flex items-center rounded-xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors px-2">
-                <span className="text-muted-foreground font-bold text-base mr-1 font-mono">£</span>
+              <div className="flex items-center rounded-xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors px-3">
                 <Input
                   type="text"
                   inputMode="decimal"
                   value={quantities[item.id] || ""}
                   onChange={(e) => handleInputChange(item.id, e.target.value, true)}
-                  className="h-10 w-24 border-0 bg-transparent text-left font-bold text-lg focus-visible:ring-0 focus-visible:ring-offset-0 p-0"
+                  className="h-10 w-24 border-0 bg-transparent text-center font-bold text-lg focus-visible:ring-0 focus-visible:ring-offset-0 p-0"
                   placeholder="0.00"
                 />
               </div>
@@ -205,14 +204,13 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
 
             <div className="flex items-center justify-between gap-6 pt-2">
               {item.allowDecimal ? (
-                <div className="flex items-center rounded-2xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors px-3">
-                  <span className="text-muted-foreground font-black text-xl mr-1 font-mono">£</span>
+                <div className="flex items-center rounded-2xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors px-4">
                   <Input
                     type="text"
                     inputMode="decimal"
                     value={quantities[item.id] || ""}
                     onChange={(e) => handleInputChange(item.id, e.target.value, true)}
-                    className="h-14 w-32 border-0 bg-transparent text-left text-2xl font-black focus-visible:ring-0 focus-visible:ring-offset-0 p-0"
+                    className="h-14 w-32 border-0 bg-transparent text-center text-2xl font-black focus-visible:ring-0 focus-visible:ring-offset-0 p-0"
                     placeholder="0.00"
                   />
                 </div>
