@@ -52,14 +52,14 @@ export function StampTypesPreview() {
           </Button>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-12 flex flex-wrap justify-center gap-6">
           {groups.map(({ group, bestItem, items }) => {
             const displayTitle = group === "Barcoded Values" ? "Barcoded Face Values" : `${group} Stamps`
             
             return (
               <Card
                 key={group}
-                className="group flex flex-col h-full overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg bg-white dark:bg-slate-900"
+                className="group w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex flex-col overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg bg-white dark:bg-slate-900"
               >
                 <div className="relative aspect-4/3 overflow-hidden bg-muted m-2 rounded-xl">
                   <div className="absolute inset-0 stamp-edge z-10 pointer-events-none opacity-50" />

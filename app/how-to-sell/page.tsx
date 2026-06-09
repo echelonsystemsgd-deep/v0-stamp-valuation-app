@@ -134,8 +134,8 @@ export default function HowToSellPage() {
         {/* Process Timeline */}
         <section className="py-16 lg:py-20 bg-secondary/30" aria-labelledby="process-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl mb-12">
-              <h2 id="process-heading" className="text-primary">The Selling Process</h2>
+            <div className="max-w-2xl mx-auto text-center mb-12">
+              <h2 id="process-heading" className="text-3xl sm:text-4xl font-bold tracking-tight text-primary">The Selling Process</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 Follow these simple steps to sell your stamp collection. Our team is here to guide you at every stage.
               </p>

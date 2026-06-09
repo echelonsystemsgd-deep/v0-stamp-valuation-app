@@ -55,9 +55,8 @@ export const HeroSlideshow = React.memo(function HeroSlideshow() {
         </Magnetic>
       </div>
 
-      {/* Floating Trust Badges */}
-      <div className="absolute top-1/2 -right-4 lg:right-20 -translate-y-1/2 hidden md:flex flex-col gap-6 z-20">
-        <div className="glassmorphism p-4 rounded-2xl flex items-center gap-3 animate-float [animation-delay:1s] shadow-xl border-white/20 bg-white/10">
+      <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-6 animate-fade-in-up opacity-0 [animation-delay:800ms]">
+        <div className="glassmorphism inline-flex items-center gap-3 p-3 rounded-2xl shadow-xl border border-white/20 bg-white/10">
           <div className="bg-heritage-gold/20 p-2 rounded-xl">
             <div className="flex gap-0.5">
               {[1, 2, 3, 4, 5].map((i) => (
@@ -65,16 +64,16 @@ export const HeroSlideshow = React.memo(function HeroSlideshow() {
               ))}
             </div>
           </div>
-          <div>
+          <div className="pr-2">
             <p className="text-white font-bold text-sm leading-tight">Rated 5/5 Stars</p>
             <p className="text-white/70 text-xs font-medium">For Fairness & Value</p>
           </div>
         </div>
+        <p className="text-base text-white/70 flex items-center gap-2">
+          <span className="inline-block w-2 h-2 rounded-full bg-forest-green" aria-hidden="true" />
+          No obligation to sell
+        </p>
       </div>
-      <p className="mt-6 text-base text-white/70 flex items-center gap-2">
-        <span className="inline-block w-2 h-2 rounded-full bg-forest-green" aria-hidden="true" />
-        No obligation to sell
-      </p>
     </BaseHeroSlideshow>
   )
 })

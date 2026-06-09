@@ -6,9 +6,7 @@ const steps = [
     icon: ClipboardList,
     title: 'Request a Valuation',
     description: [
-      'Use our online form wherever possible—it’s the quickest and simplest way to get started. This works particularly well for standard and large letter barcoded booklets and sheets, including stamps received from swap-out schemes, surveys, compensation, or seasonal distributions.',
-      'Our form provides a fast, no-obligation estimate without the need for back-and-forth communication. For larger or more varied collections, you can still use the form, or contact us directly with as much detail as possible. This allows us to assess your stamps properly and respond with an accurate valuation.',
-      'Providing clear information from the outset helps us give you the most efficient service.'
+      'Use our online form—it\'s the quickest way to get started. Works perfectly for barcoded booklets, sheets, and collections of all sizes. For larger or more varied collections, contact us directly with as much detail as possible for an accurate valuation.',
     ],
   },
   {
@@ -16,8 +14,7 @@ const steps = [
     icon: Package,
     title: 'Send Your Stamps',
     description: [
-      'If you’re happy with the valuation, you can send your stamps to us for review. We recommend using Royal Mail services—particularly Special Delivery—so your items are fully insured and securely delivered.',
-      'This ensures your collection arrives safely and can be processed without delay.'
+      'If you\'re happy with the valuation, send your stamps to us for review. We recommend Royal Mail Special Delivery so your items are fully insured and securely delivered straight to our team.',
     ],
   },
   {
@@ -25,8 +22,7 @@ const steps = [
     icon: Banknote,
     title: 'Receive Your Payment',
     description: [
-      'Once your stamps arrive, we aim to review and process them promptly—often on the same day. Payments are typically issued shortly after, along with a confirmation email for your records.',
-      'Our goal is to make the entire process smooth, transparent, and reliable from start to finish.'
+      'Once your stamps arrive, we aim to review and process them promptly—often on the same day. Payment is issued shortly after, along with a confirmation email. Fast, transparent, and reliable from start to finish.',
     ],
   },
 ]
