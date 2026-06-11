@@ -35,11 +35,10 @@ export const HeroSlideshow = React.memo(function HeroSlideshow() {
           <Button
             asChild
             size="lg"
-            className="bg-forest-green hover:bg-forest-green/90 text-white font-semibold h-14 px-8 text-lg relative overflow-hidden group shadow-lg shadow-forest-green/20"
+            className="bg-forest-green hover:bg-forest-green/90 hover:scale-105 transition-all duration-300 text-white font-semibold h-14 px-8 text-lg shadow-lg shadow-forest-green/20"
           >
             <Link href="/sell-your-stamps">
-              <span className="relative z-10">Sell Your Stamps Today</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] transition-transform" />
+              <span>Sell Your Stamps Today</span>
             </Link>
           </Button>
         </Magnetic>

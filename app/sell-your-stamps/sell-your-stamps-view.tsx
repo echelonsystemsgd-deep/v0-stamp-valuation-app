@@ -107,8 +107,6 @@ export function SellYourStampsView() {
           </div>
         </HeroSlideshow>
 
-        <ImportantNotice />
-
         <section className="py-12 lg:py-20 -mt-10 md:-mt-16 relative z-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -165,6 +163,8 @@ export function SellYourStampsView() {
             </Tabs>
           </div>
         </section>
+
+        <ImportantNotice />
       </main>
       <Footer />
     </>
