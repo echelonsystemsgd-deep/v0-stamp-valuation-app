@@ -5,23 +5,44 @@ import Link from 'next/link'
 import { ArrowRight, Tag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { usePathname } from 'next/navigation'
 
 export function StickyCTA() {
+  const pathname = usePathname()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     const toggleVisibility = () => {
-      // Show after scrolling 300px
-      if (window.scrollY > 300) {
+      const scrollY = window.scrollY
+      const docHeight = document.documentElement.scrollHeight
+      const windowHeight = window.innerHeight
+      const footerElement = document.querySelector('footer')
+      const footerHeight = footerElement ? footerElement.offsetHeight : 400
+
+      const scrolledPastHeader = scrollY > 96
+      const hitFooter = docHeight - (scrollY + windowHeight) < footerHeight
+
+      if (scrolledPastHeader && !hitFooter) {
         setIsVisible(true)
       } else {
         setIsVisible(false)
       }
     }
 
-    window.addEventListener('scroll', toggleVisibility)
+    window.addEventListener('scroll', toggleVisibility, { passive: true })
+    toggleVisibility()
+
     return () => window.removeEventListener('scroll', toggleVisibility)
   }, [])
+
+  if (
+    pathname.startsWith('/dashboard') || 
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/signup') ||
+    pathname.startsWith('/unauthorized') ||
+    pathname.startsWith('/auth')
+  ) return null
 
   return (
     <>

@@ -5,19 +5,46 @@ import Link from 'next/link'
 import { Sparkles, ArrowRight, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { usePathname } from 'next/navigation'
 
 export function ConciergeWidget() {
+  const pathname = usePathname()
   const [isVisible, setIsVisible] = React.useState(false)
   const [isDismissed, setIsDismissed] = React.useState(false)
 
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!isDismissed) setIsVisible(true)
-    }, 3000)
-    return () => clearTimeout(timer)
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      const docHeight = document.documentElement.scrollHeight
+      const windowHeight = window.innerHeight
+      const footerElement = document.querySelector('footer')
+      const footerHeight = footerElement ? footerElement.offsetHeight : 400
+
+      const scrolledPastHeader = scrollY > 96
+      const hitFooter = docHeight - (scrollY + windowHeight) < footerHeight
+
+      if (scrolledPastHeader && !hitFooter) {
+        if (!isDismissed) setIsVisible(true)
+      } else {
+        setIsVisible(false)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [isDismissed])
 
-  if (isDismissed) return null
+  if (
+    isDismissed || 
+    pathname.startsWith('/dashboard') || 
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/signup') ||
+    pathname.startsWith('/unauthorized') ||
+    pathname.startsWith('/auth')
+  ) return null
 
   return (
     <div 

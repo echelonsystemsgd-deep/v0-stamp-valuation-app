@@ -4,8 +4,10 @@ import * as React from 'react'
 import { ArrowUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { usePathname } from 'next/navigation'
 
 export function BackToTop() {
+  const pathname = usePathname()
   const [isVisible, setIsVisible] = React.useState(false)
 
   React.useEffect(() => {
@@ -27,6 +29,15 @@ export function BackToTop() {
       behavior: 'smooth',
     })
   }
+
+  if (
+    pathname.startsWith('/dashboard') || 
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/signup') ||
+    pathname.startsWith('/unauthorized') ||
+    pathname.startsWith('/auth')
+  ) return null
 
   return (
     <Button
