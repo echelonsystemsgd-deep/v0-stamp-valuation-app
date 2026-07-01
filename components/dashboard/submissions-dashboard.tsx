@@ -231,7 +231,7 @@ export function SubmissionsDashboard({ initialSubmissions, userId }: Submissions
           </div>
           {totalSubmissions > 0 && (
             <Link
-              href="/sell-your-stamps"
+              href="/dashboard/submissions/new"
               className="flex items-center gap-2 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#14452F] hover:bg-[#14452F]/90 rounded-xl transition-all shadow-md animate-fade-in"
             >
               Request New Appraisal
@@ -272,7 +272,7 @@ export function SubmissionsDashboard({ initialSubmissions, userId }: Submissions
             </div>
 
             <Link
-              href="/sell-your-stamps"
+              href="/dashboard/submissions/new"
               className="flex items-center gap-2 px-6 py-3 text-sm font-bold text-white bg-[#14452F] hover:bg-[#14452F]/90 rounded-xl transition-all shadow-lg hover:shadow-xl"
             >
               Start Free Appraisal Request <ArrowRight className="h-4 w-4" />

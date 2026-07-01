@@ -201,43 +201,43 @@ app/
 ## 📝 Phase 4 Checklist
 
 ### 1. Database & Security Setup
-- [ ] Database migration: Create `submission_messages` table.
-- [ ] Database migration: Add RLS policies for `submission_messages` (select/insert).
-- [ ] Database migration: Add `submissions` and `submission_messages` to `supabase_realtime` publication.
+- [x] Database migration: Create `submission_messages` table.
+- [x] Database migration: Add RLS policies for `submission_messages` (select/insert).
+- [x] Database migration: Add `submissions` and `submission_messages` to `supabase_realtime` publication.
 
 ### 2. Dashboard Shell & Layout
-- [ ] Secure layout component with authenticated user check.
-- [ ] Sidebar navigation links styling and mobile responsive drawer logic.
+- [x] Secure layout component with authenticated user check.
+- [x] Sidebar navigation links styling and mobile responsive drawer logic.
 
 ### 3. Dashboard Overview Page
-- [ ] Submissions summary metric cards.
-- [ ] Global turnaround time SLA banner.
-- [ ] Empty state UI illustration and CTA button.
-- [ ] Submissions list display (desktop table / mobile cards).
-- [ ] Supabase Realtime listener to update submission statuses live.
+- [x] Submissions summary metric cards.
+- [x] Global turnaround time SLA banner.
+- [x] Empty state UI illustration and CTA button.
+- [x] Submissions list display (desktop table / mobile cards).
+- [x] Supabase Realtime listener to update submission statuses live.
 
 ### 4. Submission Details Page
-- [ ] Route handler and database fetch for individual submission details.
-- [ ] Visual timeline stepper with active state highlights.
-- [ ] Distinct status alert banners replacing the stepper for `rejected` or `cancelled` end-states.
-- [ ] Contextual turnaround time SLAs next to active timeline states.
-- [ ] Conditional Action Card: "Accept Quote" for `quote_given` status.
-- [ ] Conditional Action Card: Carrier and Tracking entry form for `awaiting_shipment`.
-- [ ] Clickable external courier tracking links for active transit statuses.
-- [ ] Audit breakdown table showing side-by-side original and reviewed items.
+- [x] Route handler and database fetch for individual submission details.
+- [x] Visual timeline stepper with active state highlights.
+- [x] Distinct status alert banners replacing the stepper for `rejected` or `cancelled` end-states.
+- [x] Contextual turnaround time SLAs next to active timeline states.
+- [x] Conditional Action Card: "Accept Quote" for `quote_given` status.
+- [x] Conditional Action Card: Carrier and Tracking entry form for `awaiting_shipment`.
+- [x] Clickable external courier tracking links for active transit statuses.
+- [x] Audit breakdown table showing side-by-side original and reviewed items.
 
 ### 5. Chat Communication Thread
-- [ ] Message history component in details view.
-- [ ] Form submission handler for new message entry.
-- [ ] Realtime channel listener streaming new messages in.
+- [x] Message history component in details view.
+- [x] Form submission handler for new message entry.
+- [x] Realtime channel listener streaming new messages in.
 
 ### 6. Printable Receipt
-- [ ] `/dashboard/submissions/[id]/receipt` route.
-- [ ] Print media CSS overrides and high-quality receipt invoice structure.
-- [ ] Client component trigger calling `window.print()` on mount.
+- [x] `/dashboard/submissions/[id]/receipt` route.
+- [x] Print media CSS overrides and high-quality receipt invoice structure.
+- [x] Client component trigger calling `window.print()` on mount.
 
 ### 7. Payout Settings Page
-- [ ] Payout settings form in `/dashboard/settings`.
-- [ ] Strict UK Sort Code format filter and 8-digit Account Number regex validation.
-- [ ] Masking utility to obfuscate bank numbers on fetch.
-- [ ] Secure profile update sync.
+- [x] Payout settings form in `/dashboard/settings`.
+- [x] Strict UK Sort Code format filter and 8-digit Account Number regex validation.
+- [x] Masking utility to obfuscate bank numbers on fetch.
+- [x] Secure profile update sync (upsert to `profile_payout_details` table).

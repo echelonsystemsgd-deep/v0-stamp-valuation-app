@@ -169,38 +169,38 @@ To optimize communication and alignment alongside the Admin improvements, the Se
 - [ ] Implement sidebar layout component with real-time badges (Supabase subscriber for count checks).
 
 ### Step 3: Shopify-Style Submissions Table
-- [ ] Create `/admin/submissions/page.tsx`.
-- [ ] Build horizontal status navigation tabs (7 groups).
-- [ ] Add checkbox row selection controls to the grid.
-- [ ] Build the sticky bottom Bulk Actions action bar ("Mark as Received", "Mark as Paid", "Export CSV", "Print Slips").
-- [ ] Add client-side CSV parsing to compile and export selected rows.
+- [x] Create `/admin/submissions/page.tsx`.
+- [x] Build horizontal status navigation tabs (7 groups).
+- [x] Add checkbox row selection controls to the grid.
+- [x] Build the sticky bottom Bulk Actions action bar ("Mark as Received", "Mark as Paid", "Export CSV", "Print Slips").
+- [x] Add client-side CSV parsing to compile and export selected rows.
 
 ### Step 4: 2-Column Appraisal Workspace
-- [ ] Create `/admin/submissions/[id]/page.tsx`.
-- [ ] **Left Main Column**:
-    - [ ] Build a responsive image grid/carousel viewer with zoom/rotate canvas effects.
-    - [ ] Create the inline quantitative audit form table. Bind quantity controls to reactively calculate values in real-time.
-    - [ ] Embed the 2-way real-time chat window utilizing Supabase channel stream.
-- [ ] **Right-Rail Column**:
-    - [ ] Design the Status & Payout action card with the "Log Payout" modal.
-    - [ ] Assemble the Seller context metadata and billing preference block.
-    - [ ] Implement the append-only Private Notes feed, binding input to `submission_internal_notes` and listing notes in chronological order.
-    - [ ] Build the history milestones timeline.
+- [x] Create `/admin/submissions/[id]/page.tsx`.
+- [x] **Left Main Column**:
+    - [x] Build a responsive image grid/carousel viewer with zoom/rotate canvas effects.
+    - [x] Create the inline quantitative audit form table. Bind quantity controls to reactively calculate values in real-time.
+    - [x] Embed the 2-way real-time chat window utilizing Supabase channel stream.
+- [x] **Right-Rail Column**:
+    - [x] Design the Status & Payout action card with the "Log Payout" modal.
+    - [x] Assemble the Seller context metadata and billing preference block.
+    - [x] Implement the append-only Private Notes feed, binding input to `submission_internal_notes` and listing notes in chronological order.
+    - [x] Build the history milestones timeline.
 
 ### Step 5: Rates & Category Manager
-- [ ] Create `/admin/categories/page.tsx`.
-- [ ] Render the stamp categories directory grouped by tabs.
-- [ ] Restrict price adjustments to `admin` role only. Disable editing inputs and show access indicators for `staff`.
+- [x] Create `/admin/categories/page.tsx`.
+- [x] Render the stamp categories directory grouped by tabs.
+- [x] Restrict price adjustments to `admin` role only. Disable editing inputs and show access indicators for `staff`.
 
 ### Step 6: Seller Directory & Reports
-- [ ] Create `/admin/sellers/page.tsx` with ban/restriction bulk selectors.
-- [ ] Create `/admin/reports/page.tsx` integrating charting and CSV download buttons.
+- [x] Create `/admin/sellers/page.tsx` with ban/restriction bulk selectors.
+- [x] Create `/admin/reports/page.tsx` integrating charting and CSV download buttons.
 
 ### Step 7: Seller Dashboard (Phase 4) Polish
-- [ ] Insert the SLA Stepper component in `/dashboard/submissions/[id]/page.tsx`.
-- [ ] Add the "Action Required" Banner to the main seller dashboard home view.
-- [ ] Add the unread messages check query and indicator dots on dashboard lists.
-- [ ] Construct the printer-friendly print packing slip view.
+- [x] Insert the SLA Stepper component in `/dashboard/submissions/[id]/page.tsx`.
+- [x] Add the "Action Required" Banner to the main seller dashboard home view.
+- [x] Add the unread messages check query and indicator dots on dashboard lists.
+- [x] Construct the printer-friendly print packing slip view.
 
 ---
 

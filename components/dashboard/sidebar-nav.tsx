@@ -141,6 +141,7 @@ export function SidebarNav({ user, profile }: SidebarNavProps) {
       items: [
         { label: 'Admin Overview', href: '/admin', icon: LayoutDashboard },
         { label: 'Submissions Queue', href: '/admin/submissions', icon: FileSpreadsheet },
+        ...(role === 'admin' ? [{ label: 'Analytics Reports', href: '/admin/reports', icon: History }] : [])
       ]
     },
     {
@@ -163,7 +164,7 @@ export function SidebarNav({ user, profile }: SidebarNavProps) {
       group: 'COMMAND DECK',
       items: [
         { label: 'My Dashboard', href: '/dashboard', icon: LayoutDashboard },
-        { label: 'Submit Valuation', href: '/sell-your-stamps', icon: FileSpreadsheet },
+        { label: 'Submit Valuation', href: '/dashboard/submissions/new', icon: FileSpreadsheet },
       ]
     },
     {
@@ -188,7 +189,7 @@ export function SidebarNav({ user, profile }: SidebarNavProps) {
       {/* Brand Header */}
       <div className="p-6 border-b border-[#C5A059]/10 flex flex-col gap-4">
         <div>
-          <Link href="/" className="font-serif text-2xl font-black tracking-wider text-white flex items-center gap-2">
+          <Link href={role === 'admin' || role === 'staff' ? '/admin' : '/dashboard'} className="font-serif text-2xl font-black tracking-wider text-white flex items-center gap-2">
             SellYourStamps<span className="text-[#C5A059]">UK</span>
           </Link>
           <span className="text-[10px] uppercase font-bold tracking-widest text-[#C5A059] block mt-1">

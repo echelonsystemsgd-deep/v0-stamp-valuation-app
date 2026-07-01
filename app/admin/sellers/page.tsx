@@ -33,6 +33,7 @@ export default function SellerAccountsPage() {
   const [activeTab, setActiveTab] = useState<'all' | 'active' | 'restricted' | 'banned'>('all')
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [currentAdminId, setCurrentAdminId] = useState<string | null>(null)
+  const [currentAdminRole, setCurrentAdminRole] = useState<'admin' | 'staff' | 'user' | null>(null)
 
   // Ban/Restrict Modal states
   const [showBanModal, setShowBanModal] = useState(false)
@@ -47,7 +48,15 @@ export default function SellerAccountsPage() {
     setLoading(true)
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      if (user) setCurrentAdminId(user.id)
+      if (user) {
+        setCurrentAdminId(user.id)
+        const { data: prof } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single()
+        setCurrentAdminRole(prof?.role || 'staff')
+      }
 
       const { data, error } = await supabase
         .from('profiles')
@@ -148,6 +157,18 @@ export default function SellerAccountsPage() {
           <p className="text-sm text-slate-500 mt-1">Audit profile status, restrict accounts, or manage security parameters.</p>
         </div>
 
+        {currentAdminRole === 'staff' && (
+          <div className="p-4 bg-amber-50 rounded-2xl border border-amber-200/50 flex gap-3 text-amber-800 text-xs shadow-xs animate-in fade-in duration-200">
+            <ShieldAlert className="h-5 w-5 shrink-0 text-amber-600 mt-0.5" />
+            <div>
+              <span className="font-bold text-sm">Read-Only Staff Account</span>
+              <p className="text-xs text-slate-500 mt-1">
+                Your account is logged in as staff. You can view registered profiles, joined dates, and restriction logs, but modification of account status (restrict, ban, activate) is restricted strictly to Administrator roles.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Tab Filters */}
         <div className="border-b border-slate-200/60 flex gap-4 scrollbar-none">
           {(['all', 'active', 'restricted', 'banned'] as const).map(tab => (
@@ -194,9 +215,10 @@ export default function SellerAccountsPage() {
                   <th className="py-4 px-6 text-center w-12">
                     <input
                       type="checkbox"
+                      disabled={currentAdminRole === 'staff'}
                       checked={filteredProfiles.length > 0 && selectedIds.length === filteredProfiles.filter(p => p.id !== currentAdminId).length}
                       onChange={handleSelectAll}
-                      className="rounded border-slate-300 text-[#14452F] focus:ring-[#14452F] h-4 w-4 cursor-pointer"
+                      className="rounded border-slate-300 text-[#14452F] focus:ring-[#14452F] h-4 w-4 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                     />
                   </th>
                   <th className="py-4 px-4 font-serif text-[#0B1D2E] font-bold text-xs uppercase tracking-wider">Seller Profile</th>
@@ -230,17 +252,18 @@ export default function SellerAccountsPage() {
                         key={p.id} 
                         className={cn(
                           'group hover:bg-[#FBFBF9]/80 transition-all cursor-pointer duration-100',
-                          isSelected ? 'bg-amber-50/20' : ''
+                          isSelected ? 'bg-amber-50/20' : '',
+                          currentAdminRole === 'staff' ? 'cursor-default hover:bg-white' : ''
                         )}
-                        onClick={() => !isSelf && handleSelectRow(p.id, !isSelected)}
+                        onClick={() => !isSelf && currentAdminRole !== 'staff' && handleSelectRow(p.id, !isSelected)}
                       >
                         <td className="py-4 px-6 text-center w-12" onClick={e => e.stopPropagation()}>
                           <input
                             type="checkbox"
-                            disabled={isSelf}
+                            disabled={isSelf || currentAdminRole === 'staff'}
                             checked={isSelected}
                             onChange={e => handleSelectRow(p.id, e.target.checked)}
-                            className="rounded border-slate-300 text-[#14452F] focus:ring-[#14452F] h-4 w-4 cursor-pointer disabled:opacity-30"
+                            className="rounded border-slate-300 text-[#14452F] focus:ring-[#14452F] h-4 w-4 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                           />
                         </td>
                         <td className="py-4 px-4 text-sm">

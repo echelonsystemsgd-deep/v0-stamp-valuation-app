@@ -91,20 +91,17 @@ export function PayoutForm({ user, initialPayoutDetails }: PayoutFormProps) {
     setSaving(true)
     
     try {
-      const payout_details = {
-        bank_name: bankName.trim(),
-        account_holder_name: accountHolder.trim(),
-        sort_code: sortCode.trim(),
-        account_number: accountNumber.trim()
-      }
-
       const { error } = await supabase
-        .from('profiles')
-        .update({
-          payout_details,
-          updated_at: new Date().toISOString(),
+        .from('profile_payout_details')
+        .upsert({
+          id: user.id,
+          payout_method: 'bank_transfer',
+          bank_name: bankName.trim(),
+          bank_account_name: accountHolder.trim(),
+          bank_sort_code: sortCode.trim(),
+          bank_account_number: accountNumber.trim(),
+          updated_at: new Date().toISOString()
         })
-        .eq('id', user.id)
 
       if (error) throw error
 

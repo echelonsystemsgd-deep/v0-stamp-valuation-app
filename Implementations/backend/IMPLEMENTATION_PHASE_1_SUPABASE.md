@@ -393,14 +393,14 @@ Enable RLS on all tables and apply these policies:
     ```
 
 ### Trigger Verification
-- [ ] **Trigger: Profile Creation**: Create a mock auth user (via Supabase Auth) and verify that a matching row in `public.profiles` is immediately spawned.
-- [ ] **Trigger: Role Auto-Upgrade**: Log in as a user with role `user`. Create a mock submission. Verify that the user's role in `profiles` automatically upgrades to `seller`.
-- [ ] **Trigger: Submission History Logging**: Create a submission, then update its status to `in_transit`. Verify that a matching entry is added to `submission_history` capturing the old and new statuses.
-- [ ] **Trigger: Auto-Update `updated_at`**: Perform an update on a row in `profiles`, `stamp_categories`, or `profile_payout_details`, and confirm `updated_at` matches the latest transaction time.
+- [x] **Trigger: Profile Creation**: Create a mock auth user (via Supabase Auth) and verify that a matching row in `public.profiles` is immediately spawned.
+- [x] **Trigger: Role Auto-Upgrade**: Log in as a user with role `user`. Create a mock submission. Verify that the user's role in `profiles` automatically upgrades to `seller`.
+- [x] **Trigger: Submission History Logging**: Create a submission, then update its status to `in_transit`. Verify that a matching entry is added to `submission_history` capturing the old and new statuses.
+- [x] **Trigger: Auto-Update `updated_at`**: Perform an update on a row in `profiles`, `stamp_categories`, or `profile_payout_details`, and confirm `updated_at` matches the latest transaction time.
 
 ### RLS Verification
-- [ ] **Test: Anonymous Submission Creation**: Confirm that an unauthenticated client can successfully insert a record into `submissions` and add associated `submission_items` and `submission_images`.
-- [ ] **Test: Item/Image Insertion Isolation**: Confirm that an anonymous client or logged-in user CANNOT insert items or images that link to another user's private `submission_id`.
-- [ ] **Test: Payout Security Isolation**: Verify that a user with role `seller` can SELECT their own payouts, but CANNOT see other users' payouts. Confirm that `payouts` cannot be read by anonymous users.
-- [ ] **Test: Payout Details Access**: Verify that a user can SELECT and UPDATE their own record in `profile_payout_details` but cannot see any other user's record. Confirm that this data does not leak into public queries on `profiles`.
-- [ ] **Test: Admin Escalation Rules**: Verify that only users with `role = 'admin'` can INSERT, UPDATE, or DELETE categories, or SELECT logs from `stamp_category_history`, `admin_audit_logs`, and `user_login_history`.
+- [x] **Test: Anonymous Submission Creation**: Confirm that an unauthenticated client can successfully insert a record into `submissions` and add associated `submission_items` and `submission_images`.
+- [x] **Test: Item/Image Insertion Isolation**: Confirm that an anonymous client or logged-in user CANNOT insert items or images that link to another user's private `submission_id`.
+- [x] **Test: Payout Security Isolation**: Verify that a user with role `seller` can SELECT their own payouts, but CANNOT see other users' payouts. Confirm that `payouts` cannot be read by anonymous users.
+- [x] **Test: Payout Details Access**: Verify that a user can SELECT and UPDATE their own record in `profile_payout_details` but cannot see any other user's record. Confirm that this data does not leak into public queries on `profiles`.
+- [x] **Test: Admin Escalation Rules**: Verify that only users with `role = 'admin'` can INSERT, UPDATE, or DELETE categories, or SELECT logs from `stamp_category_history`, `admin_audit_logs`, and `user_login_history`.

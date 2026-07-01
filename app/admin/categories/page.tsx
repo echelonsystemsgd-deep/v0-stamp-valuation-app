@@ -81,13 +81,26 @@ export default function RatesManagerPage() {
       if (catsErr) throw catsErr
       setCategories(cats || [])
 
-      // Fetch rate changes history
+      // Fetch rate changes history from stamp_category_history
       const { data: hist, error: histErr } = await supabase
-        .from('rate_changes_history')
+        .from('stamp_category_history')
         .select('*, profiles:changed_by(full_name, email)')
+        .eq('change_type', 'RATE_UPDATE')
         .order('changed_at', { ascending: false })
 
-      if (!histErr) setHistory(hist || [])
+      if (!histErr && hist) {
+        const mappedHistory: RateHistory[] = hist.map((h: any) => ({
+          id: h.id,
+          category_id: h.category_id,
+          old_rate: Number(h.old_value?.rate || 0),
+          new_rate: Number(h.new_value?.rate || 0),
+          changed_at: h.changed_at,
+          profiles: h.profiles
+        }))
+        setHistory(mappedHistory)
+      } else {
+        setHistory([])
+      }
 
     } catch (err: any) {
       toast.error('Failed to load rates data: ' + err.message)
@@ -152,12 +165,14 @@ export default function RatesManagerPage() {
         // 1. Write audits if rate changed
         if (hasRateChanged) {
           const { error: histErr } = await supabase
-            .from('rate_changes_history')
+            .from('stamp_category_history')
             .insert({
               category_id: selectedCategory.id,
               changed_by: userId,
-              old_rate: selectedCategory.rate,
-              new_rate: nextRate
+              change_type: 'RATE_UPDATE',
+              old_value: { rate: selectedCategory.rate },
+              new_value: { rate: nextRate },
+              reason: 'Rate updated by admin'
             })
 
           if (histErr) throw histErr

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { 
   FileText, 
@@ -38,9 +39,11 @@ interface PaymentLog {
 }
 
 export default function ReportsDashboard() {
+  const router = useRouter()
   const [metrics, setMetrics] = useState<ReportMetric[]>([])
   const [payments, setPayments] = useState<PaymentLog[]>([])
   const [loading, setLoading] = useState(true)
+  const [userRole, setUserRole] = useState<'admin' | 'staff' | 'user' | null>(null)
 
   // Totals
   const [totalSubmissions, setTotalSubmissions] = useState(0)
@@ -129,7 +132,26 @@ export default function ReportsDashboard() {
   }
 
   useEffect(() => {
-    fetchReportsData()
+    const checkAdmin = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: prof } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single()
+        
+        if (!prof || prof.role !== 'admin') {
+          router.replace('/unauthorized')
+        } else {
+          setUserRole('admin')
+          fetchReportsData()
+        }
+      } else {
+        router.replace('/login')
+      }
+    }
+    checkAdmin()
   }, [])
 
   // Export CSV

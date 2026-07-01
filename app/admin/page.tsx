@@ -23,7 +23,7 @@ export default async function AdminPage() {
     .eq('id', user.id)
     .single()
 
-  if (profile?.role !== 'admin') {
+  if (!profile || (profile.role !== 'admin' && profile.role !== 'staff')) {
     redirect('/dashboard')
   }
 
@@ -171,13 +171,6 @@ export default async function AdminPage() {
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" /> Full Access (Admin)
                 </span>
               </div>
-
-              <Link
-                href="/"
-                className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 bg-white hover:bg-slate-50 transition-all text-center"
-              >
-                Return to Landing Page
-              </Link>
             </div>
           </div>
         </div>

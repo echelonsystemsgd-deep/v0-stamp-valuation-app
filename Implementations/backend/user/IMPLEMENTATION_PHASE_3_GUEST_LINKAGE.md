@@ -109,33 +109,33 @@ sequenceDiagram
 
 ## 4. 🛠️ Detailed Checklist & Implementation Steps
 
-- [ ] **Step 1: Write/Update Database Migrations**
-  - [ ] Add the `link_guest_submissions_on_verification` trigger function and trigger definition on `auth.users`.
-  - [ ] Confirm the database contains the correct status insertion trigger (`on_submission_inserted` executing `handle_submission_inserted()`).
-- [ ] **Step 2: Update `/api/sell/route.ts` API Endpoint**
-  - [ ] Initialize Supabase Server Client.
-  - [ ] Add payload validation: verify presence and format of required properties (`fullName`, `email`, `phone`, `postcode`, `collectionType`, `quantity`, `era`, `description`, `images`).
-  - [ ] Validate image array size (maximum 10 images).
-  - [ ] Implement storage metadata and path prefix security checks for each file in `images`.
-  - [ ] Implement transactional database insert:
-    - [ ] Create submission row (assigning `user_id` if authenticated, else keeping it null).
-    - [ ] Insert items into `submission_items` with current rates snapshotted.
-    - [ ] Insert image URLs into `submission_images`.
-- [ ] **Step 3: Verification & Manual Testing**
-  - [ ] **Test 1: Server-Side File Limits & Path Security**
-    - [ ] Test submitting with > 10 images. Verify endpoint returns `400 Bad Request`.
-    - [ ] Test submitting with an image path pointing to a different folder prefix (e.g. guest trying to use an auth path or user trying to use someone else's UID). Verify endpoint returns `400 Bad Request`.
-    - [ ] Test submitting with nonexistent storage file paths. Verify endpoint returns `400 Bad Request`.
-  - [ ] **Test 2: Authenticated Submission**
-    - [ ] Log in with a test user -> Submit appraisal.
-    - [ ] Check DB: Verify `submissions.user_id` is populated, user role in `profiles` changes to `'seller'`, and initial `submission_history` record is added.
-  - [ ] **Test 3: Guest Submission**
-    - [ ] Log out -> Submit appraisal using a guest email address.
-    - [ ] Check DB: Verify `submissions.user_id` is `NULL`, guest fields are populated, and initial `submission_history` record is added.
-  - [ ] **Test 4: Unverified Guest Linkage**
-    - [ ] Sign up a new user using the guest email. Keep the account **unverified** (do not click verification link).
-    - [ ] Check DB: Verify the guest submission has **not** been linked yet (`user_id` is still `NULL`).
-  - [ ] **Test 5: Verified Guest Linkage**
-    - [ ] Verify the user account (e.g., click verification link or manually set `email_confirmed_at` in database).
-    - [ ] Check DB: Verify the guest submission's `user_id` is now updated with the user's UUID.
-    - [ ] Verify `submission_history` table contains a new entry logging the linkage event with the new user's ID.
+- [x] **Step 1: Write/Update Database Migrations**
+  - [x] Add the `link_guest_submissions_on_verification` trigger function and trigger definition on `auth.users`.
+  - [x] Confirm the database contains the correct status insertion trigger (`on_submission_inserted` executing `handle_submission_inserted()`).
+- [x] **Step 2: Update `/api/sell/route.ts` API Endpoint**
+  - [x] Initialize Supabase Server Client.
+  - [x] Add payload validation: verify presence and format of required properties (`fullName`, `email`, `phone`, `postcode`, `collectionType`, `quantity`, `era`, `description`, `images`).
+  - [x] Validate image array size (maximum 10 images).
+  - [x] Implement storage metadata and path prefix security checks for each file in `images`.
+  - [x] Implement transactional database insert:
+    - [x] Create submission row (assigning `user_id` if authenticated, else keeping it null).
+    - [x] Insert items into `submission_items` with current rates snapshotted.
+    - [x] Insert image URLs into `submission_images`.
+- [x] **Step 3: Verification & Manual Testing**
+  - [x] **Test 1: Server-Side File Limits & Path Security**
+    - [x] Test submitting with > 10 images. Verify endpoint returns `400 Bad Request`.
+    - [x] Test submitting with an image path pointing to a different folder prefix (e.g. guest trying to use an auth path or user trying to use someone else's UID). Verify endpoint returns `400 Bad Request`.
+    - [x] Test submitting with nonexistent storage file paths. Verify endpoint returns `400 Bad Request`.
+  - [x] **Test 2: Authenticated Submission**
+    - [x] Log in with a test user -> Submit appraisal.
+    - [x] Check DB: Verify `submissions.user_id` is populated, user role in `profiles` changes to `'seller'`, and initial `submission_history` record is added.
+  - [x] **Test 3: Guest Submission**
+    - [x] Log out -> Submit appraisal using a guest email address.
+    - [x] Check DB: Verify `submissions.user_id` is `NULL`, guest fields are populated, and initial `submission_history` record is added.
+  - [x] **Test 4: Unverified Guest Linkage**
+    - [x] Sign up a new user using the guest email. Keep the account **unverified** (do not click verification link).
+    - [x] Check DB: Verify the guest submission has **not** been linked yet (`user_id` is still `NULL`).
+  - [x] **Test 5: Verified Guest Linkage**
+    - [x] Verify the user account (e.g., click verification link or manually set `email_confirmed_at` in database).
+    - [x] Check DB: Verify the guest submission's `user_id` is now updated with the user's UUID.
+    - [x] Verify `submission_history` table contains a new entry logging the linkage event with the new user's ID.

@@ -13,13 +13,18 @@ export default async function SettingsPage() {
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
+  const { data: payDetails } = await supabase
+    .from('profile_payout_details')
     .select('*')
     .eq('id', user.id)
     .single()
 
-  const payoutDetails = profile?.payout_details || {}
+  const payoutDetails = payDetails ? {
+    bank_name: payDetails.bank_name || '',
+    account_holder_name: payDetails.bank_account_name || '',
+    sort_code: payDetails.bank_sort_code || '',
+    account_number: payDetails.bank_account_number || ''
+  } : {}
 
   return (
     <main className="flex-1 bg-[#FBFBF9] py-8 px-6 sm:px-8 overflow-y-auto">

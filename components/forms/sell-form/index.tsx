@@ -52,9 +52,10 @@ export interface SellFormProps {
   initialDescription?: string
   /** Set when user arrives from homepage calculator lock-in URL (offer_low present). */
   isLockInOffer?: boolean
+  isDashboard?: boolean
 }
 
-export function SellForm({ initialQuantity, initialDescription, isLockInOffer = false }: SellFormProps) {
+export function SellForm({ initialQuantity, initialDescription, isLockInOffer = false, isDashboard = false }: SellFormProps) {
   const [currentStep, setCurrentStep] = React.useState(1)
   const [formData, setFormData] = React.useState<FormData>(() => {
     return {
@@ -264,7 +265,9 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
             A confirmation email has been sent to <strong>{formData.email}</strong>
           </p>
           <Button asChild className="bg-forest-green hover:bg-forest-green/90 text-white">
-            <Link href="/">Return to Home</Link>
+            <Link href={isDashboard ? "/dashboard" : "/"}>
+              {isDashboard ? "Go to Dashboard" : "Return to Home"}
+            </Link>
           </Button>
         </CardContent>
       </Card>

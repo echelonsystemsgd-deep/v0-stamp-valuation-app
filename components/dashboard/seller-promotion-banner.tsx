@@ -29,7 +29,7 @@ export function SellerPromotionBanner() {
 
         <div className="w-full md:w-auto shrink-0 md:pl-16">
           <Link
-            href="/sell-your-stamps"
+            href="/dashboard/submissions/new"
             className="w-full md:w-auto inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl text-sm font-bold text-[#0B1D2E] bg-[#C5A059] hover:bg-[#C5A059]/90 transition-all text-center shadow-lg hover:shadow-[#C5A059]/10"
           >
             <Compass className="h-4 w-4" /> Start Your Valuation

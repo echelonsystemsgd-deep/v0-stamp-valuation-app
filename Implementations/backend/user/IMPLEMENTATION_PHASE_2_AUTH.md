@@ -137,28 +137,28 @@ No new database migrations are required for Phase 2 auth updates.
 
 ### 🚀 Phase 2 Implementation Checklist
 
-- [ ] **Dual-Tab Authentication Pages**
-  - [ ] Implement `Tabs` UI for `/login` page (Tabs: Magic Link, Password).
-  - [ ] Implement `Tabs` UI for `/signup` page (Tabs: Magic Link, Password).
-  - [ ] Confirm email validation, password minimum 6-character length validation, and confirm password check on signup.
-  - [ ] Validate password signup correctly passes `full_name` metadata to trigger the `handle_new_user()` Postgres function.
-  - [ ] Implement confirmation state on password signup if email verification is enabled.
+- [x] **Dual-Tab Authentication Pages**
+  - [x] Implement `Tabs` UI for `/login` page (Tabs: Magic Link, Password).
+  - [x] Implement `Tabs` UI for `/signup` page (Tabs: Magic Link, Password).
+  - [x] Confirm email validation, password minimum 6-character length validation, and confirm password check on signup.
+  - [x] Validate password signup correctly passes `full_name` metadata to trigger the `handle_new_user()` Postgres function.
+  - [x] Implement confirmation state on password signup if email verification is enabled.
 
-- [ ] **Forgot & Reset Password Flow**
-  - [ ] Build inline "Forgot Password?" trigger and email request form on `/login`.
-  - [ ] Ensure recovery link correctly uses `resetPasswordForEmail` with redirect pointing to `/auth/callback?next=/reset-password`.
-  - [ ] Create `/reset-password/page.tsx` with secure password input fields and validation.
-  - [ ] Verify `supabase.auth.updateUser` successfully changes user password and logs them in.
+- [x] **Forgot & Reset Password Flow**
+  - [x] Build inline "Forgot Password?" trigger and email request form on `/login`.
+  - [x] Ensure recovery link correctly uses `resetPasswordForEmail` with redirect pointing to `/auth/callback?next=/reset-password`.
+  - [x] Create `/reset-password/page.tsx` with secure password input fields and validation.
+  - [x] Verify `supabase.auth.updateUser` successfully changes user password and logs them in.
 
-- [ ] **Sticky Seller Promotion Banner**
-  - [ ] Build the promotion card component for `role === 'user'` users on `/dashboard`.
-  - [ ] Implement styling: Heritage Green background, gold accent line, custom illustration or icons.
-  - [ ] Verify banner is **non-dismissible** (no close button) and disappears automatically once the user's role transitions to `'seller'`.
-  - [ ] Double-check existing users' emails and passwords are not impacted.
+- [x] **Sticky Seller Promotion Banner**
+  - [x] Build the promotion card component for `role === 'user'` users on `/dashboard`.
+  - [x] Implement styling: Heritage Green background, gold accent line, custom illustration or icons.
+  - [x] Verify banner is **non-dismissible** (no close button) and disappears automatically once the user's role transitions to `'seller'`.
+  - [x] Double-check existing users' emails and passwords are not impacted.
 
-- [ ] **Auth Callback & Middleware**
-  - [ ] Confirm `/auth/callback` handles code exchange and routes to `/reset-password` or `/dashboard` properly.
-  - [ ] Confirm `middleware.ts` intercepts `/reset-password` if user is unauthenticated.
+- [x] **Auth Callback & Middleware**
+  - [x] Confirm `/auth/callback` handles code exchange and routes to `/reset-password` or `/dashboard` properly.
+  - [x] Confirm `middleware.ts` intercepts `/reset-password` if user is unauthenticated.
 
-- [ ] **Email Configuration**
-  - [ ] Manually update Supabase Auth templates (Welcome & Confirmation emails) to display a call-to-action link pointing to `/sell-your-stamps`.
+- [x] **Email Configuration**
+  - [x] Manually update Supabase Auth templates (Welcome & Confirmation emails) to display a call-to-action link pointing to `/sell-your-stamps`.

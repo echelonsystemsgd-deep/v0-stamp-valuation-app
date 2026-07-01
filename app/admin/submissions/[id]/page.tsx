@@ -286,7 +286,8 @@ export default function SubmissionWorkspace() {
             ...seller,
             payout_details: payDetails ? {
               payout_method: payDetails.payout_method,
-              bank_name: payDetails.bank_account_name || undefined,
+              bank_name: payDetails.bank_name || undefined,
+              payee_name: payDetails.bank_account_name || undefined,
               account_number: payDetails.bank_account_number || undefined,
               sort_code: payDetails.bank_sort_code || undefined,
               cheque_recipient: payDetails.cheque_recipient_name || undefined,
@@ -1006,8 +1007,10 @@ export default function SubmissionWorkspace() {
                     <div className="grid grid-cols-2 gap-1 text-[11px]">
                       <span className="text-slate-450">Method:</span>
                       <span className="font-bold text-[#0B1D2E]">Bank Transfer</span>
-                      <span className="text-slate-450">Payee Name:</span>
+                      <span className="text-slate-450">Bank Name:</span>
                       <span className="font-bold text-slate-750">{sellerProfile.payout_details.bank_name || '-'}</span>
+                      <span className="text-slate-450">Payee Name:</span>
+                      <span className="font-bold text-slate-750">{sellerProfile.payout_details.payee_name || '-'}</span>
                       <span className="text-slate-450">Sort Code:</span>
                       <span className="font-bold text-slate-750 font-mono">{sellerProfile.payout_details.sort_code || '-'}</span>
                       <span className="text-slate-450">Acc Number:</span>
