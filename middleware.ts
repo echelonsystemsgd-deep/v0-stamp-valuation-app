@@ -35,7 +35,7 @@ export async function middleware(request: NextRequest) {
   const path = url.pathname
 
   // 1. If not logged in and accessing protected routes -> redirect to /login
-  if (!user && (path.startsWith('/dashboard') || path.startsWith('/admin'))) {
+  if (!user && (path.startsWith('/dashboard') || path.startsWith('/admin') || path.startsWith('/reset-password'))) {
     const redirectUrl = new URL('/login', request.url)
     redirectUrl.searchParams.set('redirectedFrom', path)
     return NextResponse.redirect(redirectUrl)

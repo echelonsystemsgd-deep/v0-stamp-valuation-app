@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { CheckCircle2, FileText, Banknote, ShieldAlert, Compass } from 'lucide-react'
 import { OnboardingBanner } from '@/components/dashboard/onboarding-banner'
+import { SellerPromotionBanner } from '@/components/dashboard/seller-promotion-banner'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,6 +44,9 @@ export default async function DashboardPage() {
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Onboarding Alert Banner */}
         <OnboardingBanner isProfileIncomplete={isProfileIncomplete} />
+
+        {/* Seller Promotion Banner */}
+        {profile?.role === 'user' && <SellerPromotionBanner />}
 
         {/* Dashboard Header Banner */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-8 bg-[#0B1D2E] text-white rounded-3xl border border-[#C5A059]/20 shadow-xl relative overflow-hidden">
