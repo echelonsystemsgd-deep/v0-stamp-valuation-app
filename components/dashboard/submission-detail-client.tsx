@@ -17,7 +17,8 @@ import {
   Truck,
   Download,
   AlertCircle,
-  HelpCircle
+  HelpCircle,
+  Printer
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -602,6 +603,21 @@ export function SubmissionDetailClient({
                       EC1A 1BB, United Kingdom
                     </div>
                   </div>
+                </div>
+
+                {/* Print Packing Slip Button */}
+                <div className="p-4 bg-slate-50 border border-slate-200/60 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5">
+                  <div className="space-y-0.5">
+                    <p className="text-xs font-bold text-slate-700">Need a packing slip?</p>
+                    <p className="text-[11px] text-slate-500">Print and include this document inside your parcel so we can identify your stamps instantly.</p>
+                  </div>
+                  <a
+                    href={`/dashboard/submissions/${submission.id}/print`}
+                    target="_blank"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 border border-slate-200 hover:border-slate-350 bg-white text-xs font-bold text-[#0B1D2E] rounded-xl transition-all shadow-sm shrink-0"
+                  >
+                    <Printer className="h-4 w-4 text-[#C5A059]" /> Print Packing Slip
+                  </a>
                 </div>
 
                 <form onSubmit={handleTrackingSubmit} className="space-y-4 pt-2">

@@ -12,7 +12,8 @@ import {
   Inbox, 
   HelpCircle,
   TrendingUp,
-  ExternalLink
+  ExternalLink,
+  AlertCircle
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -65,6 +66,43 @@ export function SubmissionsDashboard({ initialSubmissions, userId }: Submissions
   const router = useRouter()
   const supabase = createClient()
   const [submissions, setSubmissions] = useState<Submission[]>(initialSubmissions)
+  const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({})
+
+  // Fetch unread messages count for each submission
+  useEffect(() => {
+    const fetchUnreadCounts = async () => {
+      const { data, error } = await supabase
+        .from('submission_messages')
+        .select('submission_id')
+        .eq('is_read_by_seller', false)
+      
+      if (!error && data) {
+        const counts: Record<string, number> = {}
+        data.forEach(msg => {
+          counts[msg.submission_id] = (counts[msg.submission_id] || 0) + 1
+        })
+        setUnreadCounts(counts)
+      }
+    }
+    
+    fetchUnreadCounts()
+
+    // Realtime channel for unread counts
+    const channel = supabase
+      .channel('unread-messages-count-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'submission_messages' },
+        () => {
+          fetchUnreadCounts()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [submissions, supabase])
 
   // Realtime Subscriptions
   useEffect(() => {
@@ -126,6 +164,30 @@ export function SubmissionsDashboard({ initialSubmissions, userId }: Submissions
           </p>
         </div>
       </div>
+
+      {/* Action Required Banner */}
+      {submissions.some(s => s.status === 'quote_given') && (
+        <div className="bg-amber-50/50 border border-[#C5A059]/30 rounded-3xl p-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center relative overflow-hidden shadow-sm animate-in fade-in duration-300">
+          <div className="absolute left-0 top-0 h-full w-1 bg-[#C5A059]" />
+          <div className="p-3 bg-[#C5A059]/10 rounded-2xl text-[#C5A059] shrink-0">
+            <AlertCircle className="h-6 w-6" />
+          </div>
+          <div className="space-y-1 flex-1">
+            <h3 className="font-serif text-lg font-bold text-[#0B1D2E]">Action Required: Action Your Quotation</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              We have completed an initial estimate for your stamp collection. Please review and action the quote (accept or reject) to proceed with your shipment.
+            </p>
+          </div>
+          <div className="mt-4 sm:mt-0 shrink-0">
+            <Link
+              href={`/dashboard/submissions/${submissions.find(s => s.status === 'quote_given')?.id}`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0B1D2E] bg-[#C5A059] hover:bg-[#C5A059]/90 rounded-xl transition-all shadow-md"
+            >
+              Action Valuation <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -241,7 +303,10 @@ export function SubmissionsDashboard({ initialSubmissions, userId }: Submissions
                         className="group hover:bg-[#FBFBF9]/70 transition-all duration-150 cursor-pointer"
                         onClick={() => router.push(`/dashboard/submissions/${sub.id}`)}
                       >
-                        <td className="py-4 text-sm font-bold text-[#0B1D2E] group-hover:text-[#14452F] font-mono">
+                        <td className="py-4 text-sm font-bold text-[#0B1D2E] group-hover:text-[#14452F] font-mono flex items-center gap-2">
+                          {unreadCounts[sub.id] > 0 && (
+                            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shrink-0" title="New unread messages from valuation desk" />
+                          )}
                           VAL-{sub.id.slice(0, 8).toUpperCase()}
                         </td>
                         <td className="py-4 text-sm text-slate-500">
@@ -296,7 +361,10 @@ export function SubmissionsDashboard({ initialSubmissions, userId }: Submissions
                     <div className="flex justify-between items-start">
                       <div>
                         <span className="text-[10px] font-bold text-slate-400 font-mono block">VALUATION ID</span>
-                        <span className="text-sm font-black text-[#0B1D2E] font-mono">
+                        <span className="text-sm font-black text-[#0B1D2E] font-mono flex items-center gap-1.5">
+                          {unreadCounts[sub.id] > 0 && (
+                            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
+                          )}
                           VAL-{sub.id.slice(0, 8).toUpperCase()}
                         </span>
                       </div>

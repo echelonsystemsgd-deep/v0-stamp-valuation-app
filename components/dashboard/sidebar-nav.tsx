@@ -28,7 +28,7 @@ interface SidebarNavProps {
   }
   profile: {
     full_name?: string
-    role: 'user' | 'seller' | 'admin'
+    role: 'user' | 'seller' | 'admin' | 'staff'
     status?: string
     avatar_url?: string | null
   } | null
@@ -38,10 +38,67 @@ export function SidebarNav({ user, profile }: SidebarNavProps) {
   const pathname = usePathname()
   const [isPending, startTransition] = useTransition()
   const [avatarPreviewUrl, setAvatarPreviewUrl] = React.useState<string | null>(null)
+  const [pendingSubmissionsCount, setPendingSubmissionsCount] = React.useState<number>(0)
+  const [activeSellersCount, setActiveSellersCount] = React.useState<number>(0)
   
   const role = profile?.role ?? 'user'
   const name = profile?.full_name || user.email.split('@')[0]
   const avatarLetter = name.charAt(0).toUpperCase()
+
+  // Fetch live counts for pending submissions & sellers
+  React.useEffect(() => {
+    if (role !== 'admin' && role !== 'staff') return
+
+    const supabase = createClient()
+
+    const fetchCounts = async () => {
+      // Pending submissions count: quote_requested, received, under_review
+      const { count: pendingCount } = await supabase
+        .from('submissions')
+        .select('*', { count: 'exact', head: true })
+        .in('status', ['quote_requested', 'received', 'under_review'])
+
+      // Active sellers count: users with role = 'seller'
+      const { count: sellersCount } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('role', 'seller')
+
+      setPendingSubmissionsCount(pendingCount || 0)
+      setActiveSellersCount(sellersCount || 0)
+    }
+
+    fetchCounts()
+
+    // Realtime subscription for submissions
+    const submissionsChannel = supabase
+      .channel('sidebar-submissions-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'submissions' },
+        () => {
+          fetchCounts()
+        }
+      )
+      .subscribe()
+
+    // Realtime subscription for profiles
+    const profilesChannel = supabase
+      .channel('sidebar-profiles-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'profiles' },
+        () => {
+          fetchCounts()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(submissionsChannel)
+      supabase.removeChannel(profilesChannel)
+    }
+  }, [role])
 
   React.useEffect(() => {
     if (!profile?.avatar_url) {
@@ -124,7 +181,7 @@ export function SidebarNav({ user, profile }: SidebarNavProps) {
     }
   ]
 
-  const navigationGroups = role === 'admin' ? adminNavigation : userNavigation
+  const navigationGroups = (role === 'admin' || role === 'staff') ? adminNavigation : userNavigation
 
   return (
     <aside className="w-80 bg-[#0B1D2E] text-white flex flex-col h-screen border-r border-[#C5A059]/20 flex-shrink-0">
@@ -158,23 +215,44 @@ export function SidebarNav({ user, profile }: SidebarNavProps) {
               {group.items.map((item) => {
                 const Icon = item.icon
                 const isActive = pathname === item.href
+                let badgeVal: number | undefined = undefined
+                
+                if (role === 'admin' || role === 'staff') {
+                  if (item.href === '/admin/submissions') {
+                    badgeVal = pendingSubmissionsCount
+                  } else if (item.href === '/admin/sellers') {
+                    badgeVal = activeSellersCount
+                  }
+                }
                 
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      'flex items-center gap-3.5 px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 group/item',
+                      'flex items-center justify-between gap-2 px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 group/item',
                       isActive 
                         ? 'bg-[#14452F] text-white shadow-lg shadow-[#14452F]/15 border border-[#14452F]/20'
                         : 'text-slate-300 hover:text-white hover:bg-white/5'
                     )}
                   >
-                    <Icon className={cn(
-                      'h-5 w-5 transition-transform duration-200 group-hover/item:scale-105',
-                      isActive ? 'text-[#C5A059]' : 'text-slate-400 group-hover/item:text-white'
-                    )} />
-                    {item.label}
+                    <div className="flex items-center gap-3.5 overflow-hidden">
+                      <Icon className={cn(
+                        'h-5 w-5 transition-transform duration-200 group-hover/item:scale-105 flex-shrink-0',
+                        isActive ? 'text-[#C5A059]' : 'text-slate-400 group-hover/item:text-white'
+                      )} />
+                      <span className="truncate">{item.label}</span>
+                    </div>
+                    {badgeVal !== undefined && badgeVal > 0 && (
+                      <span className={cn(
+                        'text-[10px] font-bold px-2 py-0.5 rounded-full border shadow-sm flex-shrink-0 transition-all duration-200',
+                        isActive 
+                          ? 'bg-[#C5A059] text-[#0B1D2E] border-[#C5A059]' 
+                          : 'bg-[#C5A059]/15 text-[#C5A059] border-[#C5A059]/25 group-hover/item:bg-[#C5A059]/25'
+                      )}>
+                        {badgeVal}
+                      </span>
+                    )}
                   </Link>
                 )
               })}

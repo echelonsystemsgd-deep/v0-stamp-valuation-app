@@ -52,13 +52,13 @@ export async function middleware(request: NextRequest) {
         .single()
       
       const role = profile?.role ?? 'user'
-      if (role === 'admin') {
+      if (role === 'admin' || role === 'staff') {
         return NextResponse.redirect(new URL('/admin', request.url))
       }
       return NextResponse.redirect(new URL('/dashboard', request.url))
     }
 
-    // If accessing /dashboard, redirect admins to /admin
+    // If accessing /dashboard, redirect admins and staff to /admin
     if (path.startsWith('/dashboard')) {
       const { data: profile } = await supabase
         .from('profiles')
@@ -67,12 +67,12 @@ export async function middleware(request: NextRequest) {
         .single()
       
       const role = profile?.role ?? 'user'
-      if (role === 'admin') {
+      if (role === 'admin' || role === 'staff') {
         return NextResponse.redirect(new URL('/admin', request.url))
       }
     }
 
-    // If accessing /admin, ensure they are an admin
+    // If accessing /admin, ensure they are an admin or staff
     if (path.startsWith('/admin')) {
       const { data: profile } = await supabase
         .from('profiles')
@@ -81,7 +81,7 @@ export async function middleware(request: NextRequest) {
         .single()
       
       const role = profile?.role ?? 'user'
-      if (role !== 'admin') {
+      if (role !== 'admin' && role !== 'staff') {
         // Redirect standard users / sellers to the unauthorized access page
         return NextResponse.redirect(new URL('/unauthorized', request.url))
       }
