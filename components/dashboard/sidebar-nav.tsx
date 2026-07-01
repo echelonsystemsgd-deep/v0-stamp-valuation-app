@@ -32,9 +32,10 @@ interface SidebarNavProps {
     status?: string
     avatar_url?: string | null
   } | null
+  className?: string
 }
 
-export function SidebarNav({ user, profile }: SidebarNavProps) {
+export function SidebarNav({ user, profile, className }: SidebarNavProps) {
   const pathname = usePathname()
   const [isPending, startTransition] = useTransition()
   const [avatarPreviewUrl, setAvatarPreviewUrl] = React.useState<string | null>(null)
@@ -185,7 +186,7 @@ export function SidebarNav({ user, profile }: SidebarNavProps) {
   const navigationGroups = (role === 'admin' || role === 'staff') ? adminNavigation : userNavigation
 
   return (
-    <aside className="w-80 bg-[#0B1D2E] text-white flex flex-col h-screen border-r border-[#C5A059]/20 flex-shrink-0">
+    <aside className={cn("w-80 bg-[#0B1D2E] text-white flex flex-col h-screen border-r border-[#C5A059]/20 flex-shrink-0", className)}>
       {/* Brand Header */}
       <div className="p-6 border-b border-[#C5A059]/10 flex flex-col gap-4">
         <div>

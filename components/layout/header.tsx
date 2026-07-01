@@ -286,7 +286,7 @@ export function Header() {
               suppressHydrationWarning
             >
               <PhoneCall className="h-4 w-4" />
-              <span className="text-base font-bold tracking-tight">
+              <span className="text-base font-bold tracking-tight hidden sm:inline">
                 {contactInfo.phone}
               </span>
             </a>

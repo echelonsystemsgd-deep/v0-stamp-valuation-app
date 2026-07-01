@@ -597,13 +597,13 @@ export default function SubmissionWorkspace() {
     <main className="flex-1 bg-[#FBFBF9] overflow-y-auto min-h-screen pb-16">
       
       {/* Top Navigation Bar */}
-      <div className="border-b border-slate-200/60 bg-white sticky top-0 z-30 px-6 py-4 flex items-center justify-between shadow-xs">
-        <div className="flex items-center gap-4 overflow-hidden">
+      <div className="border-b border-slate-200/60 bg-white sticky top-0 z-30 px-6 py-4 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between shadow-xs">
+        <div className="flex items-center gap-4 overflow-hidden w-full md:w-auto">
           <Link
             href="/admin/submissions"
             className="p-2 hover:bg-slate-50 rounded-xl transition-all border border-slate-200/80"
           >
-            <ArrowLeft className="h-4 w-4 text-slate-650" />
+            <ArrowLeft className="h-4 w-4 text-slate-655" />
           </Link>
           <div className="overflow-hidden">
             <div className="flex items-center gap-2 flex-wrap">
@@ -622,7 +622,7 @@ export default function SubmissionWorkspace() {
         </div>
 
         {/* Audit status actions */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 flex-wrap w-full md:w-auto justify-start md:justify-end">
           {(submission.status === 'quote_requested' || submission.status === 'received' || submission.status === 'under_review') && (
             <button
               onClick={() => handleTransitionStatus('under_review')}
