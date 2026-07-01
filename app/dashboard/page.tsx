@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { CheckCircle2, FileText, Banknote, ShieldAlert, Compass } from 'lucide-react'
+import { OnboardingBanner } from '@/components/dashboard/onboarding-banner'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,9 +36,14 @@ export default async function DashboardPage() {
     .eq('user_id', user.id)
     .eq('status', 'paid')
 
+  const isProfileIncomplete = !profile?.full_name || !profile?.phone || !profile?.postcode
+
   return (
     <main className="flex-1 bg-[#FBFBF9] py-8 px-6 sm:px-8 overflow-y-auto">
       <div className="max-w-6xl mx-auto space-y-8">
+        {/* Onboarding Alert Banner */}
+        <OnboardingBanner isProfileIncomplete={isProfileIncomplete} />
+
         {/* Dashboard Header Banner */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-8 bg-[#0B1D2E] text-white rounded-3xl border border-[#C5A059]/20 shadow-xl relative overflow-hidden">
           {/* Decorative Gold Border Line */}

@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -27,6 +28,7 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ user, initialProfile, onSaveSuccess }: ProfileFormProps) {
+  const router = useRouter()
   const supabase = createClient()
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   
@@ -138,6 +140,24 @@ export function ProfileForm({ user, initialProfile, onSaveSuccess }: ProfileForm
     } catch (error: any) {
       console.error('Error updating profile:', error)
       toast.error(error.message || 'Failed to update profile details')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleGlobalSignOut = async () => {
+    const confirm = window.confirm('Are you sure you want to sign out of all devices? This will invalidate all your active sessions.')
+    if (!confirm) return
+
+    setSaving(true)
+    try {
+      const { error } = await supabase.auth.signOut({ scope: 'global' })
+      if (error) throw error
+      toast.success('Successfully signed out of all devices!')
+      router.push('/login')
+    } catch (error: any) {
+      console.error('Error signing out globally:', error)
+      toast.error(error.message || 'Failed to sign out globally')
     } finally {
       setSaving(false)
     }
@@ -293,7 +313,16 @@ export function ProfileForm({ user, initialProfile, onSaveSuccess }: ProfileForm
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-4 pt-4 border-t border-slate-100 dark:border-slate-800/60">
+          <div className="flex items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-800/60">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={saving || uploading}
+              onClick={handleGlobalSignOut}
+              className="text-red-650 hover:text-red-700 dark:text-red-400 border-slate-200 dark:border-slate-800 hover:bg-red-50 dark:hover:bg-red-950/10 h-11 px-6 rounded-xl shadow-sm cursor-pointer"
+            >
+              Sign Out of All Devices
+            </Button>
             <Button
               type="submit"
               disabled={saving || uploading}

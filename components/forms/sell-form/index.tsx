@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { CheckCircle } from 'lucide-react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 const steps = ['Collection Details', 'Photos', 'Contact Info']
 
@@ -113,6 +114,30 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
     const { images, ...persistentData } = formData
     localStorage.setItem('sell_form_progress', JSON.stringify(persistentData))
   }, [formData])
+
+  // Fetch logged-in user profile to pre-fill details
+  React.useEffect(() => {
+    const fetchUserProfile = async () => {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name, phone, postcode')
+          .eq('id', session.user.id)
+          .single()
+        
+        setFormData((prev) => ({
+          ...prev,
+          email: prev.email || session.user.email || '',
+          fullName: prev.fullName || profile?.full_name || '',
+          phone: prev.phone || profile?.phone || '',
+          postcode: prev.postcode || profile?.postcode || '',
+        }))
+      }
+    }
+    fetchUserProfile()
+  }, [])
 
   const validateStep = (step: number): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}

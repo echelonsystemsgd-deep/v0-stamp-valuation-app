@@ -1,6 +1,6 @@
 # Implementation Plan - Phase 2: Authentication Flows
 
-This document outlines the detailed implementation plan for integrating Supabase user authentication, designing the login and registration pages, and setting up role-based middleware redirection.
+This document outlines the detailed implementation plan for integrating passwordless Supabase user authentication, designing the login and registration pages, setting up role-based middleware redirection, and establishing profile management with onboarding nudges.
 
 ---
 
@@ -20,105 +20,157 @@ We will implement the following auth-related routes:
 ```
 app/
 └── (auth)/
-    ├── login/page.tsx               # Login page with Email + Magic Link OTP options
-    ├── signup/page.tsx              # Sign up page
-    └── logout/route.ts              # Route handler to destroy cookies and sign out
+    ├── login/page.tsx               # Passwordless login page (Email + OTP Code / Magic Link)
+    ├── signup/page.tsx              # Passwordless registration page (Email + Name only)
+    └── logout/route.ts              # Route handler to destroy cookies and sign out (or action)
 ```
 
 ---
 
 ## 3. 🛠️ Implementation Steps
 
-### Step 1: Magic Link Integration
-1. Configure the Supabase Client in the application.
-2. Build the `/login` and `/signup` page interfaces.
-3. Hook up the forms to invoke Supabase Magic Link authentication:
-   ```typescript
-   const { data, error } = await supabase.auth.signInWithOtp({
-     email,
-     options: {
-       emailRedirectTo: `${window.location.origin}/auth/callback`, // Callback route that parses code/token
-     },
-   });
-   ```
-4. Create the `/auth/callback` page or route handler to exchange the OTP hash/code for a session and redirect to `/dashboard`.
+### Step 1: Passwordless Magic Link & OTP Integration
+1. **Supabase Client Setup**: Ensure `createClient` (browser-side) and `createServerSupabaseClient` (server-side) are properly imported.
+2. **Passwordless Login Page (`/login`)**:
+   *   Remove password fields/tabs. Provide a single unified email field.
+   *   Support two ways of logging in upon submitting the email:
+       1. **Magic Link Click**: User clicks the secure link in their email.
+       2. **OTP Code Entry**: User types a 6-digit verification code directly on `/login` (revealing an OTP input field after sending).
+   *   Disable the submit button for 60 seconds with a visual countdown timer after sending to prevent SMTP rate abuse.
+3. **Passwordless Signup Page (`/signup`)**:
+   *   Remove password and confirm-password fields.
+   *   Collect **Full Name** (maps to `options.data.full_name`) and **Email**.
+   *   Trigger the `signInWithOtp` call to sign up the new user and trigger public profile generation.
+4. **Auth Callback Route (`/auth/callback/route.ts`)**:
+   *   Exchange the code/token for a session and redirect the user to `/dashboard` (or the previous path via `redirectedFrom`).
+
+```typescript
+// Supabase call for passwordless entry
+const { data, error } = await supabase.auth.signInWithOtp({
+  email,
+  options: {
+    emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectedFrom)}`,
+    data: {
+      full_name: fullName, // Handled only during signup
+    }
+  },
+});
+```
 
 ### Step 2: Custom Logout Handler
-Create a server route `/logout/route.ts` to log out the user, destroy cookies, and redirect to the home page:
+Ensure the global logout action or `/logout` route handler destroys cookie sessions and redirects users back to `/login`:
 ```typescript
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 
-export async function POST(request: Request) {
-  const cookieStore = cookies();
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+export async function signOut() {
+  const supabase = await createServerSupabaseClient();
   await supabase.auth.signOut();
-  return NextResponse.redirect(new URL('/login', request.url), {
-    status: 303,
-  });
+  redirect('/login');
 }
 ```
 
 ### Step 3: Role Checker Middleware
-Create/Update `middleware.ts` in the root of the project to check user session roles server-side:
-1. Parse the user session using `@supabase/auth-helpers-nextjs` or `@supabase/ssr`.
-2. Retrieve the user's role from the database profiles table (or decode a custom claim if stored in JWT).
-3. Apply access control rules:
-   *   If trying to access `/dashboard` or its subpages without being authenticated: Redirect to `/login`.
-   *   If trying to access `/admin` or its subpages and the profile role is NOT `'admin'`: Redirect to `/dashboard` (or show a 403 Access Denied page).
-   *   If authenticated and trying to access `/login` or `/signup`: Auto-redirect to `/dashboard` (or `/admin` depending on role).
+Update `middleware.ts` to check user session roles server-side:
+*   If not logged in: Redirect `/dashboard` and `/admin` to `/login`.
+*   If logged in:
+    *   Redirect `/login` and `/signup` to `/dashboard` (or `/admin` if the user is an admin).
+    *   Block non-admins from accessing `/admin` (redirecting them to `/unauthorized`).
+    *   Redirect admins accessing `/dashboard` directly to `/admin`.
 
-### Step 4: User Profile Page & Navigation Dropdown
-To support profile management for users of all roles, we will implement the following:
+### Step 4: Non-Blocking Profile Onboarding & Autosave
 
-1. **Database Schema Update**:
-   * Add an `avatar_url` text column to the `public.profiles` table to store the storage URL of the user's avatar.
-   ```sql
-   ALTER TABLE public.profiles ADD COLUMN avatar_url TEXT;
-   ```
-2. **Supabase Storage Bucket**:
-   * Create a public storage bucket named `avatars` in Supabase to hold user profile pictures.
-   * Add Row Level Security (RLS) policies:
-     * **Public Read**: Allow anyone (public/anonymous) to download/view files.
-       ```sql
-       CREATE POLICY "Allow public read access" ON storage.objects
-       FOR SELECT USING (bucket_id = 'avatars');
-       ```
-     * **Owner Manage**: Allow authenticated users to upload, update, and delete objects in their own folder.
-       ```sql
-       CREATE POLICY "Allow users to manage own avatars" ON storage.objects
-       FOR ALL TO authenticated USING (
-         bucket_id = 'avatars' AND (storage.foldername(name))[1] = auth.uid()::text
-       );
-       ```
-3. **Dropdown Menu Navigation**:
-   * Update the desktop and mobile navigation in `components/layout/header.tsx` to replace the "Sign In" / "Valuation Console" text links for authenticated users with a profile picture button.
-   * If a user has an `avatar_url`, render the image; if not (or if it fails to load), render a styled placeholder containing the user's initials inside a gold-bordered circular badge.
-   * Clicking the profile picture toggles a dropdown menu containing:
-     * A user info summary (Name, Email, Role badge).
-     * A link to **Profile Settings** (taking admins to `/admin/settings` and standard users/sellers to `/dashboard/profile`).
-     * A button to **Log Out** (calling the sign-out actions handler).
-4. **Profile Page & Form Components**:
-   * Create the profile pages: `/app/dashboard/profile/page.tsx` for users/sellers and support updates for `/app/admin/settings` (or a dedicated admin profile subpage).
-   * Create a reusable profile form component allowing users to update their:
-     * Full Name
-     * Phone Number
-     * Postcode
-     * Profile picture (handled via interactive upload to the `avatars` storage bucket).
-   * Read-only displays for user role (`user`, `seller`, `admin`) and account status.
-   * Connect toast alerts (via `sonner`) for validation errors, upload progress, and success events.
+To prompt users to complete their profile without gating access to the dashboard:
+
+1. **Dashboard Onboarding Banner**:
+   *   On `/dashboard` (or in the dashboard layout), if `full_name`, `phone`, or `postcode` is missing from the user's profile, render a non-blocking, dismissible premium alert banner.
+   *   *Banner Text*: `"✉️ Complete your profile details to unlock seamless valuations and track payments. [Complete Profile ->]"` linking to `/dashboard/profile`.
+2. **Profile Completion Gating**:
+   *   Do **NOT** block dashboard entry.
+   *   Instead, enforce that `phone` and `postcode` are specifically required when performing high-intent actions, such as **accepting a quote** or **providing shipping details** in Phase 4.
+3. **Autosave Profile Details during Valuation Submission**:
+   *   When an authenticated user submits a valuation through the `SellForm` (which collects name, email, phone, and postcode), pre-fill the form with existing profile data.
+   *   If they fill in missing details, the backend submission endpoint (`/api/sell/route.ts`) will automatically write these details into their `public.profiles` row, completing their profile seamlessly.
+4. **Dropdown Menu Navigation**:
+   *   Update `components/layout/header.tsx` to replace "Sign In" with a profile avatar button (or initials badge in a gold border).
+   *   Dropdown options:
+       *   User Summary (Name, Email, Role badge).
+       *   **Profile Settings** (`/dashboard/profile` or `/admin/settings`).
+       *   **Log Out** (triggers Server Action).
+
+---
+
+## 📂 Database Schema updates
+
+### 1. Profile Avatar Columns
+```sql
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS avatar_url TEXT;
+```
+
+### 2. Storage Bucket for Avatars
+*   Create a public storage bucket `avatars`.
+*   Establish RLS Policies:
+    *   **Select**: Publicly readable.
+    *   **Insert/Update/Delete**: Restricted to authenticated users managing their own subfolder (matching `auth.uid()::text`).
+
+---
+
+## 🔒 Session & Rate-Limiting Policy
+
+1. **Session Length**:
+   *   **JWT Access Token Expiry**: 1 hour (Default).
+   *   **Refresh Token Expiry**: 1 year rolling. User remains logged in indefinitely as long as they are active.
+   *   **Global Sign Out**: Include a button on `/dashboard/profile` to sign out of all devices using `supabase.auth.signOut({ scope: 'global' })`.
+2. **Rate Limiting**:
+   *   **Supabase Level**: 30 requests per 5 minutes per IP (Default). SMTP cooldown of 60 seconds between magic link emails.
+   *   **Client Level**: 60-second submission lock on `/login` and `/signup` forms after requesting an OTP.
+   *   **Turnstile Captcha**: Deferred to a subsequent security hardening phase.
 
 ---
 
 ## 🧪 Verification & Testing Plan
 
-*   **Magic Link Test**: Enter an email in `/login`, receive the magic link, click it, and confirm successful authentication and redirection to `/dashboard`.
-*   **Unauthorized Middleware Test**: Access `/admin` or `/dashboard` directly without logging in and confirm automatic redirection to `/login`.
-*   **Non-Admin Redirect Test**: Log in as a standard user (`role = 'user'` or `'seller'`) and try to browse to `/admin`. Verify that Middleware intercepts and redirects to `/dashboard`.
-*   **Logout Test**: Click the Logout button and confirm the user session is destroyed, cookies are cleared, and they are redirected back to `/login`.
-*   **Profile Picture Placeholder Test**: Log in with an account that has no avatar set, and verify that the header displays the initials placeholder with a premium aesthetic border.
-*   **Dropdown Toggle Test**: Click the profile button in the header, verify that the dropdown opens with 'Profile' and 'Log Out' links, and closes when clicking outside or selecting an option.
-*   **Profile Page Navigation**: Click the 'Profile' option in the dropdown and confirm that the user is correctly routed (Admins to `/admin/settings` and standard users to `/dashboard/profile`).
-*   **Avatar Upload & Update Test**: Upload a profile picture on the profile page, verify the upload completes, and check that the header profile button updates immediately with the new image.
-*   **Profile Field Modification Test**: Modify name/phone/postcode on the profile settings page, save changes, and verify that the database profile table updates and reflect on page refresh.
+### 🚀 Phase 2 Implementation Checklist
+
+- [x] **Auth Client Configuration**
+  - [x] Validate cookie middleware matches Next.js App Router rules.
+  - [x] Configure local and production Supabase clients.
+
+- [x] **Passwordless Pages**
+  - [x] Clean `/login` page containing only email input (no password fields).
+  - [x] UI-level 60s cooldown timer upon clicking "Send Link".
+  - [x] 6-digit OTP input field shown after submitting email.
+  - [x] Clean `/signup` page collecting only Full Name and Email.
+
+- [x] **Auth Callback & Middleware**
+  - [x] `/auth/callback` endpoint successfully exchanges OTP code/hash for session.
+  - [x] Middleware blocks unauthenticated `/dashboard` and `/admin` access.
+  - [x] Middleware blocks non-admin access to `/admin`.
+  - [x] Middleware redirects logged-in users away from `/login` and `/signup`.
+
+- [x] **Onboarding & Header UX**
+  - [x] Dismissible onboarding banner shown in `/dashboard` if profile fields are empty.
+  - [x] Header updates with initials badge/avatar on successful login.
+  - [x] Dropdown menu works with correct links and log out button.
+  - [x] Global sign out button on profile settings page functions.
+
+- [x] **Profile Page & Storage**
+  - [x] `/dashboard/profile` allows updating Full Name, Phone, and Postcode.
+  - [x] Avatar upload works and updates profile photo bucket.
+  - [x] RLS policies restrict avatar updates to the user's folder.
+
+- [x] **Autosave Submission Verification**
+  - [x] Logged-in user submission pre-fills form data.
+  - [x] Submitting a form writes missing profile details to database automatically.
+
+---
+
+### Manual Verification Scenarios
+
+*   **Test Magic Link**: Enter email in `/login`, receive email, click link -> redirected to `/dashboard`.
+*   **Test OTP Code**: Enter email in `/login`, copy 6-digit OTP code from email, paste code into OTP input field -> logged in.
+*   **Test Rate-Limit Cooldown**: Click "Send Magic Link", verify button is disabled and displays a countdown timer. Attempting to submit again is blocked.
+*   **Test Role Access Interception**: Log in as a seller. Attempt to visit `/admin`. Verify middleware redirects to `/unauthorized`.
+*   **Test Onboarding Banner**: Log in with a fresh email, verify onboarding banner is displayed in the dashboard. Fill out profile fields, refresh, verify banner disappears.
+*   **Test Submission Profile Write**: Submit an appraisal as a logged-in user with an incomplete profile. Verify that `public.profiles` is populated with the form's phone and postcode upon submission.
+*   **Test Global Logout**: Click "Sign out of all devices" on `/dashboard/profile`. Verify all browser sessions on different devices are invalidated.
