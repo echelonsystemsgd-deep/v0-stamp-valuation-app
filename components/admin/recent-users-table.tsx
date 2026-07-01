@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import React from 'react'
+import { useOnlinePresence } from '@/lib/presence-context'
 
 interface UserProfile {
   id: string
@@ -16,25 +16,7 @@ interface RecentUsersTableProps {
 }
 
 export function RecentUsersTable({ initialUsers }: RecentUsersTableProps) {
-  const [users] = useState<UserProfile[]>(initialUsers)
-  const [onlineUserIds, setOnlineUserIds] = useState<Set<string>>(new Set())
-  const supabase = createClient()
-
-  useEffect(() => {
-    const channel = supabase.channel('online-users')
-
-    channel
-      .on('presence', { event: 'sync' }, () => {
-        const state = channel.presenceState()
-        const onlineIds = new Set(Object.keys(state))
-        setOnlineUserIds(onlineIds)
-      })
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [supabase])
+  const { onlineUserIds } = useOnlinePresence()
 
   return (
     <div className="overflow-x-auto">
@@ -48,8 +30,8 @@ export function RecentUsersTable({ initialUsers }: RecentUsersTableProps) {
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
-          {users && users.length > 0 ? (
-            users.map((u) => (
+          {initialUsers && initialUsers.length > 0 ? (
+            initialUsers.map((u) => (
               <tr key={u.id} className="hover:bg-slate-50/50">
                 <td className="py-3 text-sm font-semibold text-slate-700">{u.email}</td>
                 <td className="py-3 text-sm text-slate-500">{u.full_name || 'Not provided'}</td>
@@ -62,7 +44,7 @@ export function RecentUsersTable({ initialUsers }: RecentUsersTableProps) {
                     </span>
                   ) : onlineUserIds.has(u.id) ? (
                     <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                       Online
                     </span>
                   ) : (

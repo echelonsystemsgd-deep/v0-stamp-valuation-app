@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useTransition } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { useOnlinePresence } from '@/lib/presence-context'
 import { 
   Search, 
   Users, 
@@ -33,7 +34,7 @@ export default function SellerAccountsPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [currentAdminId, setCurrentAdminId] = useState<string | null>(null)
   const [currentAdminRole, setCurrentAdminRole] = useState<'admin' | 'staff' | 'user' | null>(null)
-  const [onlineUserIds, setOnlineUserIds] = useState<Set<string>>(new Set())
+  const { onlineUserIds } = useOnlinePresence()
 
   // Ban/Restrict Modal states
   const [showBanModal, setShowBanModal] = useState(false)
@@ -43,22 +44,6 @@ export default function SellerAccountsPage() {
   const [isPending, startTransition] = useTransition()
   const supabase = createClient()
 
-  // Track online/offline users via Presence channel
-  useEffect(() => {
-    const channel = supabase.channel('online-users')
-
-    channel
-      .on('presence', { event: 'sync' }, () => {
-        const state = channel.presenceState()
-        const onlineIds = new Set(Object.keys(state))
-        setOnlineUserIds(onlineIds)
-      })
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [supabase])
 
   // Fetch profiles list
   const fetchProfiles = async () => {
