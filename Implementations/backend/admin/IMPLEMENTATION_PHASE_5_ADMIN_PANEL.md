@@ -1,6 +1,6 @@
 # Implementation Plan - Phase 5: Admin Management Panel
 
-This document outlines the detailed implementation plan for developing the secure administrative dashboard. It includes submission filters, the physical appraisal editor workspace, payment logging, category rate controls, and seller management audits.
+This document outlines the detailed implementation plan for developing the secure administrative dashboard. It includes submission filters, the physical appraisal editor workspace, payment logging, category rate controls, seller management audits, and the admin-side chat interface.
 
 ---
 
@@ -24,7 +24,7 @@ app/
     ├── page.tsx                     # Admin overview (Metrics, pending counts, charts)
     ├── submissions/
     │   ├── page.tsx                 # Submissions list (Status filters, search, pagination)
-    │   └── [id]/page.tsx            # Appraisal workspace (Verify items, adjust amounts, log payouts)
+    │   └── [id]/page.tsx            # Appraisal workspace (Verify items, adjust amounts, log payouts, chat)
     ├── categories/
     │   └── page.tsx                 # Stamp rates manager (CRUD, edit rates, pause category)
     ├── sellers/
@@ -32,6 +32,10 @@ app/
     └── reports/
         └── page.tsx                 # Valuation graphs, payout metrics, volume charts
 ```
+
+> [!NOTE]
+> **Cross-Phase Dependency**:
+> This phase relies on the `public.submission_messages` table and Supabase Realtime publication configured in Phase 4.
 
 ---
 
@@ -50,7 +54,7 @@ app/
 2. Add filters for status (e.g. `quote_requested`, `under_review`, `approved`, `paid`).
 3. Implement tabular layout with page pagination to manage large volume loads.
 
-### Step 3: Appraisal Workspace (`/admin/submissions/[id]/page.tsx`)
+### Step 3: Appraisal Workspace & Seller Chat (`/admin/submissions/[id]/page.tsx`)
 1. **Photo Appraisal Panel**: Render uploaded submission images in a side-by-side or carousel view.
 2. **Item Count Adjuster Table**:
    *   Render the list of categories in the submission.
@@ -61,6 +65,12 @@ app/
    *   Triggers when marked as `paid`.
    *   Fields: Payment Method (`bank_transfer`/`cheque`), Reference Number (Transaction ID / Cheque #), Amount.
    *   Saves the details to the `payouts` table.
+5. **Lightweight Seller Messaging Board (Phase 4 Dependency)**:
+   *   Embed the admin-side messaging widget in the workspace sidebar or detail panel.
+   *   Show chronological message logs between the seller and admins.
+   *   Implement an input text area with a "Send Reply" button. Saving a message inserts a row in `submission_messages` with `sender_id = auth.uid()` (admin's profile ID) and resets `is_read_by_seller` to `false`.
+   *   Utilize Supabase Realtime to stream incoming messages from the seller instantly.
+   *   Provide an automatic trigger to mark incoming messages as read by admin (`is_read_by_admin = true`) when the workspace page is open.
 
 ### Step 4: Category Rates Manager (`/admin/categories/page.tsx`)
 1. List all active stamp category entries.
@@ -81,4 +91,8 @@ app/
 *   **Access Verification**: Log in as a non-admin and attempt to load `/admin`. Ensure middleware intercepts and redirects.
 *   **Appraisal Quantity Adjustment**: In the workspace, edit the audited quantity of an item. Verify that total calculations update instantly and accurately.
 *   **Log Payment Flow**: Complete an appraisal, trigger the "Log Payment" modal, input a transaction code, and click submit. Verify the submission status changes to `paid` and a record is created in the `payouts` table.
+*   **Realtime Seller Communication Thread**:
+    *   Open both the seller submission details page and the admin appraisal workspace side-by-side.
+    *   Send a message from the seller side; verify it appears in the admin workspace live without page refresh.
+    *   Send a reply from the admin side; verify it appears on the seller's dashboard live and updates `is_read_by_seller` and `is_read_by_admin` statuses correctly.
 *   **Rates Auditor Check**: Edit a stamp buy-back rate in `/admin/categories` and verify that a new entry appears in the `rate_changes_history` table detailing the old rate, new rate, and the changing admin's user ID.
