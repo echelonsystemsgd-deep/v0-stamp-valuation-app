@@ -51,8 +51,10 @@ export function SidebarNav({ user, profile, className }: SidebarNavProps) {
     if (role !== 'admin' && role !== 'staff') return
 
     const supabase = createClient()
+    let isMounted = true
 
     const fetchCounts = async () => {
+      if (!isMounted) return
       // Pending submissions count: quote_requested, received, under_review
       const { count: pendingCount } = await supabase
         .from('submissions')
@@ -65,15 +67,19 @@ export function SidebarNav({ user, profile, className }: SidebarNavProps) {
         .select('*', { count: 'exact', head: true })
         .eq('role', 'seller')
 
+      if (!isMounted) return
       setPendingSubmissionsCount(pendingCount || 0)
       setActiveSellersCount(sellersCount || 0)
     }
 
     fetchCounts()
 
+    // Use a unique ID per mount to avoid Strict Mode channel name collisions
+    const instanceId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+
     // Realtime subscription for submissions
     const submissionsChannel = supabase
-      .channel('sidebar-submissions-realtime')
+      .channel(`sidebar-submissions-${instanceId}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'submissions' },
@@ -85,7 +91,7 @@ export function SidebarNav({ user, profile, className }: SidebarNavProps) {
 
     // Realtime subscription for profiles
     const profilesChannel = supabase
-      .channel('sidebar-profiles-realtime')
+      .channel(`sidebar-profiles-${instanceId}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'profiles' },
@@ -96,6 +102,7 @@ export function SidebarNav({ user, profile, className }: SidebarNavProps) {
       .subscribe()
 
     return () => {
+      isMounted = false
       supabase.removeChannel(submissionsChannel)
       supabase.removeChannel(profilesChannel)
     }

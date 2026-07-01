@@ -163,9 +163,12 @@ export function SubmissionDetailClient({
 
   // Realtime subscription for submissions status & chat messages
   useEffect(() => {
+    let isMounted = true
+
     // 1. Subscribe to Submission table updates
+    const mountId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
     const subChannel = supabase
-      .channel(`submission-detail-${submission.id}`)
+      .channel(`submission-detail-${submission.id}-${mountId}`)
       .on(
         'postgres_changes',
         {
@@ -175,6 +178,7 @@ export function SubmissionDetailClient({
           filter: `id=eq.${submission.id}`
         },
         (payload) => {
+          if (!isMounted) return
           setSubmission(payload.new as Submission)
           toast.info(`Appraisal status updated: ${STATE_LABELS[payload.new.status as Submission['status']]}`)
         }
@@ -183,7 +187,7 @@ export function SubmissionDetailClient({
 
     // 2. Subscribe to Messages updates
     const msgChannel = supabase
-      .channel(`submission-messages-${submission.id}`)
+      .channel(`submission-messages-${submission.id}-${mountId}`)
       .on(
         'postgres_changes',
         {
@@ -201,6 +205,7 @@ export function SubmissionDetailClient({
             .eq('id', newMsg.sender_id || '')
             .single()
 
+          if (!isMounted) return
           const populatedMsg: Message = {
             ...newMsg,
             profiles: profile || null
@@ -222,6 +227,7 @@ export function SubmissionDetailClient({
     markAsRead()
 
     return () => {
+      isMounted = false
       supabase.removeChannel(subChannel)
       supabase.removeChannel(msgChannel)
     }

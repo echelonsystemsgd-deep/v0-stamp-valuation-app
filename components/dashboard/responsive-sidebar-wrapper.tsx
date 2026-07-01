@@ -13,6 +13,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
+import { createClient } from '@/lib/supabase/client'
 
 interface ResponsiveSidebarWrapperProps {
   user: {
@@ -31,6 +32,36 @@ export function ResponsiveSidebarWrapper({ user, profile, children }: Responsive
   useEffect(() => {
     setIsOpen(false)
   }, [pathname])
+
+  // Real-time online presence tracking
+  useEffect(() => {
+    if (!user?.id) return
+
+    const supabase = createClient()
+    const mountId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+    const channel = supabase.channel('online-users', {
+      config: {
+        presence: {
+          key: user.id,
+        },
+      },
+    })
+
+    channel.subscribe(async (status) => {
+      if (status === 'SUBSCRIBED') {
+        await channel.track({
+          user_id: user.id,
+          email: user.email,
+          role: profile?.role || 'user',
+          online_at: new Date().toISOString(),
+        })
+      }
+    })
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [user?.id, profile?.role])
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#FBFBF9] flex-col lg:flex-row">
@@ -70,12 +101,10 @@ export function ResponsiveSidebarWrapper({ user, profile, children }: Responsive
         </span>
       </header>
 
-      {/* Desktop Sidebar (Permanent) */}
-      <SidebarNav
-        user={user}
-        profile={profile}
-        className="hidden lg:flex"
-      />
+      {/* Desktop Sidebar — hidden below lg, visible at lg+ */}
+      <div className="hidden lg:block shrink-0">
+        <SidebarNav user={user} profile={profile} />
+      </div>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0">

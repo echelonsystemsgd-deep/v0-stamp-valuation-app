@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { Users, FileText, LayoutGrid, ShieldAlert, Award } from 'lucide-react'
+import { RecentUsersTable } from '@/components/admin/recent-users-table'
 
 export const dynamic = 'force-dynamic'
 
@@ -116,40 +117,7 @@ export default async function AdminPage() {
           <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
             <h2 className="font-serif text-2xl font-bold text-[#0B1D2E] mb-6">Recent Registered Users</h2>
             
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-slate-100">
-                <thead>
-                  <tr>
-                    <th className="text-left text-xs font-bold text-slate-400 uppercase tracking-wider pb-4">Email</th>
-                    <th className="text-left text-xs font-bold text-slate-400 uppercase tracking-wider pb-4">Name</th>
-                    <th className="text-left text-xs font-bold text-slate-400 uppercase tracking-wider pb-4">Role</th>
-                    <th className="text-left text-xs font-bold text-slate-400 uppercase tracking-wider pb-4">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {recentUsers && recentUsers.length > 0 ? (
-                    recentUsers.map((u) => (
-                      <tr key={u.id} className="hover:bg-slate-50/50">
-                        <td className="py-3 text-sm font-semibold text-slate-700">{u.email}</td>
-                        <td className="py-3 text-sm text-slate-500">{u.full_name || 'Not provided'}</td>
-                        <td className="py-3 text-sm font-bold text-amber-600 capitalize">{u.role}</td>
-                        <td className="py-3 text-sm">
-                          <span className="inline-flex items-center text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full capitalize">
-                            {u.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={4} className="py-6 text-center text-sm text-slate-400">
-                        No users registered.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <RecentUsersTable initialUsers={recentUsers || []} />
           </div>
 
           {/* Quick Actions */}

@@ -1,6 +1,6 @@
 # Implementation Plan - Phase 6: Pre-Launch System & Responsive Audit
 
-This document serves as the permanent record of the Phase 6 Pre-Launch Audit. It covers the full system validation (auth, roles, routing, database) and responsive design checks across desktop, tablet, and mobile breakpoints, detailing the layout issues identified and the subsequent technical resolutions.
+This document serves as the permanent record of the Phase 6 Pre-Launch Audit. It covers the full system validation (auth, roles, routing, database) and responsive design checks across desktop, tablet, and mobile breakpoints, detailing the issues identified and the subsequent technical resolutions.
 
 ---
 
@@ -13,12 +13,20 @@ This document serves as the permanent record of the Phase 6 Pre-Launch Audit. It
   - The Postgres email-verification trigger links guest submissions to confirmed user profiles in the database correctly, preserving records on registration.
 - **Database & Realtime Subscriptions**:
   - Submissions tables and chat messages successfully use Supabase Realtime channels (`supabase.channel()`) to listen for update events and redraw components dynamically.
+  - **Issue (Strict Mode Crashes)**: React Strict Mode double-mounts caused fatal crashes where components tried to subscribe to already active realtime channel names (e.g. `Uncaught Error: cannot add postgres_changes callbacks after subscribe()`).
+  - **Fix**: Appended unique mount identifiers (`Date.now()` and random suffixes) and added `isMounted` safety guards to all realtime subscribers.
+- **Account Status Database Realignment**:
+  - **Issue**: The admin panels tried to read `u.status` (an always-green badge) which was undefined because the database uses the `is_suspended` (boolean) column instead of `status`.
+  - **Fix**: Realigned the Sellers Accounts directory and Recent Users table to render badges dynamically based on `is_suspended` and live Presence status.
+- **Realtime Online/Offline Presence**:
+  - **Issue**: Users were showing as offline because of different Presence channel names.
+  - **Fix**: Standardized and joined the global `'online-users'` channel in `ResponsiveSidebarWrapper` (tracker), `RecentUsersTable` (listener), and `sellers/page.tsx` (listener) to synchronize active sessions.
 - **Compilation Health**:
   - Code compiles without TypeScript errors, next-dev warnings, or deployment-blocking failures.
 
 ---
 
-### Pass 2: Full Responsive/Device Audit Findings
+## 2. Full Responsive/Device Audit Findings
 
 - **Header Phone Representation**:
   - **Issue**: The full business phone number string (`+44 (0)20 1234 5678`) was rendered directly next to the logo on narrow screens. This caused clipping, overlap, and horizontal layout overflow on viewports under `400px`.
@@ -32,7 +40,7 @@ This document serves as the permanent record of the Phase 6 Pre-Launch Audit. It
 
 ---
 
-## 2. Technical Implementation Steps
+## 3. Technical Implementation Steps
 
 ### Step 1: Linter & Build Warnings Cleanup
 - Configured `.eslintignore` in the project root to exclude helper utility scripts in the `scratch/` folder, removing four TS-JS require warnings and establishing clean linter outputs.
@@ -47,12 +55,15 @@ This document serves as the permanent record of the Phase 6 Pre-Launch Audit. It
   - Configurable `className` styling injection for standard sidebar views.
 - Updated `app/admin/layout.tsx` and `app/dashboard/layout.tsx` to use the responsive shell wrapper.
 
-### Step 4: Flex Workstation Header Refactoring
-- Updated `app/admin/submissions/[id]/page.tsx` top action header, applying responsive layouts (`flex-col md:flex-row`) and button alignment rules to adapt to smaller viewports.
+### Step 4: Supabase Realtime & Presence Implementation
+- Standardized all client realtime channels (`sidebar-nav.tsx`, `submissions-dashboard.tsx`, `submission-detail-client.tsx`, `page.tsx`) to prevent React Strict Mode collisions using unique mount-bound channel suffixes and `isMounted` guards.
+- Implemented global Presence tracking over the `'online-users'` channel inside the sidebar wrapper.
+- Extracted the Recent Users table in `app/admin/page.tsx` into a client-side component `RecentUsersTable` that updates user statuses to **Online** or **Offline** based on Presence.
+- Updated `sellers/page.tsx` directory with segmented filters (All, Online, Offline, Suspended) and presence-tracking logic.
 
 ---
 
-## 3. Verification & Testing Checklist
+## 4. Verification & Testing Checklist
 
 - [x] **Lint & Build Validation**
   - Run `npm run lint` and confirm no compile-blocking code quality errors.
@@ -66,3 +77,5 @@ This document serves as the permanent record of the Phase 6 Pre-Launch Audit. It
   - Verify navigation options work correctly and close the drawer automatically upon selection.
 - [x] **Workstation Workspace Checks**
   - Verify admin workstation buttons stack correctly without overlapping title text.
+- [x] **Realtime Presence Checks**
+  - Verify logging in/out of a seller account immediately flips their status between **Online** and **Offline** on the Admin dashboard and Sellers account directory.

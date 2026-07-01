@@ -115,21 +115,32 @@ export default function SubmissionsPage() {
   }
 
   useEffect(() => {
-    fetchSubmissions()
+    let isMounted = true
+    
+    const fetchWithGuard = async () => {
+      if (!isMounted) return
+      await fetchSubmissions()
+    }
+    
+    fetchWithGuard()
 
     // Realtime changes listener
+    const instanceId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
     const channel = supabase
-      .channel('admin-submissions-queue')
+      .channel(`admin-submissions-queue-${instanceId}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'submissions' },
         () => {
-          fetchSubmissions()
+          if (isMounted) {
+            fetchSubmissions()
+          }
         }
       )
       .subscribe()
 
     return () => {
+      isMounted = false
       supabase.removeChannel(channel)
     }
   }, [])

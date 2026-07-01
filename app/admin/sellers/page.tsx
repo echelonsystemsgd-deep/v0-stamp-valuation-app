@@ -21,8 +21,7 @@ interface Profile {
   email: string
   full_name: string | null
   role: 'user' | 'seller' | 'admin' | 'staff'
-  status: 'active' | 'restricted' | 'banned'
-  ban_reason: string | null
+  is_suspended: boolean
   created_at: string
 }
 
@@ -30,10 +29,11 @@ export default function SellerAccountsPage() {
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [activeTab, setActiveTab] = useState<'all' | 'active' | 'restricted' | 'banned'>('all')
+  const [activeTab, setActiveTab] = useState<'all' | 'online' | 'offline' | 'suspended'>('all')
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [currentAdminId, setCurrentAdminId] = useState<string | null>(null)
   const [currentAdminRole, setCurrentAdminRole] = useState<'admin' | 'staff' | 'user' | null>(null)
+  const [onlineUserIds, setOnlineUserIds] = useState<Set<string>>(new Set())
 
   // Ban/Restrict Modal states
   const [showBanModal, setShowBanModal] = useState(false)
@@ -42,6 +42,23 @@ export default function SellerAccountsPage() {
 
   const [isPending, startTransition] = useTransition()
   const supabase = createClient()
+
+  // Track online/offline users via Presence channel
+  useEffect(() => {
+    const channel = supabase.channel('online-users')
+
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState()
+        const onlineIds = new Set(Object.keys(state))
+        setOnlineUserIds(onlineIds)
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [supabase])
 
   // Fetch profiles list
   const fetchProfiles = async () => {
@@ -84,7 +101,10 @@ export default function SellerAccountsPage() {
     if (!matchesSearch) return false
 
     if (activeTab === 'all') return true
-    return p.status === activeTab
+    if (activeTab === 'online') return !p.is_suspended && onlineUserIds.has(p.id)
+    if (activeTab === 'offline') return !p.is_suspended && !onlineUserIds.has(p.id)
+    if (activeTab === 'suspended') return p.is_suspended
+    return true
   })
 
   // Select Row handlers
@@ -104,39 +124,32 @@ export default function SellerAccountsPage() {
     }
   }
 
-  // Bulk Status updates
-  const handleBulkStatusChange = async (status: 'active' | 'restricted' | 'banned', reason?: string) => {
+  // Bulk Status updates — toggle is_suspended on selected profiles
+  const handleBulkStatusChange = async (suspend: boolean, reason?: string) => {
     if (selectedIds.length === 0) return
 
     startTransition(async () => {
       try {
-        const updates: Partial<Profile> = { status }
-        if (status === 'restricted' || status === 'banned') {
-          updates.ban_reason = reason || 'Suspended by administrative bulk actions'
-        } else {
-          updates.ban_reason = null
-        }
-
         const { error } = await supabase
           .from('profiles')
-          .update(updates)
+          .update({ is_suspended: suspend })
           .in('id', selectedIds)
 
         if (error) throw error
 
-        // Also write log entries to admin_audit_logs if applicable
+        // Write audit log entries
         if (currentAdminId) {
           for (const targetId of selectedIds) {
             await supabase.from('admin_audit_logs').insert({
               admin_id: currentAdminId,
-              action_type: `account_${status}`,
+              action_type: suspend ? 'account_suspended' : 'account_activated',
               target_user_id: targetId,
-              reason: updates.ban_reason || 'Status cleared'
+              reason: reason || (suspend ? 'Suspended by admin' : 'Account reactivated by admin')
             })
           }
         }
 
-        toast.success(`Successfully updated ${selectedIds.length} profiles status to ${status}.`)
+        toast.success(`Successfully ${suspend ? 'suspended' : 'activated'} ${selectedIds.length} account(s).`)
         setSelectedIds([])
         setShowBanModal(false)
         setBanReason('')
@@ -170,8 +183,9 @@ export default function SellerAccountsPage() {
         )}
 
         {/* Tab Filters */}
+        {/* Tab Filters */}
         <div className="border-b border-slate-200/60 flex gap-4 scrollbar-none">
-          {(['all', 'active', 'restricted', 'banned'] as const).map(tab => (
+          {(['all', 'online', 'offline', 'suspended'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -182,7 +196,7 @@ export default function SellerAccountsPage() {
                   : 'border-transparent text-slate-400 hover:text-slate-700'
               )}
             >
-              {tab} Accounts
+              {tab === 'all' ? 'All Accounts' : tab === 'online' ? 'Online' : tab === 'offline' ? 'Offline' : 'Suspended'}
             </button>
           ))}
         </div>
@@ -281,17 +295,25 @@ export default function SellerAccountsPage() {
                           {p.role}
                         </td>
                         <td className="py-4 px-4 text-center">
-                          <span className={cn(
-                            'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border',
-                            p.status === 'active' && 'bg-emerald-50 text-[#14452F] border-[#14452F]/15',
-                            p.status === 'restricted' && 'bg-amber-50 text-[#C5A059] border-[#C5A059]/25',
-                            p.status === 'banned' && 'bg-red-50 text-red-700 border-red-200'
-                          )}>
-                            {p.status}
-                          </span>
+                          {p.is_suspended ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border bg-red-50 text-red-700 border-red-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                              Suspended
+                            </span>
+                          ) : onlineUserIds.has(p.id) ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border bg-emerald-50 text-emerald-700 border-emerald-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                              Online
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border bg-slate-50 text-slate-600 border-slate-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                              Offline
+                            </span>
+                          )}
                         </td>
                         <td className="py-4 px-6 text-xs text-slate-500 italic max-w-xs truncate">
-                          {p.ban_reason || '-'}
+                          {p.is_suspended ? 'Account suspended by admin' : '-'}
                         </td>
                       </tr>
                     )
@@ -312,7 +334,7 @@ export default function SellerAccountsPage() {
           
           <div className="flex items-center gap-2">
             <button
-              onClick={() => handleBulkStatusChange('active')}
+              onClick={() => handleBulkStatusChange(false)}
               disabled={isPending}
               className="flex items-center gap-1.5 bg-[#14452F] hover:bg-[#14452F]/90 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-[#14452F]/30 transition-all cursor-pointer disabled:opacity-50"
             >
@@ -327,7 +349,7 @@ export default function SellerAccountsPage() {
               }}
               className="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-amber-600/30 transition-all cursor-pointer"
             >
-              <AlertTriangle className="h-3.5 w-3.5" /> Restrict
+              <AlertTriangle className="h-3.5 w-3.5" /> Suspend
             </button>
 
             <button
@@ -393,7 +415,7 @@ export default function SellerAccountsPage() {
                 <button
                   type="button"
                   disabled={isPending || !banReason.trim()}
-                  onClick={() => handleBulkStatusChange(banType, banReason)}
+                  onClick={() => handleBulkStatusChange(true, banReason)}
                   className={cn(
                     'flex-1 py-3 text-xs font-bold uppercase tracking-wider text-white rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50',
                     banType === 'restricted' ? 'bg-amber-600 hover:bg-amber-700' : 'bg-red-650 hover:bg-red-750'

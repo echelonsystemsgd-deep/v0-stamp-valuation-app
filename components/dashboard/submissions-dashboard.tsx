@@ -88,8 +88,9 @@ export function SubmissionsDashboard({ initialSubmissions, userId }: Submissions
     fetchUnreadCounts()
 
     // Realtime channel for unread counts
+    const mountId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
     const channel = supabase
-      .channel('unread-messages-count-realtime')
+      .channel(`unread-messages-${userId}-${mountId}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'submission_messages' },
@@ -102,12 +103,13 @@ export function SubmissionsDashboard({ initialSubmissions, userId }: Submissions
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [submissions, supabase])
+  }, [submissions, supabase, userId])
 
   // Realtime Subscriptions
   useEffect(() => {
+    const mountId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
     const channel = supabase
-      .channel(`submissions-dashboard-${userId}`)
+      .channel(`submissions-dashboard-${userId}-${mountId}`)
       .on(
         'postgres_changes',
         {

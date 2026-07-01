@@ -130,6 +130,7 @@ interface Profile {
   payout_details: {
     payout_method?: string
     bank_name?: string
+    payee_name?: string
     account_number?: string
     sort_code?: string
     cheque_recipient?: string
@@ -305,11 +306,13 @@ export default function SubmissionWorkspace() {
   }
 
   useEffect(() => {
+    let isMounted = true
     fetchAllData()
 
     // Realtime subscribers
+    const mountId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
     const messagesSubscription = supabase
-      .channel(`appraisal-messages-${id}`)
+      .channel(`appraisal-messages-${id}-${mountId}`)
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'submission_messages', filter: `submission_id=eq.${id}` },
@@ -320,6 +323,8 @@ export default function SubmissionWorkspace() {
             .select('*, profiles(full_name, email, role)')
             .eq('id', payload.new.id)
             .single()
+
+          if (!isMounted) return
 
           if (newMsg) {
             setMessages(prev => [...prev, newMsg])
@@ -334,6 +339,7 @@ export default function SubmissionWorkspace() {
       .subscribe()
 
     return () => {
+      isMounted = false
       supabase.removeChannel(messagesSubscription)
     }
   }, [id])
