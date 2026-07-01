@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, PhoneCall } from 'lucide-react'
+import { Menu, PhoneCall, Settings, LogOut, User as UserIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -13,6 +13,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { mainNavigation, contactInfo } from '@/data/navigation'
 import { cn } from '@/lib/utils'
 import { PageBreadcrumbs } from '@/components/layout/breadcrumbs'
@@ -25,7 +34,8 @@ export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false)
   const [isOpen, setIsOpen] = React.useState(false)
   const [user, setUser] = React.useState<User | null>(null)
-  const [profile, setProfile] = React.useState<{ full_name?: string; role: 'user' | 'seller' | 'admin' } | null>(null)
+  const [profile, setProfile] = React.useState<{ full_name?: string; role: 'user' | 'seller' | 'admin'; avatar_url?: string | null } | null>(null)
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = React.useState<string | null>(null)
   const pathname = usePathname()
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -35,38 +45,65 @@ export function Header() {
     }
   }
 
+  const fetchProfile = React.useCallback(async (userId: string) => {
+    const supabase = createClient()
+    const { data } = await supabase
+      .from('profiles')
+      .select('full_name, role, avatar_url')
+      .eq('id', userId)
+      .single()
+    setProfile(data as any)
+  }, [])
+
   React.useEffect(() => {
     const supabase = createClient()
 
-    const fetchProfile = async (userId: string) => {
-      const { data } = await supabase
-        .from('profiles')
-        .select('full_name, role')
-        .eq('id', userId)
-        .single()
-      setProfile(data as any)
-    }
-
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
-      if (session?.user) {
-        fetchProfile(session.user.id)
-      } else {
-        setProfile(null)
-      }
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
-      if (session?.user) {
-        fetchProfile(session.user.id)
-      } else {
-        setProfile(null)
-      }
     })
 
     return () => subscription.unsubscribe()
   }, [])
+
+  React.useEffect(() => {
+    if (user?.id) {
+      fetchProfile(user.id)
+    } else {
+      setProfile(null)
+    }
+  }, [user?.id, pathname, fetchProfile])
+
+  React.useEffect(() => {
+    if (!profile?.avatar_url) {
+      setAvatarPreviewUrl(null)
+      return
+    }
+
+    const getSignedUrl = async () => {
+      if (profile.avatar_url!.startsWith('http')) {
+        setAvatarPreviewUrl(profile.avatar_url!)
+        return
+      }
+
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase.storage
+          .from('avatars')
+          .createSignedUrl(profile.avatar_url!, 3600)
+        
+        if (error) throw error
+        setAvatarPreviewUrl(data.signedUrl)
+      } catch (err) {
+        console.error('Error creating header signed URL:', err)
+      }
+    }
+
+    getSignedUrl()
+  }, [profile?.avatar_url])
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -144,23 +181,94 @@ export function Header() {
                 <span className="font-bold tracking-tight text-xl">{contactInfo.phone}</span>
               </a>
             </div>
-            <Link
-              href={profile?.role === 'admin' ? '/admin' : '/dashboard'}
-              className={cn(
-                'text-base font-semibold transition-all duration-300 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm px-1 py-2 relative group/nav whitespace-nowrap mr-2',
-                pathname === '/dashboard' || pathname === '/admin' || pathname === '/login'
-                  ? 'text-forest-green dark:text-gold'
-                  : 'text-slate-700 dark:text-slate-300 hover:text-forest-green dark:hover:text-gold'
-              )}
-            >
-              {user 
-                ? (profile?.role === 'admin' ? 'Admin Console' : 'Valuation Console') 
-                : 'Sign In'}
-              <span className={cn(
-                "absolute bottom-0 left-1 right-1 h-0.5 transition-all duration-300 transform scale-x-0 group-hover/nav:scale-x-100 origin-left bg-forest-green dark:bg-gold",
-                (pathname === '/dashboard' || pathname === '/admin' || pathname === '/login') && "scale-x-100"
-              )} />
-            </Link>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-10 w-10 rounded-full border border-slate-200 dark:border-slate-850 p-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 overflow-hidden hover:opacity-90 transition-opacity cursor-pointer flex-shrink-0 mr-2"
+                  >
+                    <Avatar className="h-full w-full">
+                      {avatarPreviewUrl ? (
+                        <AvatarImage
+                          src={avatarPreviewUrl}
+                          alt={profile?.full_name || user.email || 'User Avatar'}
+                          className="object-cover"
+                        />
+                      ) : null}
+                      <AvatarFallback className="bg-forest-green/10 text-forest-green dark:bg-gold/10 dark:text-gold font-bold text-sm">
+                        {(profile?.full_name || user.email || 'U').charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-60 bg-white dark:bg-navy border border-slate-200/80 dark:border-white/10 rounded-xl p-2 shadow-xl" align="end">
+                  <DropdownMenuLabel className="font-normal px-3 py-2.5">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-bold text-slate-800 dark:text-white truncate">
+                        {profile?.full_name || user.email?.split('@')[0]}
+                      </p>
+                      <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                      <div className="pt-1.5">
+                        <span className={cn(
+                          'text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full select-none tracking-wider',
+                          profile?.role === 'admin'
+                            ? 'bg-[#C5A059]/10 text-[#C5A059] border border-[#C5A059]/25'
+                            : 'bg-[#14452F]/10 text-emerald-600 dark:text-emerald-400 border border-[#14452F]/25'
+                        )}>
+                          {profile?.role || 'user'}
+                        </span>
+                      </div>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-805/50 my-1" />
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={profile?.role === 'admin' ? '/admin' : '/dashboard'}
+                      className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-semibold rounded-lg text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+                    >
+                      <UserIcon className="h-4 w-4 text-slate-400" />
+                      {profile?.role === 'admin' ? 'Admin Console' : 'Valuation Console'}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={profile?.role === 'admin' ? '/admin/settings' : '/dashboard/profile'}
+                      className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-semibold rounded-lg text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+                    >
+                      <Settings className="h-4 w-4 text-slate-400" />
+                      Profile Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-805/50 my-1" />
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      await signOut()
+                    }}
+                    className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-semibold rounded-lg text-red-650 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Log Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link
+                href="/login"
+                className={cn(
+                  'text-base font-semibold transition-all duration-300 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm px-1 py-2 relative group/nav whitespace-nowrap mr-2',
+                  pathname === '/login'
+                    ? 'text-forest-green dark:text-gold'
+                    : 'text-slate-700 dark:text-slate-300 hover:text-forest-green dark:hover:text-gold'
+                )}
+              >
+                Sign In
+                <span className={cn(
+                  "absolute bottom-0 left-1 right-1 h-0.5 transition-all duration-300 transform scale-x-0 group-hover/nav:scale-x-100 origin-left bg-forest-green dark:bg-gold",
+                  pathname === '/login' && "scale-x-100"
+                )} />
+              </Link>
+            )}
             <Button
               asChild
               className="font-bold px-8 h-12 transition-all duration-300 shadow-lg whitespace-nowrap bg-forest-green hover:bg-forest-green/90 text-white shadow-forest-green/20"
@@ -225,9 +333,18 @@ export function Header() {
                   {user ? (
                     <>
                       <div className="mt-6 mb-4 p-4 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-[#C5A059] text-navy flex items-center justify-center font-bold text-lg select-none">
-                          {(profile?.full_name || user.email).charAt(0).toUpperCase()}
-                        </div>
+                        <Avatar className="h-10 w-10 border border-slate-205 dark:border-slate-800 flex-shrink-0">
+                          {avatarPreviewUrl ? (
+                            <AvatarImage
+                              src={avatarPreviewUrl}
+                              alt={profile?.full_name || user.email || 'User Avatar'}
+                              className="object-cover"
+                            />
+                          ) : null}
+                          <AvatarFallback className="bg-[#C5A059] text-navy font-bold text-lg">
+                            {(profile?.full_name || user.email || 'U').charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
                         <div className="overflow-hidden flex-1">
                           <p className="text-sm font-bold text-slate-800 dark:text-white truncate">
                             {profile?.full_name || user.email.split('@')[0]}

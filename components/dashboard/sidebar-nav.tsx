@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from '@/app/auth/actions'
 import { cn } from '@/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { createClient } from '@/lib/supabase/client'
 import { 
   LayoutDashboard, 
   FileSpreadsheet, 
@@ -15,7 +17,8 @@ import {
   Users, 
   Coins, 
   History, 
-  CreditCard 
+  CreditCard,
+  ArrowLeft
 } from 'lucide-react'
 
 interface SidebarNavProps {
@@ -27,16 +30,46 @@ interface SidebarNavProps {
     full_name?: string
     role: 'user' | 'seller' | 'admin'
     status?: string
+    avatar_url?: string | null
   } | null
 }
 
 export function SidebarNav({ user, profile }: SidebarNavProps) {
   const pathname = usePathname()
   const [isPending, startTransition] = useTransition()
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = React.useState<string | null>(null)
   
   const role = profile?.role ?? 'user'
   const name = profile?.full_name || user.email.split('@')[0]
   const avatarLetter = name.charAt(0).toUpperCase()
+
+  React.useEffect(() => {
+    if (!profile?.avatar_url) {
+      setAvatarPreviewUrl(null)
+      return
+    }
+
+    const getSignedUrl = async () => {
+      if (profile.avatar_url!.startsWith('http')) {
+        setAvatarPreviewUrl(profile.avatar_url!)
+        return
+      }
+
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase.storage
+          .from('avatars')
+          .createSignedUrl(profile.avatar_url!, 3600)
+        
+        if (error) throw error
+        setAvatarPreviewUrl(data.signedUrl)
+      } catch (err) {
+        console.error('Error creating sidebar signed URL:', err)
+      }
+    }
+
+    getSignedUrl()
+  }, [profile?.avatar_url])
 
   const handleLogout = () => {
     startTransition(async () => {
@@ -96,13 +129,22 @@ export function SidebarNav({ user, profile }: SidebarNavProps) {
   return (
     <aside className="w-80 bg-[#0B1D2E] text-white flex flex-col h-screen border-r border-[#C5A059]/20 flex-shrink-0">
       {/* Brand Header */}
-      <div className="p-6 border-b border-[#C5A059]/10">
-        <Link href="/" className="font-serif text-2xl font-black tracking-wider text-white flex items-center gap-2">
-          SellYourStamps<span className="text-[#C5A059]">UK</span>
+      <div className="p-6 border-b border-[#C5A059]/10 flex flex-col gap-4">
+        <div>
+          <Link href="/" className="font-serif text-2xl font-black tracking-wider text-white flex items-center gap-2">
+            SellYourStamps<span className="text-[#C5A059]">UK</span>
+          </Link>
+          <span className="text-[10px] uppercase font-bold tracking-widest text-[#C5A059] block mt-1">
+            {role === 'admin' ? 'Admin Console' : 'Valuation Console'}
+          </span>
+        </div>
+        <Link
+          href="/"
+          className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-bold uppercase tracking-wider rounded-xl border border-[#C5A059]/20 hover:border-[#C5A059]/50 bg-white/5 hover:bg-white/10 text-white transition-all duration-300 group/btn"
+        >
+          <ArrowLeft className="h-3.5 w-3.5 text-[#C5A059] group-hover/btn:-translate-x-0.5 transition-transform" />
+          Back to Website
         </Link>
-        <span className="text-[10px] uppercase font-bold tracking-widest text-[#C5A059] block mt-1">
-          {role === 'admin' ? 'Admin Console' : 'Valuation Console'}
-        </span>
       </div>
 
       {/* Navigation Links */}
@@ -144,9 +186,18 @@ export function SidebarNav({ user, profile }: SidebarNavProps) {
       {/* User Info Bottom Card */}
       <div className="p-4 border-t border-[#C5A059]/10 bg-black/10 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 overflow-hidden">
-          <div className="w-10 h-10 rounded-full bg-[#C5A059] text-[#0B1D2E] flex items-center justify-center font-bold text-lg flex-shrink-0 select-none">
-            {avatarLetter}
-          </div>
+          <Avatar className="h-10 w-10 border border-[#C5A059]/20 flex-shrink-0">
+            {avatarPreviewUrl ? (
+              <AvatarImage
+                src={avatarPreviewUrl}
+                alt={name}
+                className="object-cover"
+              />
+            ) : null}
+            <AvatarFallback className="bg-[#C5A059] text-[#0B1D2E] font-bold text-lg">
+              {avatarLetter}
+            </AvatarFallback>
+          </Avatar>
           <div className="overflow-hidden">
             <p className="text-sm font-bold text-white truncate max-w-[130px]">{name}</p>
             <p className="text-xs text-slate-400 truncate max-w-[130px]">{user.email}</p>
