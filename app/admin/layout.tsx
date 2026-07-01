@@ -29,7 +29,7 @@ export default async function AdminLayout({
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#FBFBF9]">
-      <SidebarNav user={user} profile={profile} />
+      <SidebarNav user={{ id: user.id, email: user.email || '' }} profile={profile} />
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         {children}
       </div>

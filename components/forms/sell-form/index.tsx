@@ -182,24 +182,64 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
     if (validateStep(currentStep)) {
       setIsSubmitting(true)
       try {
-        // In a real app, you would use FormData for image uploads
-        // For this demo, we'll send everything except the File objects
+        const supabase = createClient()
+        const { data: { session } } = await supabase.auth.getSession()
+        const prefix = session?.user?.id ? session.user.id : 'guest'
+
+        // Upload images to Supabase Storage
+        const uploadedImages = []
+        for (const file of formData.images) {
+          const fileExt = file.name.split('.').pop()
+          const uniqueId = Math.random().toString(36).substring(2, 15)
+          const fileName = `${uniqueId}-${Date.now()}.${fileExt}`
+          const filePath = `${prefix}/${fileName}`
+
+          const { error: uploadError } = await supabase.storage
+            .from('submissions')
+            .upload(filePath, file)
+
+          if (uploadError) {
+            console.error('Error uploading file to storage:', file.name, uploadError)
+            throw new Error(`Failed to upload image: ${file.name}`)
+          }
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('submissions')
+            .getPublicUrl(filePath)
+
+          uploadedImages.push({
+            file_path: filePath,
+            image_url: publicUrl
+          })
+        }
+
         const { images, ...payload } = formData
+        const submissionPayload = {
+          ...payload,
+          images: uploadedImages
+        }
         
         const response = await fetch('/api/sell', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(submissionPayload)
         })
 
-        if (!response.ok) throw new Error('Submission failed')
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}))
+          throw new Error(errData.message || 'Submission failed')
+        }
 
-        console.log('Form submitted successfully:', formData)
+        const resData = await response.json()
+        console.log('Form submitted successfully:', resData)
         localStorage.removeItem('sell_form_progress')
         setIsSubmitted(true)
-      } catch (err) {
+      } catch (err: any) {
         console.error('Submission error:', err)
-        setErrors((prev) => ({ ...prev, email: 'Submission failed. Please try again or contact us directly.' }))
+        setErrors((prev) => ({ 
+          ...prev, 
+          email: err.message || 'Submission failed. Please try again or contact us directly.' 
+        }))
       } finally {
         setIsSubmitting(false)
       }

@@ -347,9 +347,9 @@ export function Header() {
                         </Avatar>
                         <div className="overflow-hidden flex-1">
                           <p className="text-sm font-bold text-slate-800 dark:text-white truncate">
-                            {profile?.full_name || user.email.split('@')[0]}
+                            {profile?.full_name || (user.email || '').split('@')[0]}
                           </p>
-                          <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                          <p className="text-xs text-slate-500 truncate">{user.email || ''}</p>
                         </div>
                         <span className={cn(
                           'text-[10px] font-black uppercase px-2 py-0.5 rounded-full select-none tracking-wider shrink-0',

@@ -53,7 +53,7 @@ export default async function DashboardPage() {
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-[#C5A059]">Valuation Console</span>
             <h1 className="font-serif text-3xl font-bold mt-1 text-white">
-              Welcome back, {profile?.full_name || user.email.split('@')[0]}
+              Welcome back, {profile?.full_name || (user.email || '').split('@')[0]}
             </h1>
             <p className="text-sm text-slate-300 mt-1">
               Manage your appraisals, check valuations, and secure payouts.
