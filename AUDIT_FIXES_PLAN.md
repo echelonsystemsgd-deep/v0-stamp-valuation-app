@@ -52,10 +52,10 @@ This plan outlines the steps to resolve issues identified during the comprehensi
 - [x] Check for console errors/warnings
 
 ### Implementation
-- [ ] Fix Accessibility (Sheet Description)
-- [ ] Fix Linting (Hook Cleanup & Unused Vars)
-- [ ] Standardise Navigation Labels
-- [ ] Final Responsive Check
+- [x] Fix Accessibility (Sheet Description)
+- [x] Fix Linting (Hook Cleanup & Unused Vars)
+- [x] Standardise Navigation Labels
+- [x] Final Responsive Check
 
 ---
 

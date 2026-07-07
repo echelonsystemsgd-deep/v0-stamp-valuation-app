@@ -59,7 +59,7 @@ export function StickyCTA() {
             variant="ghost"
             className="h-10 px-3 text-sm font-semibold text-primary hover:text-forest-green"
           >
-            <Link href="/how-to-sell">How it works</Link>
+            <Link href="/how-to-sell">How to Sell</Link>
           </Button>
           <Button
             asChild
@@ -102,7 +102,7 @@ export function StickyCTA() {
               variant="ghost"
               className="font-semibold text-primary hover:text-forest-green"
             >
-              <Link href="/how-to-sell">How it works</Link>
+              <Link href="/how-to-sell">How to Sell</Link>
             </Button>
             <Button
               asChild
