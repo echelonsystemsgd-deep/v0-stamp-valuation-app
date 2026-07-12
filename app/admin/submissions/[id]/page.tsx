@@ -117,6 +117,11 @@ interface Submission {
   date_received: string | null
   created_at: string
   updated_at: string
+  applied_bonus_code_id: string | null
+  payout_bonus_codes: {
+    code: string
+    percentage_bonus: number
+  } | null
 }
 
 interface Profile {
@@ -181,6 +186,12 @@ export default function SubmissionWorkspace() {
   const [chatMessage, setChatMessage] = useState('')
   const [staffNote, setStaffNote] = useState('')
   const [currentAdminUser, setCurrentAdminUser] = useState<{ id: string; role: string } | null>(null)
+  
+  // Split resizer, Canned replies, & Active bonus codes states
+  const [splitWidth, setSplitWidth] = useState(65)
+  const [isResizing, setIsResizing] = useState(false)
+  const [showCannedDropdown, setShowCannedDropdown] = useState(false)
+  const [activeBonusCodes, setActiveBonusCodes] = useState<{ id: string; code: string; percentage_bonus: number }[]>([])
 
   const [isPending, startTransition] = useTransition()
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -196,15 +207,23 @@ export default function SubmissionWorkspace() {
         setCurrentAdminUser({ id: user.id, role: prof?.role || 'staff' })
       }
 
-      // Fetch Submissions
+      // Fetch Submissions with joined payout_bonus_codes
       const { data: sub, error: subErr } = await supabase
         .from('submissions')
-        .select('*')
+        .select('*, payout_bonus_codes(code, percentage_bonus)')
         .eq('id', id)
         .single()
 
       if (subErr) throw subErr
       setSubmission(sub)
+
+      // Fetch active bonus codes
+      const { data: bonusCodes } = await supabase
+        .from('payout_bonus_codes')
+        .select('id, code, percentage_bonus')
+        .eq('is_active', true)
+
+      setActiveBonusCodes(bonusCodes || [])
 
       // Fetch Items
       const { data: itms, error: itmsErr } = await supabase
@@ -349,6 +368,43 @@ export default function SubmissionWorkspace() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  // Drag resizer mouse listener
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return
+      const container = document.getElementById('appraisal-split-container')
+      if (!container) return
+      
+      const containerRect = container.getBoundingClientRect()
+      // Adjust splitWidth based on mouse X coordinate relative to container
+      const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100
+      
+      // Restrict left panel to be between 40% and 80%
+      if (newWidth >= 40 && newWidth <= 80) {
+        setSplitWidth(newWidth)
+      }
+    }
+
+    const handleMouseUp = () => {
+      setIsResizing(false)
+    }
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+      document.body.style.cursor = 'col-resize'
+      document.body.style.userSelect = 'none'
+    } else {
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isResizing])
+
   // Audited qty changes (reactive total)
   const handleQuantityEdit = (itemId: string, val: string) => {
     const parsed = parseFloat(val) || 0
@@ -364,8 +420,30 @@ export default function SubmissionWorkspace() {
     return sum + (qty * item.rate_at_submission)
   }, 0)
 
+  const bonusPercentage = submission?.payout_bonus_codes?.percentage_bonus || 0
+  const bonusAmount = (liveAuditedTotal * bonusPercentage) / 100
+  const finalPayoutTotal = liveAuditedTotal + bonusAmount
+
   const formatGBP = (val: number) => {
     return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(val)
+  }
+
+  // Apply Payout Bonus Code
+  const handleApplyBonusCode = async (codeId: string) => {
+    try {
+      const { error } = await supabase
+        .from('submissions')
+        .update({
+          applied_bonus_code_id: codeId || null
+        })
+        .eq('id', id)
+
+      if (error) throw error
+      toast.success('Bonus code updated successfully for this submission.')
+      fetchAllData()
+    } catch (err: any) {
+      toast.error('Failed to apply bonus code: ' + err.message)
+    }
   }
 
   // Save Audited worksheet counts to DB
@@ -388,11 +466,11 @@ export default function SubmissionWorkspace() {
           if (itemErr) throw itemErr
         }
 
-        // 2. Update parent submission's final audited total valuation
+        // 2. Update parent submission's final audited total valuation (including bonus)
         const { error: subErr } = await supabase
           .from('submissions')
           .update({
-            final_reviewed_valuation: liveAuditedTotal
+            final_reviewed_valuation: finalPayoutTotal
           })
           .eq('id', id)
 
@@ -671,11 +749,15 @@ export default function SubmissionWorkspace() {
       </div>
 
       {/* Main Two-Column Layout Grid */}
-      <div className="max-w-7xl mx-auto py-8 px-6 sm:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div 
+        id="appraisal-split-container"
+        className="max-w-7xl mx-auto py-8 px-6 sm:px-8"
+        style={{ '--split-width': `${splitWidth}%` } as React.CSSProperties}
+      >
+        <div className="flex flex-col lg:flex-row gap-0 items-start relative">
           
-          {/* LEFT 70% MAIN COLUMN */}
-          <div className="lg:col-span-2 space-y-8">
+          {/* LEFT COLUMN */}
+          <div className="space-y-8 w-full lg:w-[var(--split-width)] lg:pr-4 shrink-0 transition-all duration-75">
             
             {/* Section 1: Photos Appraisal Panel */}
             <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-6 space-y-4">
@@ -883,6 +965,42 @@ export default function SubmissionWorkspace() {
 
               {/* Send Chat input */}
               <form onSubmit={handleSendChatMessage} className="flex gap-2 shrink-0 pt-2 border-t border-slate-100">
+                {/* Canned replies button */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setShowCannedDropdown(!showCannedDropdown)}
+                    className="p-3 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-500 hover:text-[#C5A059] rounded-xl transition-all cursor-pointer flex items-center justify-center shrink-0 h-full"
+                    title="Canned Responses"
+                  >
+                    <span className="text-sm font-bold">⚡</span>
+                  </button>
+
+                  {showCannedDropdown && (
+                    <div className="absolute bottom-14 left-0 w-80 bg-white border border-slate-200 shadow-2xl rounded-2xl p-2.5 z-40 space-y-1 text-left">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-[#C5A059] px-2 py-1">Quick Responses</p>
+                      {[
+                        { title: 'Request back photos', text: 'Hi, could you please provide a high-resolution, close-up image of the back of this stamp so we can check watermarks / cancellations?' },
+                        { title: 'Package received safely', text: 'Hi, we have received your physical stamp parcel safely. Our appraisal team is currently auditing the quantities and checking the conditions.' },
+                        { title: 'Appraisal completed', text: 'Hi, we have finished auditing your collection! The final valuation details are updated. Please review them and let us know if you approve.' }
+                      ].map((item, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => {
+                            setChatMessage(item.text)
+                            setShowCannedDropdown(false)
+                          }}
+                          className="w-full text-left p-2 hover:bg-slate-50 rounded-xl transition-all cursor-pointer group block"
+                        >
+                          <p className="text-xs font-bold text-slate-750 group-hover:text-[#14452F]">{item.title}</p>
+                          <p className="text-[10px] text-slate-400 truncate mt-0.5">{item.text}</p>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <input
                   type="text"
                   placeholder="Type a message to the seller..."
@@ -899,29 +1017,72 @@ export default function SubmissionWorkspace() {
                 </button>
               </form>
             </div>
-
+ 
           </div>
 
-          {/* RIGHT 30% RIGHT-RAIL COLUMN */}
-          <div className="space-y-6">
+          {/* Resizer Bar (visible on desktop lg+) */}
+          <div
+            onMouseDown={() => setIsResizing(true)}
+            className={cn(
+              "hidden lg:block w-1 px-1 self-stretch hover:bg-[#C5A059]/40 active:bg-[#C5A059] cursor-col-resize transition-all select-none mx-2 relative group",
+              isResizing && "bg-[#C5A059]"
+            )}
+          >
+            {/* Subtle drag line */}
+            <div className="absolute inset-y-0 left-[2px] w-[2px] bg-slate-200/60 group-hover:bg-transparent" />
+          </div>
+ 
+          {/* RIGHT COLUMN */}
+          <div className="space-y-6 w-full lg:flex-1 lg:pl-4 mt-6 lg:mt-0">
             
             {/* 1. Status & Valuation Summary Card */}
             <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-6 space-y-5">
               <h3 className="font-serif text-md font-bold text-[#0B1D2E] border-b border-slate-100 pb-2">Valuation Summary</h3>
               
-              <div className="space-y-4">
-                <div className="flex justify-between items-center text-sm py-1 border-b border-slate-50">
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between items-center py-1 border-b border-slate-50">
                   <span className="font-semibold text-slate-500">Estimate Total:</span>
                   <span className="font-bold text-slate-700 font-mono">{formatGBP(submission.estimated_valuation)}</span>
                 </div>
                 
-                <div className="flex justify-between items-center py-2">
-                  <span className="font-serif font-black text-[#0B1D2E]">Audited Total:</span>
-                  <span className="font-black text-lg text-[#14452F] font-mono">
-                    {formatGBP(liveAuditedTotal)}
+                <div className="flex justify-between items-center py-1 border-b border-slate-50">
+                  <span className="font-semibold text-slate-500">Audited Base:</span>
+                  <span className="font-bold text-slate-700 font-mono">{formatGBP(liveAuditedTotal)}</span>
+                </div>
+
+                {bonusPercentage > 0 && (
+                  <div className="flex justify-between items-center py-1 border-b border-slate-50 text-amber-700 font-semibold">
+                    <span>Bonus ({submission.payout_bonus_codes?.code} +{bonusPercentage}%):</span>
+                    <span className="font-mono">+{formatGBP(bonusAmount)}</span>
+                  </div>
+                )}
+                
+                <div className="flex justify-between items-center py-1.5 text-base font-bold">
+                  <span className="font-serif font-black text-[#0B1D2E]">Net Payout:</span>
+                  <span className="text-[#14452F] font-mono font-black">
+                    {formatGBP(finalPayoutTotal)}
                   </span>
                 </div>
               </div>
+
+              {/* Apply Payout Bonus Code Select input */}
+              {submission.status !== 'approved' && submission.status !== 'paid' && submission.status !== 'rejected' && submission.status !== 'cancelled' && (
+                <div className="pt-3.5 border-t border-slate-100 space-y-1.5">
+                  <label className="text-[10px] font-black uppercase text-slate-400 tracking-wider block">Apply Payout Bonus Code</label>
+                  <select
+                    value={submission.applied_bonus_code_id || ''}
+                    onChange={(e) => handleApplyBonusCode(e.target.value)}
+                    className="w-full text-xs px-2.5 py-2 border border-slate-200 focus:border-[#C5A059] focus:outline-none rounded-lg bg-white font-semibold text-slate-700"
+                  >
+                    <option value="">No Active Bonus Code</option>
+                    {activeBonusCodes.map(code => (
+                      <option key={code.id} value={code.id}>
+                        {code.code} (+{code.percentage_bonus}%)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {submission.status === 'paid' && (
                 <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 space-y-2">
@@ -1108,7 +1269,84 @@ export default function SubmissionWorkspace() {
             </div>
 
           </div>
+ 
+        </div>
+      </div>
 
+      {/* Sticky Bottom Actions Ribbon */}
+      <div className="fixed bottom-0 left-0 right-0 bg-[#0B1D2E]/95 backdrop-blur-xs border-t border-[#C5A059]/20 p-4 flex flex-col sm:flex-row justify-between items-center gap-4 z-30 shadow-2xl px-6 sm:px-12 animate-slide-up">
+        <div className="flex items-center gap-6 text-sm text-white">
+          <div>
+            <span className="text-slate-400 text-[10px] block uppercase font-bold tracking-wider">Estimated Total</span>
+            <span className="font-mono font-bold text-slate-200">{formatGBP(submission.estimated_valuation)}</span>
+          </div>
+          <div className="h-8 w-px bg-white/10" />
+          <div>
+            <span className="text-[#C5A059] text-[10px] block uppercase tracking-wider font-bold">Audited Base</span>
+            <span className="font-mono font-bold text-slate-200 block">
+              {formatGBP(liveAuditedTotal)}
+            </span>
+          </div>
+          {bonusPercentage > 0 && (
+            <>
+              <div className="h-8 w-px bg-white/10" />
+              <div>
+                <span className="text-amber-500 text-[10px] block uppercase tracking-wider font-bold">Bonus ({submission.payout_bonus_codes?.code})</span>
+                <span className="font-mono font-bold text-amber-400 block">
+                  +{formatGBP(bonusAmount)}
+                </span>
+              </div>
+            </>
+          )}
+          <div className="h-8 w-px bg-white/10" />
+          <div>
+            <span className="text-emerald-400 text-[10px] block uppercase tracking-wider font-bold">Net Payout</span>
+            <span className="font-mono font-black text-white text-base block">
+              {formatGBP(finalPayoutTotal)}
+            </span>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          {hasChanges && (
+            <button
+              onClick={handleSaveWorksheet}
+              disabled={isPending}
+              className="px-4.5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl border border-[#C5A059]/30 hover:border-[#C5A059] bg-white/5 hover:bg-white/10 text-white transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
+            >
+              {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5 text-[#C5A059]" />}
+              Save Progress
+            </button>
+          )}
+
+          {submission.status !== 'approved' && submission.status !== 'paid' && submission.status !== 'rejected' && submission.status !== 'cancelled' && (
+            <>
+              <button
+                onClick={() => setShowRejectModal(true)}
+                disabled={isPending}
+                className="px-4.5 py-2.5 border border-red-200/20 hover:border-red-300/40 text-xs font-bold uppercase tracking-wider rounded-xl bg-red-950/20 text-red-400 hover:text-red-300 transition-all cursor-pointer"
+              >
+                Reject
+              </button>
+
+              <button
+                onClick={() => handleTransitionStatus('approved')}
+                disabled={isPending}
+                className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl bg-[#14452F] hover:bg-[#14452F]/90 text-white shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                <Check className="h-3.5 w-3.5" /> Approve Appraisal
+              </button>
+            </>
+          )}
+
+          {submission.status === 'approved' && (
+            <button
+              onClick={() => setShowPayoutModal(true)}
+              className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl bg-[#14452F] hover:bg-[#14452F]/90 text-white shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <CreditCard className="h-3.5 w-3.5 text-[#C5A059]" /> Log Payout
+            </button>
+          )}
         </div>
       </div>
 

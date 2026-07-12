@@ -747,14 +747,26 @@ export function SubmissionDetailClient({
                           {showAudit && (
                             <>
                               <td className={cn(
-                                "py-3.5 text-center font-bold font-mono text-xs",
+                                "py-3.5 text-center font-mono text-xs relative group/audit",
                                 isAuditedDiff 
-                                  ? "text-emerald-700 bg-emerald-50 rounded-lg px-2 font-black border border-emerald-100" 
+                                  ? "text-amber-750 bg-amber-50/70 rounded-lg px-2 font-black border border-amber-250/20 cursor-help" 
                                   : "text-slate-700"
                               )}>
-                                {item.reviewed_quantity !== null 
-                                  ? Number(item.reviewed_quantity).toLocaleString() 
-                                  : 'Pending'}
+                                <span>
+                                  {item.reviewed_quantity !== null 
+                                    ? Number(item.reviewed_quantity).toLocaleString() 
+                                    : 'Pending'}
+                                </span>
+                                {isAuditedDiff && (
+                                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 text-white text-[10px] p-2.5 rounded-xl opacity-0 pointer-events-none group-hover/audit:opacity-100 transition-opacity duration-150 z-20 shadow-lg text-center leading-normal font-sans normal-case tracking-normal">
+                                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900" />
+                                    {Number(item.reviewed_quantity) < Number(item.quantity) ? (
+                                      "Quantity adjusted down: stamps excluded due to damage, heavy cancellation, or incorrect category classification."
+                                    ) : (
+                                      "Quantity adjusted up: additional stamps discovered in your parcel during inspection."
+                                    )}
+                                  </div>
+                                )}
                               </td>
                               <td className="py-3.5 text-right font-bold text-[#14452F] font-serif">
                                 {item.reviewed_value !== null 

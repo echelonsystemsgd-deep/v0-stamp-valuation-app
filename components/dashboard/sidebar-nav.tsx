@@ -18,7 +18,11 @@ import {
   Coins, 
   History, 
   CreditCard,
-  ArrowLeft
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Gift,
+  Megaphone
 } from 'lucide-react'
 
 interface SidebarNavProps {
@@ -33,9 +37,11 @@ interface SidebarNavProps {
     avatar_url?: string | null
   } | null
   className?: string
+  isCollapsed?: boolean
+  toggleCollapse?: () => void
 }
 
-export function SidebarNav({ user, profile, className }: SidebarNavProps) {
+export function SidebarNav({ user, profile, className, isCollapsed = false, toggleCollapse }: SidebarNavProps) {
   const pathname = usePathname()
   const [isPending, startTransition] = useTransition()
   const [avatarPreviewUrl, setAvatarPreviewUrl] = React.useState<string | null>(null)
@@ -157,6 +163,8 @@ export function SidebarNav({ user, profile, className }: SidebarNavProps) {
       items: [
         { label: 'Rates Manager', href: '/admin/categories', icon: Coins },
         { label: 'Seller Accounts', href: '/admin/sellers', icon: Users },
+        { label: 'Payout Bonuses', href: '/admin/bonuses', icon: Gift },
+        { label: 'Marketing', href: '/admin/marketing', icon: Megaphone }
       ]
     },
     {
@@ -193,33 +201,60 @@ export function SidebarNav({ user, profile, className }: SidebarNavProps) {
   const navigationGroups = (role === 'admin' || role === 'staff') ? adminNavigation : userNavigation
 
   return (
-    <aside className={cn("w-80 bg-[#0B1D2E] text-white flex flex-col h-screen border-r border-[#C5A059]/20 flex-shrink-0", className)}>
+    <aside className={cn("w-80 bg-[#0B1D2E] text-white flex flex-col h-screen border-r border-[#C5A059]/20 flex-shrink-0 transition-all duration-300 ease-in-out", isCollapsed && "w-20", className)}>
       {/* Brand Header */}
-      <div className="p-6 border-b border-[#C5A059]/10 flex flex-col gap-4">
+      <div className={cn("p-6 border-b border-[#C5A059]/10 flex flex-col gap-4", isCollapsed && "p-4 gap-2 text-center items-center")}>
         <div>
-          <Link href={role === 'admin' || role === 'staff' ? '/admin' : '/dashboard'} className="font-serif text-2xl font-black tracking-wider text-white flex items-center gap-2">
-            SellYourStamps<span className="text-[#C5A059]">UK</span>
+          <Link href={role === 'admin' || role === 'staff' ? '/admin' : '/dashboard'} className="font-serif text-2xl font-black tracking-wider text-white flex items-center gap-2 justify-center">
+            {isCollapsed ? <span className="text-[#C5A059] text-3xl font-serif">S</span> : <>SellYourStamps<span className="text-[#C5A059]">UK</span></>}
           </Link>
-          <span className="text-[10px] uppercase font-bold tracking-widest text-[#C5A059] block mt-1">
-            {role === 'admin' ? 'Admin Console' : 'Valuation Console'}
-          </span>
+          {!isCollapsed && (
+            <span className="text-[10px] uppercase font-bold tracking-widest text-[#C5A059] block mt-1">
+              {role === 'admin' ? 'Admin Console' : 'Valuation Console'}
+            </span>
+          )}
         </div>
         <Link
           href="/"
-          className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-bold uppercase tracking-wider rounded-xl border border-[#C5A059]/20 hover:border-[#C5A059]/50 bg-white/5 hover:bg-white/10 text-white transition-all duration-300 group/btn"
+          className={cn(
+            "flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-bold uppercase tracking-wider rounded-xl border border-[#C5A059]/20 hover:border-[#C5A059]/50 bg-white/5 hover:bg-white/10 text-white transition-all duration-300 group/btn",
+            isCollapsed && "p-2 rounded-xl"
+          )}
+          title="Back to Website"
         >
           <ArrowLeft className="h-3.5 w-3.5 text-[#C5A059] group-hover/btn:-translate-x-0.5 transition-transform" />
-          Back to Website
+          {!isCollapsed && "Back to Website"}
         </Link>
       </div>
+
+      {/* Collapse Button for desktop only */}
+      {toggleCollapse && (
+        <div className={cn("hidden lg:flex items-center justify-end px-4 py-2 border-b border-[#C5A059]/10 bg-[#071320]/40 shrink-0", isCollapsed && "justify-center px-0")}>
+          <button
+            onClick={toggleCollapse}
+            className="p-1 hover:text-[#C5A059] text-slate-400 hover:bg-white/5 rounded-lg transition-all cursor-pointer"
+            title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+          >
+            {isCollapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+      )}
 
       {/* Navigation Links */}
       <nav className="flex-1 px-4 py-6 overflow-y-auto space-y-8 custom-scrollbar">
         {navigationGroups.map((group) => (
           <div key={group.group} className="space-y-2">
-            <span className="text-[10px] font-black tracking-widest text-slate-500 block px-3 uppercase">
-              {group.group}
-            </span>
+            {!isCollapsed ? (
+              <span className="text-[10px] font-black tracking-widest text-slate-500 block px-3 uppercase">
+                {group.group}
+              </span>
+            ) : (
+              <div className="h-px bg-slate-800/40 mx-2 my-4" />
+            )}
             <div className="space-y-1">
               {group.items.map((item) => {
                 const Icon = item.icon
@@ -239,28 +274,34 @@ export function SidebarNav({ user, profile, className }: SidebarNavProps) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      'flex items-center justify-between gap-2 px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 group/item',
+                      'flex items-center justify-between gap-2 px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 group/item relative',
                       isActive 
                         ? 'bg-[#14452F] text-white shadow-lg shadow-[#14452F]/15 border border-[#14452F]/20'
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
+                        : 'text-slate-300 hover:text-white hover:bg-white/5',
+                      isCollapsed && 'justify-center px-0'
                     )}
+                    title={isCollapsed ? item.label : undefined}
                   >
-                    <div className="flex items-center gap-3.5 overflow-hidden">
+                    <div className={cn("flex items-center gap-3.5 overflow-hidden", isCollapsed && "justify-center gap-0")}>
                       <Icon className={cn(
                         'h-5 w-5 transition-transform duration-200 group-hover/item:scale-105 flex-shrink-0',
                         isActive ? 'text-[#C5A059]' : 'text-slate-400 group-hover/item:text-white'
                       )} />
-                      <span className="truncate">{item.label}</span>
+                      {!isCollapsed && <span className="truncate">{item.label}</span>}
                     </div>
                     {badgeVal !== undefined && badgeVal > 0 && (
-                      <span className={cn(
-                        'text-[10px] font-bold px-2 py-0.5 rounded-full border shadow-sm flex-shrink-0 transition-all duration-200',
-                        isActive 
-                          ? 'bg-[#C5A059] text-[#0B1D2E] border-[#C5A059]' 
-                          : 'bg-[#C5A059]/15 text-[#C5A059] border-[#C5A059]/25 group-hover/item:bg-[#C5A059]/25'
-                      )}>
-                        {badgeVal}
-                      </span>
+                      isCollapsed ? (
+                        <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#C5A059] rounded-full ring-2 ring-[#0B1D2E]" />
+                      ) : (
+                        <span className={cn(
+                          'text-[10px] font-bold px-2 py-0.5 rounded-full border shadow-sm flex-shrink-0 transition-all duration-200',
+                          isActive 
+                            ? 'bg-[#C5A059] text-[#0B1D2E] border-[#C5A059]' 
+                            : 'bg-[#C5A059]/15 text-[#C5A059] border-[#C5A059]/25 group-hover/item:bg-[#C5A059]/25'
+                        )}>
+                          {badgeVal}
+                        </span>
+                      )
                     )}
                   </Link>
                 )
@@ -271,8 +312,8 @@ export function SidebarNav({ user, profile, className }: SidebarNavProps) {
       </nav>
 
       {/* User Info Bottom Card */}
-      <div className="p-4 border-t border-[#C5A059]/10 bg-black/10 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3 overflow-hidden">
+      <div className={cn("p-4 border-t border-[#C5A059]/10 bg-black/10 flex items-center justify-between gap-3", isCollapsed && "flex-col py-6 px-2 gap-4")}>
+        <div className={cn("flex items-center gap-3 overflow-hidden", isCollapsed && "flex-col gap-0")}>
           <Avatar className="h-10 w-10 border border-[#C5A059]/20 flex-shrink-0">
             {avatarPreviewUrl ? (
               <AvatarImage
@@ -285,22 +326,25 @@ export function SidebarNav({ user, profile, className }: SidebarNavProps) {
               {avatarLetter}
             </AvatarFallback>
           </Avatar>
-          <div className="overflow-hidden">
-            <p className="text-sm font-bold text-white truncate max-w-[130px]">{name}</p>
-            <p className="text-xs text-slate-400 truncate max-w-[130px]">{user.email}</p>
-          </div>
+          {!isCollapsed && (
+            <div className="overflow-hidden">
+              <p className="text-sm font-bold text-white truncate max-w-[130px]">{name}</p>
+              <p className="text-xs text-slate-400 truncate max-w-[130px]">{user.email}</p>
+            </div>
+          )}
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Role Badge */}
-          <span className={cn(
-            'text-[10px] font-black uppercase px-2 py-0.5 rounded-full select-none tracking-wider shrink-0',
-            role === 'admin' 
-              ? 'bg-[#C5A059]/10 text-[#C5A059] border border-[#C5A059]/25'
-              : 'bg-[#14452F]/10 text-emerald-400 border border-[#14452F]/25'
-          )}>
-            {role}
-          </span>
+        <div className={cn("flex items-center gap-2", isCollapsed && "flex-col gap-3")}>
+          {!isCollapsed && (
+            <span className={cn(
+              'text-[10px] font-black uppercase px-2 py-0.5 rounded-full select-none tracking-wider shrink-0',
+              role === 'admin' 
+                ? 'bg-[#C5A059]/10 text-[#C5A059] border border-[#C5A059]/25'
+                : 'bg-[#14452F]/10 text-emerald-400 border border-[#14452F]/25'
+            )}>
+              {role}
+            </span>
+          )}
           
           {/* Logout Button */}
           <button

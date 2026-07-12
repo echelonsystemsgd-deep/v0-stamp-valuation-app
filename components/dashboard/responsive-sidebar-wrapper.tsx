@@ -15,6 +15,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { OnlinePresenceContext } from '@/lib/presence-context'
+import { CommandPalette } from '@/components/dashboard/command-palette'
 
 interface ResponsiveSidebarWrapperProps {
   user: {
@@ -28,7 +29,24 @@ interface ResponsiveSidebarWrapperProps {
 export function ResponsiveSidebarWrapper({ user, profile, children }: ResponsiveSidebarWrapperProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [onlineUserIds, setOnlineUserIds] = useState<Set<string>>(new Set())
+  const [isCollapsed, setIsCollapsed] = useState(false)
   const pathname = usePathname()
+
+  // Load sidebar collapsed preference on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('admin_sidebar_collapsed')
+    if (saved === 'true') {
+      setIsCollapsed(true)
+    }
+  }, [])
+
+  const toggleCollapse = () => {
+    setIsCollapsed(prev => {
+      const next = !prev
+      localStorage.setItem('admin_sidebar_collapsed', String(next))
+      return next
+    })
+  }
 
   // Auto-close sheet when pathname changes (user clicked a menu link)
   useEffect(() => {
@@ -118,12 +136,18 @@ export function ResponsiveSidebarWrapper({ user, profile, children }: Responsive
 
         {/* Desktop Sidebar — hidden below lg, visible at lg+ */}
         <div className="hidden lg:block shrink-0">
-          <SidebarNav user={user} profile={profile} />
+          <SidebarNav
+            user={user}
+            profile={profile}
+            isCollapsed={isCollapsed}
+            toggleCollapse={toggleCollapse}
+          />
         </div>
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0">
           {children}
+          <CommandPalette />
         </div>
       </div>
     </OnlinePresenceContext.Provider>

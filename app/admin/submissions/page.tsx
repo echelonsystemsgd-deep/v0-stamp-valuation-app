@@ -464,12 +464,43 @@ export default function SubmissionsPage() {
                         <td className="py-4 px-4 text-sm font-bold font-mono text-[#0B1D2E] group-hover:text-[#14452F]">
                           VAL-{sub.id.slice(0, 8).toUpperCase()}
                         </td>
-                        <td className="py-4 px-4 text-xs text-slate-500 whitespace-nowrap">
-                          {new Date(sub.created_at).toLocaleDateString('en-GB', {
-                            day: '2-digit',
-                            month: 'short',
-                            year: 'numeric'
-                          })}
+                        <td className="py-4 px-4 whitespace-nowrap text-left">
+                          <p className="text-xs font-semibold text-slate-700">
+                            {new Date(sub.created_at).toLocaleDateString('en-GB', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric'
+                            })}
+                          </p>
+                          {['quote_requested', 'received', 'under_review'].includes(sub.status) ? (
+                            (() => {
+                              const ageHours = (Date.now() - new Date(sub.created_at).getTime()) / (1000 * 60 * 60)
+                              let text = ''
+                              let colorClass = ''
+                              
+                              if (ageHours < 24) {
+                                text = ageHours < 1 ? 'Just now' : `${Math.round(ageHours)}h ago`
+                                colorClass = 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                              } else if (ageHours < 72) {
+                                const days = Math.floor(ageHours / 24)
+                                text = `${days}d ago`
+                                colorClass = 'bg-amber-50 text-[#C5A059] border-[#C5A059]/20 font-bold'
+                              } else {
+                                const days = Math.floor(ageHours / 24)
+                                text = `${days}d overdue`
+                                colorClass = 'bg-red-50 text-red-600 border-red-100 font-extrabold animate-pulse'
+                              }
+
+                              return (
+                                <span className={cn("inline-flex items-center gap-1 text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-full border mt-1 select-none", colorClass)}>
+                                  <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                                  {text}
+                                </span>
+                              )
+                            })()
+                          ) : (
+                            <span className="text-[9px] text-slate-400 uppercase font-bold tracking-wider mt-1 block">Completed</span>
+                          )}
                         </td>
                         <td className="py-4 px-4 text-sm max-w-[200px] truncate">
                           <p className="font-semibold text-slate-750">{sellerName}</p>

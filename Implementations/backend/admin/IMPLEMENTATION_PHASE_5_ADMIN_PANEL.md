@@ -159,14 +159,14 @@ To optimize communication and alignment alongside the Admin improvements, the Se
 ## 🛠️ Actionable Implementation Checklist
 
 ### Step 1: Database Updates & Role Permissions
-- [ ] Run migration to add `'staff'` to `public.user_role` type.
-- [ ] Create `public.submission_internal_notes` table with references.
-- [ ] Enable RLS on the notes table and write select/insert policies for staff and admins.
-- [ ] Configure `public.stamp_categories` RLS policy to restrict updates strictly to the `admin` role.
+- [x] Run migration to add `'staff'` to `public.user_role` type.
+- [x] Create `public.submission_internal_notes` table with references.
+- [x] Enable RLS on the notes table and write select/insert policies for staff and admins.
+- [x] Configure `public.stamp_categories` RLS policy to restrict updates strictly to the `admin` role.
 
 ### Step 2: Next.js Routing & Middleware Guards
-- [ ] Update `middleware.ts` / `/admin/layout.tsx` to handle permission logic, routing `staff` and `admin` roles, and rejecting others to `/unauthorized`.
-- [ ] Implement sidebar layout component with real-time badges (Supabase subscriber for count checks).
+- [x] Update `middleware.ts` / `/admin/layout.tsx` to handle permission logic, routing `staff` and `admin` roles, and rejecting others to `/unauthorized`.
+- [x] Implement sidebar layout component with real-time badges (Supabase subscriber for count checks).
 
 ### Step 3: Shopify-Style Submissions Table
 - [x] Create `/admin/submissions/page.tsx`.
@@ -201,6 +201,24 @@ To optimize communication and alignment alongside the Admin improvements, the Se
 - [x] Add the "Action Required" Banner to the main seller dashboard home view.
 - [x] Add the unread messages check query and indicator dots on dashboard lists.
 - [x] Construct the printer-friendly print packing slip view.
+
+### Step 8: UI/UX Refinements & Shopify Optimizations
+- [x] Implement Collapsible Sidebar (desktop nav folds to icons with tooltips)
+- [x] Implement Unified Command Palette (`Ctrl + K` or `Cmd + K` search modal)
+- [x] Implement SLA Aging indicators on submissions table (e.g. orange flags for packages pending > 24 hours)
+- [x] Implement Resizable Split-Pane Detailed Appraisal Workstation (adjust left/right column ratio)
+- [x] Implement Sticky Valuation calculations ribbon at the bottom of the worksheet
+- [x] Implement Canned Chat Templates (quick messaging triggers)
+- [x] Implement Translucent "Claimed Qty" vs "Audited Qty" table with tooltips in seller dashboard view
+
+### Step 9: Advanced Shopify Modules (Marketing, Payout Bonuses & Onboarding)
+- [ ] Create database tables for Payout Bonus Codes (`public.payout_bonus_codes`) and Marketing campaigns (`public.marketing_campaigns`)
+- [ ] Add `payout_bonus_codes` and `marketing_campaigns` RLS policies
+- [ ] Implement Payout Bonuses Management panel (`/admin/bonuses/page.tsx`)
+- [ ] Implement Marketing Email Campaign builder (`/admin/marketing/page.tsx`)
+- [ ] Update Navigation Sidebar to include Marketing and Bonuses links
+- [ ] Integrate Bonus Payout logic in Appraisal detailed workspace sticky ribbon and payout logger
+- [ ] Redesign `/admin/page.tsx` home overview (add Welcome greeting, setup onboarding checklist, and illustration banners)
 
 ---
 

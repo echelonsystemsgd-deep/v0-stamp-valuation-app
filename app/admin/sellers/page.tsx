@@ -63,6 +63,7 @@ export default function SellerAccountsPage() {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
+        .in('role', ['user', 'seller'])
         .order('created_at', { ascending: false })
 
       if (error) throw error
