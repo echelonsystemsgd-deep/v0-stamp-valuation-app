@@ -50,7 +50,7 @@ export function ImportantNotice() {
 function NoticeCard({ title, description, delay, isWarning = false }: { title: string, description: string, delay: string, isWarning?: boolean }) {
   return (
     <div 
-      className={`bg-white p-8 lg:p-10 rounded-[2rem] shadow-2xl shadow-rose-900/5 border border-rose-100 animate-fade-in-up`}
+      className="bg-white p-5 sm:p-8 lg:p-10 rounded-3xl sm:rounded-[2rem] shadow-2xl shadow-rose-900/5 border border-rose-100 animate-fade-in-up"
       style={{ animationDelay: delay }}
     >
       <div className="space-y-5">

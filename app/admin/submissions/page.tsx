@@ -16,7 +16,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Filter,
-  DollarSign
+  DollarSign,
+  Users
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -94,6 +95,12 @@ export default function SubmissionsPage() {
   const [payoutMethod, setPayoutMethod] = useState<'bank_transfer' | 'cheque'>('bank_transfer')
   const [payoutReference, setPayoutReference] = useState('')
 
+  // Bulk Assign Modal State
+  const [showAssignModal, setShowAssignModal] = useState(false)
+  const [staffMembers, setStaffMembers] = useState<{id: string; full_name: string | null; email: string; role: string}[]>([])
+  const [selectedStaffId, setSelectedStaffId] = useState<string>('')
+  const [staffLoading, setStaffLoading] = useState(false)
+
   const supabase = createClient()
 
   // Fetch submissions from Database
@@ -102,7 +109,7 @@ export default function SubmissionsPage() {
     try {
       const { data, error } = await supabase
         .from('submissions')
-        .select('*, profiles(full_name, email)')
+        .select('*, profiles!user_id(full_name, email)')
         .order('created_at', { ascending: false })
 
       if (error) throw error
@@ -198,6 +205,47 @@ export default function SubmissionsPage() {
     } else {
       setSelectedIds(prev => prev.filter(item => item !== id))
     }
+  }
+
+  // Open assign modal and load staff list
+  const handleOpenAssignModal = async () => {
+    setShowAssignModal(true)
+    setStaffLoading(true)
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id, full_name, email, role')
+        .in('role', ['admin', 'staff'])
+        .order('role', { ascending: false })
+      setStaffMembers(data || [])
+    } finally {
+      setStaffLoading(false)
+    }
+  }
+
+  // Bulk assign selected submissions to a staff member
+  const handleBulkAssign = async () => {
+    if (!selectedStaffId) {
+      toast.error('Please select a staff member to assign.')
+      return
+    }
+    startTransition(async () => {
+      try {
+        const { error } = await supabase
+          .from('submissions')
+          .update({ assigned_appraiser_id: selectedStaffId })
+          .in('id', selectedIds)
+        if (error) throw error
+        const member = staffMembers.find(m => m.id === selectedStaffId)
+        toast.success(`${selectedIds.length} submission${selectedIds.length > 1 ? 's' : ''} assigned to ${member?.full_name || member?.email || 'Staff'}.`)
+        setShowAssignModal(false)
+        setSelectedIds([])
+        setSelectedStaffId('')
+        fetchSubmissions()
+      } catch (err: any) {
+        toast.error('Assignment failed: ' + err.message)
+      }
+    })
   }
 
   // Bulk Actions
@@ -587,6 +635,14 @@ export default function SubmissionsPage() {
             </button>
 
             <button
+              onClick={handleOpenAssignModal}
+              disabled={isPending}
+              className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-indigo-500/30 transition-all cursor-pointer disabled:opacity-50"
+            >
+              <Users className="h-3.5 w-3.5" /> Assign to Staff
+            </button>
+
+            <button
               onClick={() => setShowPayoutModal(true)}
               className="flex items-center gap-1.5 bg-white/10 hover:bg-white/15 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-white/10 transition-all cursor-pointer"
             >
@@ -687,6 +743,87 @@ export default function SubmissionsPage() {
                 >
                   {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                   Confirm Payment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Bulk Assign to Staff Modal */}
+      {showAssignModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full overflow-hidden relative animate-in zoom-in-95 duration-150">
+            <div className="h-1 bg-gradient-to-r from-indigo-500 to-[#14452F]" />
+            <div className="p-6 sm:p-8 space-y-6">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-serif text-xl font-bold text-[#0B1D2E]">Assign to Staff Appraiser</h3>
+                  <p className="text-xs text-slate-500 mt-1">Select who to assign the {selectedIds.length} selected submission{selectedIds.length > 1 ? 's' : ''} to.</p>
+                </div>
+                <button onClick={() => { setShowAssignModal(false); setSelectedStaffId('') }} className="p-1.5 hover:bg-slate-100 rounded-lg transition-all cursor-pointer text-slate-450">
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              {staffLoading ? (
+                <div className="flex items-center justify-center py-8 gap-2 text-slate-400 text-xs">
+                  <Loader2 className="h-4 w-4 animate-spin" /> Loading staff members...
+                </div>
+              ) : staffMembers.length === 0 ? (
+                <div className="text-center py-8 text-slate-400 text-xs">No admin or staff members found.</div>
+              ) : (
+                <div className="space-y-2 max-h-[280px] overflow-y-auto pr-1">
+                  {staffMembers.map(member => (
+                    <button
+                      key={member.id}
+                      type="button"
+                      onClick={() => setSelectedStaffId(member.id)}
+                      className={cn(
+                        'w-full flex items-center gap-3 p-3.5 rounded-2xl border text-left transition-all cursor-pointer',
+                        selectedStaffId === member.id
+                          ? 'border-[#14452F] bg-[#14452F]/5'
+                          : 'border-slate-200 bg-slate-50 hover:bg-slate-100/60'
+                      )}
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-[#14452F]/10 flex items-center justify-center text-[#14452F] font-bold text-sm shrink-0">
+                        {(member.full_name || member.email || '?')[0].toUpperCase()}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-[#0B1D2E] truncate">{member.full_name || 'Unnamed'}</p>
+                        <p className="text-[10px] text-slate-400 truncate">{member.email}</p>
+                      </div>
+                      <span className={cn(
+                        'text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-lg shrink-0',
+                        member.role === 'admin'
+                          ? 'bg-indigo-50 text-indigo-700 border border-indigo-100'
+                          : 'bg-amber-50 text-amber-700 border border-amber-100'
+                      )}>
+                        {member.role}
+                      </span>
+                      {selectedStaffId === member.id && (
+                        <Check className="h-4 w-4 text-[#14452F] shrink-0" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => { setShowAssignModal(false); setSelectedStaffId('') }}
+                  className="flex-1 py-3 text-xs font-bold uppercase tracking-wider text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer text-center"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={isPending || !selectedStaffId}
+                  onClick={handleBulkAssign}
+                  className="flex-1 py-3 text-xs font-bold uppercase tracking-wider text-white bg-[#14452F] hover:bg-[#14452F]/90 rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
+                >
+                  {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                  Confirm Assignment
                 </button>
               </div>
             </div>

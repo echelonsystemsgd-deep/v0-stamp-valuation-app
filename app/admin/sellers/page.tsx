@@ -63,7 +63,7 @@ export default function SellerAccountsPage() {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .in('role', ['user', 'seller'])
+        .eq('role', 'seller')
         .order('created_at', { ascending: false })
 
       if (error) throw error
@@ -77,6 +77,16 @@ export default function SellerAccountsPage() {
 
   useEffect(() => {
     fetchProfiles()
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const q = params.get('search')
+      if (q) {
+        setSearch(q)
+      }
+    }
   }, [])
 
   const filteredProfiles = profiles.filter(p => {

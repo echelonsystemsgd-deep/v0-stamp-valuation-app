@@ -142,7 +142,7 @@ export function SellYourStampsView() {
               <TabsContent value="form" className="mt-0 outline-none focus-visible:ring-0">
                 <div
                   id="appraisal-form-header"
-                  className="max-w-4xl mx-auto bg-grainy-paper p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-gold/10 ring-1 ring-gold/5 relative overflow-hidden"
+                  className="max-w-4xl mx-auto bg-grainy-paper p-5 sm:p-8 md:p-12 rounded-3xl sm:rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-gold/10 ring-1 ring-gold/5 relative overflow-hidden"
                 >
                   <div className="absolute top-0 left-0 w-full h-1 bg-gold/30" />
                   <div className="mb-10 text-center">

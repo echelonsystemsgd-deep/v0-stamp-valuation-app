@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { SidebarNav } from '@/components/dashboard/sidebar-nav'
 import { Menu } from 'lucide-react'
 import {
@@ -124,9 +125,12 @@ export function ResponsiveSidebarWrapper({ user, profile, children }: Responsive
                 />
               </SheetContent>
             </Sheet>
-            <span className="font-serif text-lg font-black tracking-wider text-white select-none">
+            <Link
+              href={profile?.role === 'admin' || profile?.role === 'staff' ? '/admin' : '/dashboard'}
+              className="font-serif text-lg font-black tracking-wider text-white hover:opacity-95 transition-all focus:outline-none"
+            >
               SellYourStamps<span className="text-[#C5A059]">UK</span>
-            </span>
+            </Link>
           </div>
 
           <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#C5A059]/10 text-[#C5A059] border border-[#C5A059]/25 select-none tracking-wider">

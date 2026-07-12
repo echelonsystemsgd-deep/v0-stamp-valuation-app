@@ -43,7 +43,8 @@ export function ConciergeWidget() {
     pathname.startsWith('/login') ||
     pathname.startsWith('/signup') ||
     pathname.startsWith('/unauthorized') ||
-    pathname.startsWith('/auth')
+    pathname.startsWith('/auth') ||
+    pathname.startsWith('/sell-your-stamps')
   ) return null
 
   return (

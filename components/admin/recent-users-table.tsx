@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { useOnlinePresence } from '@/lib/presence-context'
 
 interface UserProfile {
@@ -17,6 +18,7 @@ interface RecentUsersTableProps {
 
 export function RecentUsersTable({ initialUsers }: RecentUsersTableProps) {
   const { onlineUserIds } = useOnlinePresence()
+  const router = useRouter()
 
   return (
     <div className="overflow-x-auto">
@@ -32,7 +34,12 @@ export function RecentUsersTable({ initialUsers }: RecentUsersTableProps) {
         <tbody className="divide-y divide-slate-100">
           {initialUsers && initialUsers.length > 0 ? (
             initialUsers.map((u) => (
-              <tr key={u.id} className="hover:bg-slate-50/50">
+              <tr 
+                key={u.id} 
+                onClick={() => router.push(`/admin/sellers?search=${encodeURIComponent(u.email)}`)}
+                className="hover:bg-slate-50 cursor-pointer transition-all"
+                title="Click to view in sellers list"
+              >
                 <td className="py-3 text-sm font-semibold text-slate-700">{u.email}</td>
                 <td className="py-3 text-sm text-slate-500">{u.full_name || 'Not provided'}</td>
                 <td className="py-3 text-sm font-bold text-amber-600 capitalize">{u.role}</td>

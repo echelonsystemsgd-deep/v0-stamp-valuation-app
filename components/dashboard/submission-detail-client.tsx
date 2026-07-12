@@ -791,7 +791,7 @@ export function SubmissionDetailClient({
           <div className="space-y-8">
             
             {/* 5. Realtime Conversation Board */}
-            <div className="bg-[#0B1D2E] text-white rounded-3xl border border-[#C5A059]/20 shadow-xl overflow-hidden flex flex-col h-[520px]">
+            <div className="bg-[#0B1D2E] text-white rounded-3xl border border-[#C5A059]/20 shadow-xl overflow-hidden flex flex-col h-[400px] md:h-[520px]">
               {/* Chat Header */}
               <div className="p-5 border-b border-[#C5A059]/10 bg-black/10 flex items-center justify-between shrink-0">
                 <div>

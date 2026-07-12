@@ -11,6 +11,7 @@ import {
   LayoutDashboard, 
   FileSpreadsheet, 
   Settings, 
+  UserCog,
   LogOut, 
   Loader2, 
   ShieldAlert, 
@@ -153,24 +154,27 @@ export function SidebarNav({ user, profile, className, isCollapsed = false, togg
     {
       group: 'COMMAND DECK',
       items: [
-        { label: 'Admin Overview', href: '/admin', icon: LayoutDashboard },
+        { label: role === 'staff' ? 'Appraiser Overview' : 'Admin Overview', href: '/admin', icon: LayoutDashboard },
         { label: 'Submissions Queue', href: '/admin/submissions', icon: FileSpreadsheet },
         ...(role === 'admin' ? [{ label: 'Analytics Reports', href: '/admin/reports', icon: History }] : [])
       ]
     },
-    {
-      group: 'SYSTEM MANAGEMENT',
-      items: [
-        { label: 'Rates Manager', href: '/admin/categories', icon: Coins },
-        { label: 'Seller Accounts', href: '/admin/sellers', icon: Users },
-        { label: 'Payout Bonuses', href: '/admin/bonuses', icon: Gift },
-        { label: 'Marketing', href: '/admin/marketing', icon: Megaphone }
-      ]
-    },
+    ...(role === 'admin' ? [
+      {
+        group: 'SYSTEM MANAGEMENT',
+        items: [
+          { label: 'Rates Manager', href: '/admin/categories', icon: Coins },
+          { label: 'Seller Accounts', href: '/admin/sellers', icon: Users },
+          { label: 'Payout Bonuses', href: '/admin/bonuses', icon: Gift },
+          { label: 'Marketing', href: '/admin/marketing', icon: Megaphone }
+        ]
+      }
+    ] : []),
     {
       group: 'SETTINGS',
       items: [
-        { label: 'System Settings', href: '/admin/settings', icon: Settings },
+        { label: 'Profile Settings', href: '/admin/profile', icon: UserCog },
+        ...(role === 'admin' ? [{ label: 'System Settings', href: '/admin/settings', icon: Settings }] : [])
       ]
     }
   ]

@@ -141,7 +141,7 @@ export function InlineSellCTA({
   }
 
   return (
-    <div className={`flex flex-col items-center sm:items-start text-center sm:text-left gap-6 p-8 bg-secondary rounded-xl border border-border ${className}`}>
+    <div className={`flex flex-col items-center sm:items-start text-center sm:text-left gap-6 p-5 sm:p-8 bg-secondary rounded-xl border border-border ${className}`}>
       <div className="max-w-3xl w-full">
         <h3 className="text-2xl font-bold text-primary mb-3">{title || defaultTitle}</h3>
         <p className="text-muted-foreground mb-3">

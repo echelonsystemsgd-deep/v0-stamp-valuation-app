@@ -122,6 +122,10 @@ interface Submission {
     code: string
     percentage_bonus: number
   } | null
+  assigned_appraiser_id: string | null
+  assigned_profile: {
+    full_name: string | null
+  } | null
 }
 
 interface Profile {
@@ -195,7 +199,21 @@ export default function SubmissionWorkspace() {
 
   const [isPending, startTransition] = useTransition()
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const supabase = createClient()
+  const [appraisers, setAppraisers] = useState<any[]>([])
+
+  useEffect(() => {
+    const fetchAppraisers = async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id, full_name, email, role')
+        .in('role', ['admin', 'staff'])
+        .order('full_name', { ascending: true })
+      setAppraisers(data || [])
+    }
+    if (currentAdminUser?.role === 'admin') {
+      fetchAppraisers()
+    }
+  }, [currentAdminUser])
 
   // Fetch initial details
   const fetchAllData = async () => {
@@ -210,7 +228,7 @@ export default function SubmissionWorkspace() {
       // Fetch Submissions with joined payout_bonus_codes
       const { data: sub, error: subErr } = await supabase
         .from('submissions')
-        .select('*, payout_bonus_codes(code, percentage_bonus)')
+        .select('*, payout_bonus_codes(code, percentage_bonus), assigned_profile:profiles!assigned_appraiser_id(full_name)')
         .eq('id', id)
         .single()
 
@@ -424,8 +442,32 @@ export default function SubmissionWorkspace() {
   const bonusAmount = (liveAuditedTotal * bonusPercentage) / 100
   const finalPayoutTotal = liveAuditedTotal + bonusAmount
 
+  const isReadOnlyForStaff = currentAdminUser?.role === 'staff' && submission?.assigned_appraiser_id !== null && submission?.assigned_appraiser_id !== currentAdminUser?.id
+
   const formatGBP = (val: number) => {
     return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(val)
+  }
+
+  // Claim appraisal submission for staff appraiser
+  const handleClaimSubmission = async (subId: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('No active appraiser session found.')
+
+      const { error } = await supabase
+        .from('submissions')
+        .update({
+          assigned_appraiser_id: user.id,
+          status: 'under_review'
+        })
+        .eq('id', subId)
+
+      if (error) throw error
+      toast.success('Appraisal claimed successfully! Worksheet unlocked.')
+      fetchAllData()
+    } catch (err: any) {
+      toast.error('Failed to claim appraisal: ' + err.message)
+    }
   }
 
   // Apply Payout Bonus Code
@@ -680,6 +722,81 @@ export default function SubmissionWorkspace() {
   return (
     <main className="flex-1 bg-[#FBFBF9] overflow-y-auto min-h-screen pb-16">
       
+      {/* Assignment Status Ribbon */}
+      {currentAdminUser && (
+        <div className={cn(
+          "px-6 py-3 text-xs font-semibold border-b flex items-center justify-between gap-4 transition-all duration-300",
+          !submission.assigned_appraiser_id 
+            ? "bg-amber-50 text-amber-800 border-amber-200" 
+            : submission.assigned_appraiser_id === currentAdminUser.id 
+              ? "bg-emerald-50 text-emerald-800 border-emerald-200" 
+              : "bg-red-50 text-red-800 border-red-200"
+        )}>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full animate-pulse bg-current" />
+            <span>
+              {!submission.assigned_appraiser_id 
+                ? "This appraisal parcel is currently unassigned to any appraiser desk." 
+                : submission.assigned_appraiser_id === currentAdminUser.id 
+                  ? "Assigned to your desk. You have write permissions for this worksheet." 
+                  : `Assigned to Appraiser ${submission.assigned_profile?.full_name || 'Staff'}. Worksheet editing is locked.`}
+            </span>
+          </div>
+
+          {currentAdminUser.role === 'admin' ? (
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] uppercase font-bold text-slate-500">Assign Desk:</span>
+              <select
+                disabled={isPending}
+                value={submission.assigned_appraiser_id || ''}
+                onChange={async (e) => {
+                  const val = e.target.value || null
+                  startTransition(async () => {
+                    try {
+                      const { error } = await supabase
+                        .from('submissions')
+                        .update({ assigned_appraiser_id: val })
+                        .eq('id', submission.id)
+                      if (error) throw error
+                      
+                      await supabase.from('admin_audit_logs').insert({
+                        admin_id: currentAdminUser.id,
+                        action_type: 'appraisal_reassigned',
+                        target_user_id: val,
+                        reason: `Reassigned appraisal VAL-${submission.id.slice(0, 8).toUpperCase()} to ${val ? appraisers.find(a => a.id === val)?.full_name || 'Appraiser' : 'Unassigned'}`
+                      })
+
+                      toast.success('Appraiser assignment updated successfully.')
+                      setSubmission(prev => prev ? { ...prev, assigned_appraiser_id: val } : null)
+                    } catch (err: any) {
+                      toast.error('Failed to update assignment: ' + err.message)
+                    }
+                  })
+                }}
+                className="bg-white border border-slate-200 focus:border-[#C5A059] focus:outline-none rounded-lg p-1 text-[11px] font-bold text-slate-700 transition-all cursor-pointer"
+              >
+                <option value="">-- Unassigned --</option>
+                {appraisers.map(appraiser => (
+                  <option key={appraiser.id} value={appraiser.id}>
+                    {appraiser.full_name || appraiser.email} ({appraiser.role})
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            !submission.assigned_appraiser_id && (submission.status === 'received' || submission.status === 'under_review') && (
+              <button
+                onClick={() => handleClaimSubmission(submission.id)}
+                disabled={isPending}
+                className="px-3.5 py-1.5 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-lg text-[10px] font-bold uppercase transition-all shadow-sm flex items-center gap-1 cursor-pointer disabled:opacity-40"
+              >
+                {isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Claim Appraisal'}
+              </button>
+            )
+          )}
+        </div>
+      )}
+      
       {/* Top Navigation Bar */}
       <div className="border-b border-slate-200/60 bg-white sticky top-0 z-30 px-6 py-4 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between shadow-xs">
         <div className="flex items-center gap-4 overflow-hidden w-full md:w-auto">
@@ -760,7 +877,7 @@ export default function SubmissionWorkspace() {
           <div className="space-y-8 w-full lg:w-[var(--split-width)] lg:pr-4 shrink-0 transition-all duration-75">
             
             {/* Section 1: Photos Appraisal Panel */}
-            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-6 space-y-4">
+            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-4 sm:p-6 space-y-4">
               <div className="flex justify-between items-center">
                 <h3 className="font-serif text-lg font-bold text-[#0B1D2E] flex items-center gap-2">
                   <ClipboardList className="h-5 w-5 text-[#C5A059]" /> Verification Photos
@@ -845,8 +962,8 @@ export default function SubmissionWorkspace() {
               )}
             </div>
 
-            {/* Section 2: Audited Quantity Worksheet */}
-            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-6 space-y-4">
+            {/* Section 2: Appraisal Audit Worksheet */}
+            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-4 sm:p-6 space-y-4">
               <div className="flex justify-between items-center">
                 <div>
                   <h3 className="font-serif text-lg font-bold text-[#0B1D2E]">Appraisal Audit Worksheet</h3>
@@ -855,7 +972,7 @@ export default function SubmissionWorkspace() {
                 {hasChanges && (
                   <button
                     onClick={handleSaveWorksheet}
-                    disabled={isPending}
+                    disabled={isPending || isReadOnlyForStaff}
                     className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl bg-[#14452F] hover:bg-[#14452F]/90 text-white shadow-md transition-all flex items-center gap-1"
                   >
                     {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
@@ -900,7 +1017,7 @@ export default function SubmissionWorkspace() {
                           <td className="py-3.5 px-6 text-center" onClick={e => e.stopPropagation()}>
                             <input
                               type="number"
-                              disabled={submission.status === 'paid' || submission.status === 'approved' || submission.status === 'cancelled' || submission.status === 'rejected'}
+                              disabled={isReadOnlyForStaff || submission.status === 'paid' || submission.status === 'approved' || submission.status === 'cancelled' || submission.status === 'rejected'}
                               value={editQty}
                               onChange={(e) => handleQuantityEdit(item.id, e.target.value)}
                               className="w-24 text-center px-2 py-1.5 border border-slate-200 focus:border-[#C5A059] focus:outline-none rounded-lg text-sm font-bold font-mono transition-all disabled:bg-slate-50 disabled:opacity-60"
@@ -917,8 +1034,8 @@ export default function SubmissionWorkspace() {
               </div>
             </div>
 
-            {/* Section 3: Live Seller Communication Widget */}
-            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-6 space-y-4 flex flex-col h-[480px]">
+            {/* Section 3: Two-Way Seller Communication */}
+            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-4 sm:p-6 space-y-4 flex flex-col h-[480px]">
               <div className="flex justify-between items-center border-b border-slate-100 pb-3 shrink-0">
                 <h3 className="font-serif text-lg font-bold text-[#0B1D2E] flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-[#C5A059]" /> Two-Way Seller Communication
@@ -1036,7 +1153,7 @@ export default function SubmissionWorkspace() {
           <div className="space-y-6 w-full lg:flex-1 lg:pl-4 mt-6 lg:mt-0">
             
             {/* 1. Status & Valuation Summary Card */}
-            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-6 space-y-5">
+            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-4 sm:p-6 space-y-5">
               <h3 className="font-serif text-md font-bold text-[#0B1D2E] border-b border-slate-100 pb-2">Valuation Summary</h3>
               
               <div className="space-y-3 text-sm">
@@ -1093,7 +1210,7 @@ export default function SubmissionWorkspace() {
             </div>
 
             {/* 2. Seller Context Card */}
-            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-6 space-y-4">
+            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-4 sm:p-6 space-y-4">
               <h3 className="font-serif text-md font-bold text-[#0B1D2E] border-b border-slate-100 pb-2 flex items-center gap-1.5">
                 <User className="h-4.5 w-4.5 text-[#C5A059]" /> Seller Details
               </h3>
@@ -1199,8 +1316,8 @@ export default function SubmissionWorkspace() {
               )}
             </div>
 
-            {/* 3. Append-Only Private Notes Timeline */}
-            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-6 space-y-4">
+            {/* 3. Internal Staff Notes */}
+            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-4 sm:p-6 space-y-4">
               <h3 className="font-serif text-md font-bold text-[#0B1D2E] border-b border-slate-100 pb-2">
                 Internal Staff Notes
               </h3>
@@ -1245,7 +1362,7 @@ export default function SubmissionWorkspace() {
             </div>
 
             {/* 4. Audit History Logs */}
-            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-6 space-y-4">
+            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-4 sm:p-6 space-y-5">
               <h3 className="font-serif text-md font-bold text-[#0B1D2E] border-b border-slate-100 pb-2">
                 Milestone History
               </h3>
@@ -1274,13 +1391,13 @@ export default function SubmissionWorkspace() {
       </div>
 
       {/* Sticky Bottom Actions Ribbon */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#0B1D2E]/95 backdrop-blur-xs border-t border-[#C5A059]/20 p-4 flex flex-col sm:flex-row justify-between items-center gap-4 z-30 shadow-2xl px-6 sm:px-12 animate-slide-up">
-        <div className="flex items-center gap-6 text-sm text-white">
+      <div className="fixed bottom-0 left-0 right-0 bg-[#0B1D2E]/95 backdrop-blur-xs border-t border-[#C5A059]/20 p-4 flex flex-col sm:flex-row justify-between items-center gap-4 z-30 shadow-2xl px-4 sm:px-12 animate-slide-up">
+        <div className="flex items-center gap-3 sm:gap-6 text-xs sm:text-sm text-white flex-wrap sm:flex-nowrap justify-center sm:justify-start">
           <div>
             <span className="text-slate-400 text-[10px] block uppercase font-bold tracking-wider">Estimated Total</span>
             <span className="font-mono font-bold text-slate-200">{formatGBP(submission.estimated_valuation)}</span>
           </div>
-          <div className="h-8 w-px bg-white/10" />
+          <div className="hidden sm:block h-8 w-px bg-white/10" />
           <div>
             <span className="text-[#C5A059] text-[10px] block uppercase tracking-wider font-bold">Audited Base</span>
             <span className="font-mono font-bold text-slate-200 block">
@@ -1289,7 +1406,7 @@ export default function SubmissionWorkspace() {
           </div>
           {bonusPercentage > 0 && (
             <>
-              <div className="h-8 w-px bg-white/10" />
+              <div className="hidden sm:block h-8 w-px bg-white/10" />
               <div>
                 <span className="text-amber-500 text-[10px] block uppercase tracking-wider font-bold">Bonus ({submission.payout_bonus_codes?.code})</span>
                 <span className="font-mono font-bold text-amber-400 block">
@@ -1298,7 +1415,7 @@ export default function SubmissionWorkspace() {
               </div>
             </>
           )}
-          <div className="h-8 w-px bg-white/10" />
+          <div className="hidden sm:block h-8 w-px bg-white/10" />
           <div>
             <span className="text-emerald-400 text-[10px] block uppercase tracking-wider font-bold">Net Payout</span>
             <span className="font-mono font-black text-white text-base block">
@@ -1307,12 +1424,12 @@ export default function SubmissionWorkspace() {
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-end">
           {hasChanges && (
             <button
               onClick={handleSaveWorksheet}
-              disabled={isPending}
-              className="px-4.5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl border border-[#C5A059]/30 hover:border-[#C5A059] bg-white/5 hover:bg-white/10 text-white transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
+              disabled={isPending || isReadOnlyForStaff}
+              className="flex-1 sm:flex-none justify-center px-4.5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl border border-[#C5A059]/30 hover:border-[#C5A059] bg-white/5 hover:bg-white/10 text-white transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
             >
               {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5 text-[#C5A059]" />}
               Save Progress
@@ -1323,26 +1440,25 @@ export default function SubmissionWorkspace() {
             <>
               <button
                 onClick={() => setShowRejectModal(true)}
-                disabled={isPending}
-                className="px-4.5 py-2.5 border border-red-200/20 hover:border-red-300/40 text-xs font-bold uppercase tracking-wider rounded-xl bg-red-950/20 text-red-400 hover:text-red-300 transition-all cursor-pointer"
+                disabled={isPending || isReadOnlyForStaff}
+                className="flex-1 sm:flex-none text-center px-4.5 py-2.5 border border-red-200/20 hover:border-red-300/40 text-xs font-bold uppercase tracking-wider rounded-xl bg-red-950/20 text-red-400 hover:text-red-300 transition-all cursor-pointer"
               >
                 Reject
               </button>
-
               <button
                 onClick={() => handleTransitionStatus('approved')}
-                disabled={isPending}
-                className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl bg-[#14452F] hover:bg-[#14452F]/90 text-white shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                disabled={isPending || isReadOnlyForStaff}
+                className="flex-1 sm:flex-none justify-center px-4.5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl bg-[#14452F] hover:bg-[#14452F]/90 text-white shadow-md transition-all flex items-center gap-1 cursor-pointer"
               >
                 <Check className="h-3.5 w-3.5" /> Approve Appraisal
               </button>
             </>
           )}
 
-          {submission.status === 'approved' && (
+          {submission.status === 'approved' && currentAdminUser?.role !== 'staff' && (
             <button
               onClick={() => setShowPayoutModal(true)}
-              className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl bg-[#14452F] hover:bg-[#14452F]/90 text-white shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+              className="flex-1 sm:flex-none justify-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl bg-[#14452F] hover:bg-[#14452F]/90 text-white shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <CreditCard className="h-3.5 w-3.5 text-[#C5A059]" /> Log Payout
             </button>
