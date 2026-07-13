@@ -132,25 +132,25 @@ export default function HowToSellPage() {
         </section>
 
         {/* Process Timeline */}
-        <section className="py-16 lg:py-20 bg-secondary/30" aria-labelledby="process-heading">
+        <section className="py-20 md:py-28 lg:py-32 bg-white" aria-labelledby="process-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl mx-auto text-center mb-12">
-              <h2 id="process-heading" className="text-3xl sm:text-4xl font-bold tracking-tight text-primary">The Selling Process</h2>
+              <h2 id="process-heading" className="font-serif text-3xl md:text-4xl font-bold text-primary text-balance">The Selling Process</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 Follow these simple steps to sell your stamp collection. Our team is here to guide you at every stage.
               </p>
             </div>
-            <div className="max-w-4xl">
+            <div className="max-w-4xl mx-auto">
               <ProcessTimeline />
             </div>
           </div>
         </section>
 
         {/* FAQs */}
-        <section className="py-16 lg:py-20 bg-secondary" aria-labelledby="faq-heading">
+        <section className="py-20 md:py-28 lg:py-32 bg-secondary" aria-labelledby="faq-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <h2 id="faq-heading" className="text-primary">Frequently Asked Questions</h2>
+              <h2 id="faq-heading" className="font-serif text-3xl md:text-4xl font-bold text-primary text-balance">Frequently Asked Questions</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 Find answers to common questions about selling your stamps.
               </p>
@@ -161,21 +161,17 @@ export default function HowToSellPage() {
                 <h3 className="font-serif text-xl font-semibold text-primary mb-4">
                   Shipping & Safety
                 </h3>
-                <Card>
-                  <CardContent className="py-4">
-                    <FAQAccordion items={shippingFAQs} />
-                  </CardContent>
-                </Card>
+                <div className="py-2">
+                  <FAQAccordion items={shippingFAQs} />
+                </div>
               </div>
               <div>
                 <h3 className="font-serif text-xl font-semibold text-primary mb-4">
                   General Questions
                 </h3>
-                <Card>
-                  <CardContent className="py-4">
-                    <FAQAccordion items={generalFAQs} />
-                  </CardContent>
-                </Card>
+                <div className="py-2">
+                  <FAQAccordion items={generalFAQs} />
+                </div>
               </div>
             </div>
 

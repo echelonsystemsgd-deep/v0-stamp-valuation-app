@@ -65,10 +65,10 @@ const readinessItems = [
 
 export const ValuationReadiness = () => {
   return (
-    <section className="py-16 lg:py-24 overflow-hidden" aria-labelledby="readiness-heading">
+    <section className="py-20 md:py-28 lg:py-32 overflow-hidden" aria-labelledby="readiness-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 id="readiness-heading" className="text-3xl md:text-5xl font-bold text-oxford-blue mb-6">
+          <h2 id="readiness-heading" className="font-serif text-3xl md:text-4xl font-bold text-oxford-blue mb-6">
             Getting the Best Value for Your Stamps
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">

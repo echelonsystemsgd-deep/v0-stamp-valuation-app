@@ -41,7 +41,7 @@ export default async function DashboardPage() {
 
   return (
     <main className="flex-1 bg-[#FBFBF9] py-8 px-6 sm:px-8 overflow-y-auto">
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Onboarding Alert Banner */}
         <OnboardingBanner isProfileIncomplete={isProfileIncomplete} />
 

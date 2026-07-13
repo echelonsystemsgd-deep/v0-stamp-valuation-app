@@ -55,7 +55,7 @@ export default async function AdminPage() {
 
     return (
       <main className="flex-1 bg-[#FBFBF9] py-8 px-6 sm:px-8 overflow-y-auto">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <AppraiserWorkbench
             initialAssigned={assignedData as any || []}
             initialUnassigned={unassignedData as any || []}
@@ -134,7 +134,7 @@ export default async function AdminPage() {
 
   return (
     <main className="flex-1 bg-[#FBFBF9] py-8 px-6 sm:px-8 overflow-y-auto">
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8">
 
         {/* 1. Welcome Banner */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-5 sm:p-6 md:p-8 bg-white text-[#0B1D2E] rounded-3xl border border-slate-150 shadow-sm relative overflow-hidden">

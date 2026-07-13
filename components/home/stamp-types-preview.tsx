@@ -29,11 +29,11 @@ export function StampTypesPreview() {
   })
 
   return (
-    <section className="py-28 lg:py-32 bg-slate-50/50 dark:bg-slate-950/50" aria-labelledby="stamp-types-heading">
+    <section className="py-20 md:py-28 lg:py-32 bg-slate-50/50 dark:bg-slate-950/50" aria-labelledby="stamp-types-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <h2 id="stamp-types-heading" className="text-navy text-3xl font-black tracking-tight md:text-4xl">
+            <h2 id="stamp-types-heading" className="font-serif text-3xl md:text-4xl font-bold text-navy text-balance">
               What We Buy & Live Rates
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
@@ -52,14 +52,14 @@ export function StampTypesPreview() {
           </Button>
         </div>
 
-        <div className="mt-12 flex flex-wrap justify-center gap-6">
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {groups.map(({ group, bestItem, items }) => {
             const displayTitle = group === "Barcoded Values" ? "Barcoded Face Values" : `${group} Stamps`
             
             return (
               <Card
                 key={group}
-                className="group w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex flex-col overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg bg-white dark:bg-slate-900"
+                className="group flex flex-col overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg bg-white dark:bg-slate-900"
               >
                 <div className="relative aspect-4/3 overflow-hidden bg-muted m-2 rounded-xl">
                   <div className="absolute inset-0 stamp-edge z-10 pointer-events-none opacity-50" />

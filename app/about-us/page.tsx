@@ -57,10 +57,10 @@ export default function AboutUsPage() {
         <AboutNarrative />
 
         {/* Our Values */}
-        <section className="py-16 lg:py-20 bg-secondary" aria-labelledby="values-heading">
+        <section className="py-20 md:py-28 lg:py-32 bg-secondary" aria-labelledby="values-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <h2 id="values-heading" className="text-primary">Our Values</h2>
+              <h2 id="values-heading" className="font-serif text-3xl md:text-4xl font-bold text-primary text-balance">Our Values</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 These principles guide everything we do at Sell Your Stamps UK.
               </p>
@@ -93,7 +93,7 @@ export default function AboutUsPage() {
                   <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
                   <span className="text-gold text-sm font-semibold tracking-wider uppercase">Our Promise</span>
                 </div>
-                <h2 id="commitment-heading" className="text-white text-4xl lg:text-5xl font-bold mb-6">Our Commitment to You</h2>
+                <h2 id="commitment-heading" className="font-serif text-3xl md:text-4xl font-bold text-white mb-6">Our Commitment to You</h2>
                 <p className="text-xl text-white/80 leading-relaxed max-w-xl">
                   When you choose Sell Your Stamps UK, you&apos;re working with a team that genuinely 
                   cares about philately and respects the effort that goes into building a collection.

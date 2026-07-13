@@ -21,7 +21,7 @@ export function ImportantNotice() {
           <div className="bg-rose-900 dark:bg-rose-950 p-2.5 rounded-xl shadow-md shrink-0">
             <ShieldAlert className="h-5 w-5 text-white" />
           </div>
-          <h2 id="notice-heading" className="font-serif text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          <h2 id="notice-heading" className="font-serif text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Important Info
           </h2>
         </div>

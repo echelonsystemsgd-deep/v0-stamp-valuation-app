@@ -8,7 +8,7 @@ import { CheckCircle2 } from 'lucide-react'
 
 export function AboutNarrative() {
   return (
-    <section className="py-14 md:py-20 lg:py-32 bg-white" aria-labelledby="about-heading text-lg">
+    <section className="py-20 md:py-28 lg:py-32 bg-white" aria-labelledby="about-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-14 lg:gap-24 items-center">
           {/* Left Column: Narrative */}
@@ -44,7 +44,7 @@ export function AboutNarrative() {
               </div>
             </div>
 
-            <Button asChild size="lg" className="bg-forest-green hover:bg-forest-green/90 text-white font-bold h-11 md:h-14 px-6 md:px-10 text-base md:text-lg rounded-xl shadow-lg shadow-forest-green/20">
+            <Button asChild size="lg" className="bg-forest-green hover:bg-forest-green/90 text-white font-bold h-12 md:h-14 px-6 md:px-10 text-base md:text-lg rounded-xl shadow-lg shadow-forest-green/20">
               <Link href="/sell-your-stamps">Sell Your Stamps Today</Link>
             </Button>
           </div>

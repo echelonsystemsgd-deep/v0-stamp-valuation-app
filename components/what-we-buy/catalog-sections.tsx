@@ -12,7 +12,7 @@ import { buyingRates } from "@/data/buying-rates"
 export function WhatWeBuyIntroBlock() {
   return (
     <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
-      <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-4">
+      <h2 className="font-serif text-3xl md:text-4xl font-bold text-navy mb-4 text-balance">
         {whatWeBuyIntro.headline}
       </h2>
       {whatWeBuyIntro.paragraphs.map((p, i) => (
@@ -106,7 +106,7 @@ export function WhatWeBuyCategoryGrid() {
               
               <div className="pt-8 mt-8 border-t border-slate-100 flex flex-wrap items-center justify-between gap-6">
                 <Button asChild size="lg" className="w-full sm:w-auto bg-forest-green hover:bg-forest-green/90 text-white font-bold h-14 px-8 text-base shadow-lg shadow-forest-green/20 transition-all duration-300 hover:-translate-y-0.5 shrink-0">
-                  <Link href="/sell-your-stamps">Sell Your Stamps Now!</Link>
+                  <Link href="/sell-your-stamps">Sell Your Stamps</Link>
                 </Button>
                 
                 {displayRateLabel && (

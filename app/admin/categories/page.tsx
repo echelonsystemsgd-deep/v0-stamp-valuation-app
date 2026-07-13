@@ -207,8 +207,8 @@ export default function RatesManagerPage() {
   }
 
   return (
-    <main className="flex-1 bg-[#FBFBF9] overflow-y-auto min-h-screen pb-16">
-      <div className="max-w-7xl mx-auto py-8 px-6 sm:px-8 space-y-6">
+    <main className="flex-1 bg-[#FBFBF9] py-8 px-6 sm:px-8 overflow-y-auto min-h-screen">
+      <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Block */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
