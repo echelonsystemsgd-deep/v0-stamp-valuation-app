@@ -2,11 +2,12 @@
 
 import React, { useState } from "react"
 import Image from "next/image"
-import { Plus, Minus, Info, Calculator, ArrowRight } from "lucide-react"
+import { Plus, Minus, Info, Calculator, ArrowRight, HelpCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
   buyingRates,
   calculatePurchaseTotal,
@@ -193,11 +194,30 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
                 <div className="font-bold text-slate-700 text-lg font-mono">£{item.faceValue.toFixed(2)}</div>
               </div>
               <div className="space-y-1.5 pl-4">
-                <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black">Our Rate</span>
-                <div>
+                <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black block">Our Rate</span>
+                <div className="flex items-center gap-1.5">
                   <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 font-bold px-3 py-0.5">
                     {(item.rate * 100).toFixed(item.rate % 0.01 === 0 ? 0 : 1)}%
                   </Badge>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button type="button" className="text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-200 transition-colors cursor-pointer focus:outline-none p-0.5" aria-label="Valuation Rate Guide">
+                        <HelpCircle className="h-3.5 w-3.5" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80 p-4 text-left font-normal normal-case bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-border/80 rounded-xl shadow-xl z-50" align="end">
+                      <h4 className="font-bold text-sm text-slate-950 dark:text-white mb-2 font-serif">Valuation Rate Guide</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
+                        Rates are determined by format (full sheets vs. booklets or loose stamps) and condition. For vintage stamps, we grade as follows:
+                      </p>
+                      <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                        <li><strong className="text-slate-950 dark:text-white">MNH (Mint Never Hinged):</strong> Pristine original gum, no hinge marks.</li>
+                        <li><strong className="text-slate-950 dark:text-white">MH (Mint Hinged):</strong> Unused, but has a hinge mark/remnant on the back.</li>
+                        <li><strong className="text-slate-950 dark:text-white">FU (Fine Used):</strong> Postally used with a clean, light cancel mark.</li>
+                        <li><strong className="text-slate-950 dark:text-white">GU (Good Used):</strong> Postally used with a heavier cancel mark or flaws.</li>
+                      </ul>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             </div>
@@ -273,7 +293,28 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
                   <div>Product</div>
                   <div>Description</div>
                   <div className="text-right">Face Price</div>
-                  <div className="text-right">Buy Rate %</div>
+                  <div className="text-right flex items-center justify-end gap-1">
+                    <span>Buy Rate %</span>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button type="button" className="text-white/80 hover:text-white transition-colors cursor-pointer focus:outline-none" aria-label="Valuation Rate Guide">
+                          <HelpCircle className="h-4 w-4" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-80 p-4 text-left font-normal normal-case bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-border/80 rounded-xl shadow-xl z-50" align="center">
+                        <h4 className="font-bold text-sm text-slate-950 dark:text-white mb-2 font-serif">Valuation Rate Guide</h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
+                          Rates are determined by format (full sheets vs. booklets or loose stamps) and condition. For vintage stamps, we grade as follows:
+                        </p>
+                        <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-350">
+                          <li><strong className="text-slate-950 dark:text-white">MNH (Mint Never Hinged):</strong> Pristine original gum, no hinge marks.</li>
+                          <li><strong className="text-slate-950 dark:text-white">MH (Mint Hinged):</strong> Unused, but has a hinge mark/remnant on the back.</li>
+                          <li><strong className="text-slate-950 dark:text-white">FU (Fine Used):</strong> Postally used with a clean, light cancel mark.</li>
+                          <li><strong className="text-slate-950 dark:text-white">GU (Good Used):</strong> Postally used with a heavier cancel mark or flaws.</li>
+                        </ul>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                   <div className="text-center">Quantity</div>
                   <div className="text-right">Subtotal Offer</div>
                 </div>

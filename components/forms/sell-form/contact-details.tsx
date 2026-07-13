@@ -81,20 +81,25 @@ export function ContactDetailsStep({ formData, updateFormData, errors }: Contact
       <fieldset className="flex flex-col gap-3">
         <legend className="text-sm font-medium">Preferred Contact Method</legend>
         <div className="flex flex-wrap gap-4">
-          {['email', 'phone', 'either'].map((method) => (
+          {[
+            { value: 'email', label: 'Email' },
+            { value: 'phone', label: 'Phone Call' },
+            { value: 'callback', label: 'Request Call Back 📞' },
+            { value: 'either', label: 'Either (Email/Phone)' }
+          ].map((method) => (
             <label
-              key={method}
+              key={method.value}
               className="flex items-center gap-2 cursor-pointer"
             >
               <input
                 type="radio"
                 name="preferredContact"
-                value={method}
-                checked={formData.preferredContact === method}
+                value={method.value}
+                checked={formData.preferredContact === method.value}
                 onChange={(e) => updateFormData({ preferredContact: e.target.value })}
                 className="w-5 h-5 accent-forest-green"
               />
-              <span className="text-sm capitalize">{method}</span>
+              <span className="text-sm">{method.label}</span>
             </label>
           ))}
         </div>
@@ -123,8 +128,28 @@ export function ContactDetailsStep({ formData, updateFormData, errors }: Contact
         </p>
       </div>
 
+      {/* Trust & Guarantee Indicators */}
+      <div className="border border-gold/30 bg-gold/5 dark:bg-gold/10/5 rounded-2xl p-5 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-16 h-16 bg-gold/10 rounded-full -mr-8 -mt-8" />
+        <h4 className="font-serif text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-3">Our Guarantees to You</h4>
+        <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-2">
+          <li className="flex items-start gap-2">
+            <span className="text-forest-green font-bold shrink-0">✓</span>
+            <span><strong>No obligation:</strong> Our valuation is completely free with no pressure to sell.</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-forest-green font-bold shrink-0">✓</span>
+            <span><strong>Free insured returns:</strong> If you decline our offer, we ship your stamps back fully insured at no cost.</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-forest-green font-bold shrink-0">✓</span>
+            <span><strong>Secure transit:</strong> Your collection is covered by specialist insurance up to £50,000 during transport.</span>
+          </li>
+        </ul>
+      </div>
+
       {/* Privacy Notice */}
-      <div className="bg-secondary rounded-lg p-4 text-sm text-muted-foreground">
+      <div className="bg-secondary/40 rounded-xl p-4 text-xs sm:text-sm text-muted-foreground border border-border/30">
         <p>
           By submitting this form, you agree to our privacy policy. Your information 
           will only be used to process your valuation request and will not be shared 

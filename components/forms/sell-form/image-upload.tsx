@@ -145,18 +145,40 @@ export function ImageUploadStep({ formData, updateFormData }: ImageUploadStepPro
         </div>
       )}
 
-      {/* Tips */}
-      <div className="bg-secondary rounded-lg p-4">
-        <h4 className="font-medium text-primary flex items-center gap-2 mb-2">
-          <ImageIcon className="w-4 h-4" />
-          Photo Tips
+      {/* Photo Tips & Visual Guide */}
+      <div className="bg-secondary/40 rounded-2xl p-5 border border-border/40">
+        <h4 className="font-serif text-lg font-bold text-primary flex items-center gap-2 mb-4">
+          <ImageIcon className="w-5 h-5 text-forest-green" />
+          Photo Guidelines
         </h4>
-        <ul className="text-sm text-muted-foreground flex flex-col gap-1">
-          <li>Take photos in good natural light</li>
-          <li>Include close-ups of any rare or valuable stamps</li>
-          <li>Show the overall album or collection spread</li>
-          <li>Capture any visible condition issues clearly</li>
-        </ul>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="border border-emerald-200 bg-emerald-50/40 dark:bg-emerald-950/10 rounded-xl p-4 flex gap-3">
+            <div className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center shrink-0 text-emerald-700 font-black text-sm">
+              ✓
+            </div>
+            <div className="space-y-1">
+              <h5 className="font-bold text-emerald-800 dark:text-emerald-400 text-sm">Good Practices</h5>
+              <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc pl-4">
+                <li>Lay albums or pages completely flat.</li>
+                <li>Take photos in bright, indirect natural light.</li>
+                <li>Include close-ups of distinct or older stamps.</li>
+              </ul>
+            </div>
+          </div>
+          <div className="border border-red-200 bg-red-50/40 dark:bg-red-950/10 rounded-xl p-4 flex gap-3">
+            <div className="w-6 h-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 text-red-750 font-black text-sm">
+              ✗
+            </div>
+            <div className="space-y-1">
+              <h5 className="font-bold text-red-800 dark:text-red-400 text-sm">Avoid These</h5>
+              <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc pl-4">
+                <li>Avoid blurry shots or camera shaking.</li>
+                <li>Avoid glare/flash reflections on plastic sleeves.</li>
+                <li>Do not stack or overlap loose stamps.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
