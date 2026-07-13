@@ -47,4 +47,19 @@ For pages with user input forms, we must minimize distraction. We will use the s
 ## Phase 4: Quality Assurance & Review
 - [ ] **Mobile Responsiveness:** Verify the hero slideshows resize gracefully on mobile and tablet views.
 - [ ] **Performance Check:** Ensure loading multiple images on these pages does not severely impact PageSpeed. Implement lazy loading for images not on the first slide.
-- [ ] **Contrast Check:** Verify that the page titles over the slideshows are perfectly readable against all images in the rotation (adjusting the dark overlay if necessary).
+- [x] **Contrast Check:** Verify that the page titles over the slideshows are perfectly readable against all images in the rotation (adjusting the dark overlay if necessary).
+
+## Phase 5: Cinematic Video Integration
+We have integrated a cinematic background video (using a high-quality philately asset) directly into the slideshow cycle to instantly captivate visitors and establish premium credibility.
+
+- [x] **Video Support in Base Component:** Integrated a background HTML5 video player into `@/components/ui/hero-slideshow.tsx`.
+- [x] **Seamless Transition to Images:** Programmed an `onEnded` event on the video to smoothly fade the video out and start the standard image slideshow.
+- [x] **Unified Continuous Loop:** Unified the slide index count to include the video (as slide 0) and the image sequence. Once the final image slide completes, the system resets and plays the video again.
+- [x] **Global Application:** Defaulted the `videoSrc` property inside the base component to `/6657750-uhd_4096_2160_25fps.mp4`. This ensures the video automatically reflects on all pages utilizing the component:
+  - Homepage (`/`)
+  - About Us (`/about-us`)
+  - How to Sell (`/how-to-sell`)
+  - What We Buy (`/what-we-buy`)
+  - Contact Us (`/contact`)
+  - Sell Your Stamps (`/sell-your-stamps`)
+

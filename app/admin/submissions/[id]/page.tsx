@@ -161,6 +161,7 @@ const statusConfig: Record<Submission['status'], { label: string; className: str
 }
 
 export default function SubmissionWorkspace() {
+  const supabase = createClient()
   const { id } = useParams() as { id: string }
   const router = useRouter()
   const [submission, setSubmission] = useState<Submission | null>(null)
@@ -254,7 +255,7 @@ export default function SubmissionWorkspace() {
 
       // Map initial audited quantities
       const quantitiesMap: Record<string, number> = {}
-      itms?.forEach(item => {
+      itms?.forEach((item: any) => {
         quantitiesMap[item.id] = item.reviewed_quantity !== null ? item.reviewed_quantity : item.quantity
       })
       setAuditedQuantities(quantitiesMap)
@@ -353,7 +354,7 @@ export default function SubmissionWorkspace() {
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'submission_messages', filter: `submission_id=eq.${id}` },
-        async (payload) => {
+        async (payload: any) => {
           // Refetch messages to get full profile join
           const { data: newMsg } = await supabase
             .from('submission_messages')

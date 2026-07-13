@@ -26,6 +26,7 @@ export const HeroSlideshow = React.memo(function HeroSlideshow() {
   return (
     <BaseHeroSlideshow
       images={heroImages}
+      videoSrc="/6657750-uhd_4096_2160_25fps.mp4"
       title="Sell Your Stamps UK"
       subtitle="EXPERT VALUATIONS. FAIR PRICES. TRUSTED BUYERS. The UK's most trusted stamp valuation and buying service. Expert-led and heritage-focused."
       minHeight="min-h-[600px] lg:min-h-[700px]"
