@@ -3,38 +3,15 @@ import Link from 'next/link'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { ContactForm } from '@/components/forms/contact-form'
-import { Card, CardContent } from '@/components/ui/card'
 import { InlineSellCTA } from '@/components/sections/sell-cta'
-import { Phone, Mail, Clock } from 'lucide-react'
-import { contactInfo } from '@/data/navigation'
 import { HeroSlideshow } from '@/components/ui/hero-slideshow'
 import { contactUsHero } from '@/data/slideshows'
+import { ContactDetailsList } from '@/components/content/contact-details-list'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
   description: 'Get in touch with Sell Your Stamps UK. Contact us for stamp valuations, selling enquiries, or general questions.',
 }
-
-const contactDetails = [
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: contactInfo.phone,
-    href: `tel:${contactInfo.phone.replace(/\s/g, '')}`,
-  },
-  {
-    icon: Mail,
-    label: 'Email',
-    value: contactInfo.email,
-    href: `mailto:${contactInfo.email}`,
-  },
-  {
-    icon: Clock,
-    label: 'Hours',
-    value: contactInfo.hours,
-    href: null,
-  },
-]
 
 export default function ContactPage() {
   return (
@@ -59,30 +36,7 @@ export default function ContactPage() {
                   and provide guidance on selling your stamp collection.
                 </p>
 
-                <div className="flex flex-col gap-5">
-                  {contactDetails.map((detail) => (
-                    <Card key={detail.label} className="border-border/50 hover:border-forest-green/30 transition-colors">
-                      <CardContent className="p-5 flex items-start gap-4">
-                        <div className="w-11 h-11 rounded-full bg-forest-green/10 flex items-center justify-center shrink-0">
-                          <detail.icon className="w-5 h-5 text-forest-green" aria-hidden="true" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{detail.label}</p>
-                          {detail.href ? (
-                            <a
-                              href={detail.href}
-                              className="text-primary font-serif text-lg font-bold hover:text-forest-green transition-colors break-all"
-                            >
-                              {detail.value}
-                            </a>
-                          ) : (
-                            <p className="text-primary font-serif text-lg font-bold">{detail.value}</p>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                <ContactDetailsList />
 
                 {/* Additional Info */}
                 <div className="mt-8 p-8 bg-forest-green/5 rounded-xl border border-forest-green/10">

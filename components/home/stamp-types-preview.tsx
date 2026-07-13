@@ -52,14 +52,14 @@ export function StampTypesPreview() {
           </Button>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-12 flex flex-wrap justify-center gap-6">
           {groups.map(({ group, bestItem, items }) => {
             const displayTitle = group === "Barcoded Values" ? "Barcoded Face Values" : `${group} Stamps`
             
             return (
               <Card
                 key={group}
-                className="group flex flex-col overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg bg-white dark:bg-slate-900"
+                className="group flex flex-col overflow-hidden border-border hover:border-forest-green/50 transition-all hover:shadow-lg bg-white dark:bg-slate-900 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
               >
                 <div className="relative aspect-4/3 overflow-hidden bg-muted m-2 rounded-xl">
                   <div className="absolute inset-0 stamp-edge z-10 pointer-events-none opacity-50" />
@@ -83,7 +83,7 @@ export function StampTypesPreview() {
                   <h3 className="font-serif text-lg font-semibold text-navy group-hover:text-forest-green transition-colors">
                     {displayTitle}
                   </h3>
-                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                  <p className="mt-2 text-sm text-muted-foreground line-clamp-3 min-h-[60px]">
                     Looking to sell your {group.toLowerCase()} stamps? We offer the best rates in the UK for sheets, booklets, and loose collections.
                   </p>
 
@@ -122,7 +122,7 @@ export function StampTypesPreview() {
 
                   <div className="pt-4 mt-4 border-t border-border">
                     <Button asChild className="w-full bg-forest-green hover:bg-forest-green/90 text-white transition-all duration-300 group/btn">
-                      <Link href="/sell-your-stamps" className="flex items-center justify-center gap-2 font-medium">
+                      <Link href="/sell-your-stamps#sell-station" className="flex items-center justify-center gap-2 font-medium">
                         Go to Sell Calculator
                         <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                       </Link>

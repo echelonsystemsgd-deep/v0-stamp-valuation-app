@@ -107,7 +107,7 @@ export function SellYourStampsView() {
           </div>
         </HeroSlideshow>
 
-        <section className="py-12 lg:py-20 -mt-10 md:-mt-16 relative z-20">
+        <section id="sell-station" className="py-12 lg:py-20 -mt-10 md:-mt-16 relative z-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               
