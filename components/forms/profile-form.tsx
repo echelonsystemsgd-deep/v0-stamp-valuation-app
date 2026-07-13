@@ -154,7 +154,7 @@ export function ProfileForm({ user, initialProfile, onSaveSuccess }: ProfileForm
       const { error } = await supabase.auth.signOut({ scope: 'global' })
       if (error) throw error
       toast.success('Successfully signed out of all devices!')
-      router.push('/login')
+      router.push('/')
     } catch (error: any) {
       console.error('Error signing out globally:', error)
       toast.error(error.message || 'Failed to sign out globally')

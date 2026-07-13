@@ -109,62 +109,72 @@ export function SellYourStampsView() {
 
         <section className="py-12 lg:py-20 -mt-10 md:-mt-16 relative z-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <div className="flex flex-col items-center mb-12">
-                <TabsList className="h-14 sm:h-16 p-1 bg-white shadow-2xl shadow-indigo-100/50 border border-slate-100 rounded-2xl w-full max-w-xl">
-                  <TabsTrigger
-                    value="calculate"
-                    className="flex-1 h-full rounded-xl gap-2 sm:gap-3 text-sm sm:text-base font-bold data-[state=active]:bg-navy data-[state=active]:text-white transition-all"
-                  >
-                    <Calculator className="h-4 w-4 sm:h-5 sm:w-5" /> Instant Calculator
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="form"
-                    className="flex-1 h-full rounded-xl gap-2 sm:gap-3 text-sm sm:text-base font-bold data-[state=active]:bg-navy data-[state=active]:text-white transition-all"
-                  >
-                    <FileText className="h-4 w-4 sm:h-5 sm:w-5" /> Request Appraisal
-                  </TabsTrigger>
-                </TabsList>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              
+              {/* Left Column: Guidelines Notice Card */}
+              <aside className="lg:col-span-4 lg:sticky lg:top-24 z-10 w-full">
+                <ImportantNotice />
+              </aside>
+
+              {/* Right Column: Workstation workspace tabs */}
+              <div className="lg:col-span-8 w-full">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <div className="flex flex-col items-center mb-12">
+                    <TabsList className="h-14 sm:h-16 p-1 bg-white shadow-2xl shadow-indigo-100/50 border border-slate-100 rounded-2xl w-full max-w-xl">
+                      <TabsTrigger
+                        value="calculate"
+                        className="flex-1 h-full rounded-xl gap-2 sm:gap-3 text-sm sm:text-base font-bold data-[state=active]:bg-navy data-[state=active]:text-white transition-all"
+                      >
+                        <Calculator className="h-4 w-4 sm:h-5 sm:w-5" /> Instant Calculator
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="form"
+                        className="flex-1 h-full rounded-xl gap-2 sm:gap-3 text-sm sm:text-base font-bold data-[state=active]:bg-navy data-[state=active]:text-white transition-all"
+                      >
+                        <FileText className="h-4 w-4 sm:h-5 sm:w-5" /> Request Appraisal
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
+
+                  <TabsContent value="calculate" className="mt-0 outline-none focus-visible:ring-0">
+                    <div className="space-y-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                        <div>
+                          <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-800">1. Instant Buying Rates</h2>
+                        </div>
+                        <span className="text-sm font-bold text-slate-400 shrink-0">UPDATED: APRIL 2024</span>
+                      </div>
+                      <BuyingTable onAction={handleValuationAction} />
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="form" className="mt-0 outline-none focus-visible:ring-0">
+                    <div
+                      id="appraisal-form-header"
+                      className="max-w-4xl mx-auto bg-grainy-paper p-5 sm:p-8 md:p-12 rounded-3xl sm:rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-gold/10 ring-1 ring-gold/5 relative overflow-hidden"
+                    >
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gold/30" />
+                      <div className="mb-10 text-center">
+                        <h2 className="text-3xl font-black text-slate-900 mb-3">Professional Stamp Valuation</h2>
+                        <p className="text-slate-500 text-lg">
+                          Upload photos of your collection and our experts will provide a detailed appraisal within 48 hours.
+                        </p>
+                      </div>
+                      <SavedEstimateBanner lowOffer={offerLow} highOffer={offerHigh} />
+                      <SellForm
+                        key={hasFullEstimate ? `${offerLow}-${offerHigh}-${faceValue}-${condition}` : "default"}
+                        initialQuantity={faceValue ?? undefined}
+                        initialDescription={initialDescription}
+                        isLockInOffer={isLockInOffer}
+                      />
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </div>
 
-              <TabsContent value="calculate" className="mt-0 outline-none focus-visible:ring-0">
-                <div className="space-y-6">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-                    <div>
-                      <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-800">1. Instant Buying Rates</h2>
-                    </div>
-                    <span className="text-sm font-bold text-slate-400 shrink-0">UPDATED: APRIL 2024</span>
-                  </div>
-                  <BuyingTable onAction={handleValuationAction} />
-                </div>
-              </TabsContent>
-
-              <TabsContent value="form" className="mt-0 outline-none focus-visible:ring-0">
-                <div
-                  id="appraisal-form-header"
-                  className="max-w-4xl mx-auto bg-grainy-paper p-5 sm:p-8 md:p-12 rounded-3xl sm:rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-gold/10 ring-1 ring-gold/5 relative overflow-hidden"
-                >
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gold/30" />
-                  <div className="mb-10 text-center">
-                    <h2 className="text-3xl font-black text-slate-900 mb-3">Professional Stamp Valuation</h2>
-                    <p className="text-slate-500 text-lg">
-                      Upload photos of your collection and our experts will provide a detailed appraisal within 48 hours.
-                    </p>
-                  </div>
-                  <SavedEstimateBanner lowOffer={offerLow} highOffer={offerHigh} />
-                  <SellForm
-                    key={hasFullEstimate ? `${offerLow}-${offerHigh}-${faceValue}-${condition}` : "default"}
-                    initialQuantity={faceValue ?? undefined}
-                    initialDescription={initialDescription}
-                    isLockInOffer={isLockInOffer}
-                  />
-                </div>
-              </TabsContent>
-            </Tabs>
+            </div>
           </div>
         </section>
-
-        <ImportantNotice />
       </main>
       <Footer />
     </>

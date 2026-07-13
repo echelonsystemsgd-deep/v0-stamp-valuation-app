@@ -214,6 +214,8 @@ export function Header() {
                           'text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full select-none tracking-wider',
                           profile?.role === 'admin'
                             ? 'bg-[#C5A059]/10 text-[#C5A059] border border-[#C5A059]/25'
+                            : profile?.role === 'staff'
+                            ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/25'
                             : 'bg-[#14452F]/10 text-emerald-600 dark:text-emerald-400 border border-[#14452F]/25'
                         )}>
                           {profile?.role || 'user'}
@@ -224,16 +226,18 @@ export function Header() {
                   <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-805/50 my-1" />
                   <DropdownMenuItem asChild>
                     <Link
-                      href={profile?.role === 'admin' ? '/admin' : '/dashboard'}
+                      href={profile?.role === 'admin' || profile?.role === 'staff' ? '/admin' : '/dashboard'}
                       className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-semibold rounded-lg text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
                     >
                       <UserIcon className="h-4 w-4 text-slate-400" />
-                      {profile?.role === 'admin' ? 'Admin Console' : 'Valuation Console'}
+                      {profile?.role === 'admin' || profile?.role === 'staff'
+                        ? (profile?.role === 'staff' ? 'Appraiser Console' : 'Admin Console')
+                        : 'Valuation Console'}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link
-                      href={profile?.role === 'admin' ? '/admin/settings' : '/dashboard/profile'}
+                      href={profile?.role === 'admin' ? '/admin/settings' : (profile?.role === 'staff' ? '/admin/profile' : '/dashboard/profile')}
                       className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-semibold rounded-lg text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
                     >
                       <Settings className="h-4 w-4 text-slate-400" />
@@ -351,17 +355,19 @@ export function Header() {
                           </p>
                           <p className="text-xs text-slate-500 truncate">{user.email || ''}</p>
                         </div>
-                        <span className={cn(
+                         <span className={cn(
                           'text-[10px] font-black uppercase px-2 py-0.5 rounded-full select-none tracking-wider shrink-0',
                           profile?.role === 'admin'
                             ? 'bg-[#C5A059]/10 text-[#C5A059] border border-[#C5A059]/25'
+                            : profile?.role === 'staff'
+                            ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/25'
                             : 'bg-[#14452F]/10 text-[#14452F] border border-[#14452F]/25'
                         )}>
                           {profile?.role || 'user'}
                         </span>
                       </div>
                       <Link
-                        href={profile?.role === 'admin' ? '/admin' : '/dashboard'}
+                        href={profile?.role === 'admin' || profile?.role === 'staff' ? '/admin' : '/dashboard'}
                         onClick={() => setIsOpen(false)}
                         className={cn(
                           'flex items-center px-4 py-3.5 text-lg font-serif font-bold rounded-xl transition-all',
@@ -370,14 +376,16 @@ export function Header() {
                             : 'text-foreground hover:bg-muted'
                         )}
                       >
-                        {profile?.role === 'admin' ? 'Admin Console' : 'Valuation Console'}
+                        {profile?.role === 'admin' || profile?.role === 'staff'
+                          ? (profile?.role === 'staff' ? 'Appraiser Console' : 'Admin Console')
+                          : 'Valuation Console'}
                       </Link>
                       <Link
-                        href={profile?.role === 'admin' ? '/admin/settings' : '/dashboard/profile'}
+                        href={profile?.role === 'admin' ? '/admin/settings' : (profile?.role === 'staff' ? '/admin/profile' : '/dashboard/profile')}
                         onClick={() => setIsOpen(false)}
                         className={cn(
                           'flex items-center px-4 py-3.5 text-lg font-serif font-bold rounded-xl transition-all',
-                          pathname === '/dashboard/profile' || pathname === '/admin/settings'
+                          pathname === '/dashboard/profile' || pathname === '/admin/settings' || pathname === '/admin/profile'
                             ? 'bg-[#14452F]/10 text-[#14452F] translate-x-2'
                             : 'text-foreground hover:bg-muted'
                         )}

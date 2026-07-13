@@ -46,36 +46,66 @@ Located in `/sell-your-stamps`, users have access to a workspace split into two 
 *   **Valuation Readiness Indicator:** A customized guide built to help collectors assess if their collection is ready for appraisal (sorting, mounting, etc.).
 *   **Categorized FAQs:** Interactive Accordions dividing questions between "Shipping & Safety" and "General Questions".
 
+### 4. Admin Console & Appraiser Workflows
+A fully integrated, role-protected administrator back-office suite at `/admin` designed to manage submissions, valuations, and payouts:
+*   **Appraiser Workbench:** Interactive valuation desk allowing staff to review uploaded photos, run line-item payout calculators, add appraisal notes, and update status.
+*   **Submissions Queue:** Real-time searchable and filterable datagrid displaying all submissions.
+*   **Rates Manager:** Allows adjusting rates percentage dynamically for stamp categories.
+*   **Seller Accounts & Live Presence:** Directory of registered collectors showing account statuses (`is_suspended`) and live online presence statuses.
+*   **Payout Bonuses & Marketing Panels:** Tools for creating custom promo codes, active campaigns, and payout bonus increments.
+*   **Real-time Activity & Chat:** Secure realtime messaging interface between sellers and appraisers.
+
+### 5. Hero Slideshow & Cinematic Video Integration
+The site features a reusable, responsive `HeroSlideshow` component configured across all consumer-facing landing and informational pages:
+*   **HTML5 Video Loop (Slide 0):** Auto-plays a high-quality philately asset (`/6657750-uhd_4096_2160_25fps.mp4`) as the hero slide to drive institutional trust.
+*   **Seamless Transition & Loop:** Fades out the video to initiate an image rotation before returning back to the video upon loop completion.
+
 ---
 
 ## 🗺️ Website Structure & Routing
 
-*   **`[`/` (Home Page)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/page.tsx)**: High-impact hero slideshow with magnetic CTAs, about summaries, testimonials, stamp type previews, how-it-works overview, and featured Inline Sell CTAs.
-*   **`[`/about-us` (About Us Page)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/about-us/page.tsx)**: Heritage narrative detailing over 25 years of philatelic expertise, core values, company commitments, and testimonial carousel.
-*   **`[`/how-to-sell` (Selling Guide Page)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/how-to-sell/page.tsx)**: Deep-dive timeline of the transit process, valuation readiness checklist, transit safety details, and comprehensive shipping FAQs.
-*   **`[`/what-we-buy` (Stamp Catalog Page)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/what-we-buy/page.tsx)**: Visual grid of accepted stamp categories (e.g., Penny Blacks, Queen Victoria issues, Modern Commemoratives), explicit list of exclusions, and next-step guides.
-*   **`[`/sell-your-stamps` (Valuation Workspace)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/sell-your-stamps/page.tsx)**: Tabbed interface housing the instant rates calculator and the multi-step appraisal request form.
-*   **`[`/contact` (Contact Us Page)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/contact/page.tsx)**: Direct inquiry form, customer helpline, office coordinates, and operational hours.
+### Consumer Facing
+*   **`[`/` (Home Page)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/page.tsx)**: High-impact hero slideshow with video background, magnetic CTAs, testimonials, and stamp type previews.
+*   **`[`/about-us` (About Us Page)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/about-us/page.tsx)**: Heritage narrative detailing over 25 years of philatelic expertise, core values, and testimonial carousel.
+*   **`[`/how-to-sell` (Selling Guide Page)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/how-to-sell/page.tsx)**: Detailed timeline of transit safety, valuation readiness guidelines, and FAQs.
+*   **`[`/what-we-buy` (Stamp Catalog Page)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/what-we-buy/page.tsx)**: Visual grid of accepted and excluded stamp types.
+*   **`[`/sell-your-stamps` (Valuation Workspace)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/sell-your-stamps/page.tsx)**: Calculator and request form.
+*   **`[`/contact` (Contact Us Page)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/contact/page.tsx)**: Address maps, helpline numbers, and email forms.
+*   **`[`/dashboard` (Seller Portal)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/dashboard/page.tsx)**: Seller dashboard to track active valuation requests, payouts, and chat with appraisers.
+
+### Staff / Admin Back-office (`/admin`)
+*   **`[`/admin` (Overview Board)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/admin/page.tsx)**: Operational metrics (total payout, active submissions) and recent users with presence indicators.
+*   **`[`/admin/submissions` (Queue List)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/admin/submissions/page.tsx)**: Complete table of submitted files, filters, and searches.
+*   **`[`/admin/submissions/[id]` (Workstation)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/admin/submissions/[id]/page.tsx)**: Form for entering appraisal values, shipping weight, and status updates.
+*   **`[`/admin/categories` (Rates Panel)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/admin/categories/page.tsx)**: Rate manager for stamp classifications.
+*   **`[`/admin/sellers` (Accounts Panel)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/admin/sellers/page.tsx)**: Users listing with online status and suspension toggles.
+*   **`[`/admin/bonuses` (Payout Boosts)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/admin/bonuses/page.tsx)**: Manage extra payout perks.
+*   **`[`/admin/marketing` (Campaign Controller)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/admin/marketing/page.tsx)**: Lead campaigns configuration.
+*   **`[`/admin/profile` (Appraiser Profile)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/admin/profile/page.tsx)**: Staff personal details.
+*   **`[`/admin/settings` (System Control)](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/admin/settings/page.tsx)**: Core system flags and thresholds.
 
 ---
 
 ## 🧠 Backend & Database Schema Blueprint (Supabase SQL)
 
-The application has been prepared for Supabase PostgreSQL database integration and user authentication. The database schema includes:
-*   `profiles`: Table linked to Supabase Auth mapping users, emails, phone numbers, and encrypted bank/cheque payout credentials.
-*   `stamp_categories`: Stores active rates (percentage payouts), names, groupings, barcode statuses, and limits.
-*   `submissions`: Records all guest/registered valuation requests, statuses, tracking details, and final appraisals.
-*   `submission_items`: Specific line items generated by the calculator/appraisers for a submission.
-*   `submission_images`: Storage paths and URLs for collection photos.
-*   `payouts`: Tracks completed transaction sums, dates, and payout methods (`bank_transfer`, `cheque`).
+The application utilizes Supabase PostgreSQL for authentication, database, real-time sync, and file storage:
+*   `profiles`: Custom table linked to Supabase Auth containing roles (`admin`, `staff`, `user`), presence metadata, and contact/payout credentials.
+*   `stamp_categories`: Stores active rates (percentage payouts), grouping types, barcode requirements, and limits.
+*   `submissions`: Main log for requests, valuation states, and tracking numbers.
+*   `submission_items`: Lines itemizing stamp valuations computed inside the appraiser workbench.
+*   `submission_images`: Storage reference paths for user-uploaded photography.
+*   `payouts`: Realized cash transfers, dates, and methods (`bank_transfer`, `cheque`).
+*   **Real-time Presence Sync:** Tracks active user statuses using Supabase Presence over the global `online-users` channel.
+*   **Database Triggers:** Automatically bridges new auth profiles with submissions initiated during anonymous/guest session stages via PostgreSQL functions.
 
 ---
 
 ## 🛠️ Technology Stack
 
 *   **Framework:** [Next.js](https://nextjs.org) (App Router, React 19)
-*   **Styling:** Tailwind CSS (v4) with Custom Variables
-*   **Components:** Radix UI primitives (Accordion, Tabs, Dialog, etc.)
+*   **Styling:** Tailwind CSS (v4) with custom heritage-palette variables
+*   **Components:** Radix UI primitives (Accordion, Tabs, Dialog, Sheets, etc.)
+*   **Real-time Engine:** Supabase Broadcast & Presence Client
 *   **Icons:** Lucide React
 *   **Error Monitoring & Telemetry:** Sentry Next.js SDK Integration
 *   **Form Validation:** React Hook Form & Zod Schema Validation
