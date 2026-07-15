@@ -43,46 +43,33 @@ export async function middleware(request: NextRequest) {
 
   // 2. If logged in, fetch user role to check access rights
   if (user) {
-    // If user is trying to access /login or /signup, redirect to respective dashboard
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    
+    const role = profile?.role ?? 'user'
+
+    // If user is trying to access /login or /signup
     if (path.startsWith('/login') || path.startsWith('/signup')) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-      
-      const role = profile?.role ?? 'user'
       if (role === 'admin' || role === 'staff') {
         return NextResponse.redirect(new URL('/admin', request.url))
       }
-      return NextResponse.redirect(new URL('/dashboard', request.url))
+      return NextResponse.redirect(new URL('/unauthorized', request.url))
     }
 
-    // If accessing /dashboard, redirect admins and staff to /admin
+    // If accessing /dashboard
     if (path.startsWith('/dashboard')) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-      
-      const role = profile?.role ?? 'user'
       if (role === 'admin' || role === 'staff') {
         return NextResponse.redirect(new URL('/admin', request.url))
       }
+      return NextResponse.redirect(new URL('/unauthorized', request.url))
     }
 
     // If accessing /admin, ensure they are an admin or staff
     if (path.startsWith('/admin')) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-      
-      const role = profile?.role ?? 'user'
       if (role !== 'admin' && role !== 'staff') {
-        // Redirect standard users / sellers to the unauthorized access page
         return NextResponse.redirect(new URL('/unauthorized', request.url))
       }
     }

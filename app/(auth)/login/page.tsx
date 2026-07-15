@@ -10,7 +10,7 @@ import { Mail, Lock, Loader2, ArrowRight, ArrowLeft } from 'lucide-react'
 function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const redirectedFrom = searchParams.get('redirectedFrom') || '/dashboard'
+  const redirectedFrom = searchParams.get('redirectedFrom') || '/admin'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

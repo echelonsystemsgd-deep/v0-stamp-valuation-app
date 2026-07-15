@@ -157,6 +157,13 @@ export function Footer() {
               >
                 Terms of Service
               </Link>
+              <Link
+                href="/login"
+                onClick={(e) => handleLinkClick(e, '/login')}
+                className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+              >
+                Sign In (Admin)
+              </Link>
             </div>
           </div>
         </div>

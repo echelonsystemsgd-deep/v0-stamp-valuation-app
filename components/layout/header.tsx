@@ -34,7 +34,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false)
   const [isOpen, setIsOpen] = React.useState(false)
   const [user, setUser] = React.useState<User | null>(null)
-  const [profile, setProfile] = React.useState<{ full_name?: string; role: 'user' | 'seller' | 'admin'; avatar_url?: string | null } | null>(null)
+  const [profile, setProfile] = React.useState<{ full_name?: string; role: 'user' | 'seller' | 'admin' | 'staff'; avatar_url?: string | null } | null>(null)
   const [avatarPreviewUrl, setAvatarPreviewUrl] = React.useState<string | null>(null)
   const pathname = usePathname()
 
@@ -247,7 +247,12 @@ export function Header() {
                   <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-805/50 my-1" />
                   <DropdownMenuItem
                     onClick={async () => {
+                      const supabase = createClient()
+                      await supabase.auth.signOut()
                       await signOut()
+                      if (window.location.pathname === '/') {
+                        window.location.reload()
+                      }
                     }}
                     className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-semibold rounded-lg text-red-650 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
                   >
@@ -256,23 +261,7 @@ export function Header() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : (
-              <Link
-                href="/login"
-                className={cn(
-                  'text-base font-semibold transition-all duration-300 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm px-1 py-2 relative group/nav whitespace-nowrap mr-2',
-                  pathname === '/login'
-                    ? 'text-forest-green dark:text-gold'
-                    : 'text-slate-700 dark:text-slate-300 hover:text-forest-green dark:hover:text-gold'
-                )}
-              >
-                Sign In
-                <span className={cn(
-                  "absolute bottom-0 left-1 right-1 h-0.5 transition-all duration-300 transform scale-x-0 group-hover/nav:scale-x-100 origin-left bg-forest-green dark:bg-gold",
-                  pathname === '/login' && "scale-x-100"
-                )} />
-              </Link>
-            )}
+            ) : null}
             <Button
               asChild
               className="font-bold px-8 h-12 transition-all duration-300 shadow-lg whitespace-nowrap bg-forest-green hover:bg-forest-green/90 text-white shadow-forest-green/20"
@@ -395,27 +384,19 @@ export function Header() {
                       <button
                         onClick={async () => {
                           setIsOpen(false)
+                          const supabase = createClient()
+                          await supabase.auth.signOut()
                           await signOut()
+                          if (window.location.pathname === '/') {
+                            window.location.reload()
+                          }
                         }}
                         className="flex w-full items-center text-left px-4 py-3.5 text-lg font-serif font-bold rounded-xl transition-all text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 cursor-pointer"
                       >
                         Log Out
                       </button>
                     </>
-                  ) : (
-                    <Link
-                      href="/login"
-                      onClick={() => setIsOpen(false)}
-                      className={cn(
-                        'flex items-center px-4 py-4 text-xl font-serif font-bold rounded-xl transition-all',
-                        pathname === '/login'
-                          ? 'bg-forest-green/10 text-forest-green translate-x-2'
-                          : 'text-foreground hover:bg-muted'
-                      )}
-                    >
-                      Sign In
-                    </Link>
-                  )}
+                  ) : null}
                   <div className="mt-8 p-6 bg-muted/30 rounded-2xl border border-border/50 relative overflow-hidden">
                     <div className="relative z-10">
                       <p className="text-xs uppercase tracking-widest text-muted-foreground mb-4 font-bold">Need Expert Advice?</p>

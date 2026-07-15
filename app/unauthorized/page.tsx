@@ -35,15 +35,15 @@ export default function UnauthorizedPage() {
             Access Denied
           </h2>
           <p className="text-sm text-slate-300 mb-8 leading-relaxed">
-            You do not have the required administrative permissions to access the Admin Console. Please return to your seller console or sign in with an authorized administrator account.
+            You do not have the required administrative permissions to access the Admin Console. Please sign in with an authorized administrator account.
           </p>
 
           <div className="space-y-4">
             <Link
-              href="/dashboard"
+              href="/"
               className="w-full flex justify-center items-center gap-2 py-3.5 px-4 border border-transparent rounded-xl text-sm font-bold text-white bg-[#14452F] hover:bg-[#14452F]/90 transition-all cursor-pointer shadow-lg"
             >
-              <ArrowLeft className="h-4 w-4" /> Go to Seller Console
+              <ArrowLeft className="h-4 w-4" /> Return to Home
             </Link>
 
             <button
