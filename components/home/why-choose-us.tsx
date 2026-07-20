@@ -20,7 +20,7 @@ const comparisonFeatures: ComparisonFeature[] = [
   },
   {
     title: 'Payment Speed',
-    us: 'Fast — typically within ~7 days',
+    us: 'Fast — once received payment same day',
     usIcon: true,
     them: 'Weeks to months (hammer + fees + settlement)',
     themIcon: false,
@@ -34,10 +34,17 @@ const comparisonFeatures: ComparisonFeature[] = [
   },
   {
     title: 'Expertise & Security',
-    us: '25+ years experience, UK-based & fully insured',
+    us: '10+ years experience, UK-based',
     usIcon: true,
     them: 'Varies — Risk often left to the seller',
     themIcon: 'partial',
+  },
+  {
+    title: 'Discreet Service',
+    us: '100% private, confidential transaction',
+    usIcon: true,
+    them: 'Public auction rooms and online listings',
+    themIcon: false,
   },
 ]
 
@@ -60,8 +67,7 @@ export function WhyChooseUs() {
             Why Choose Us
           </h2>
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed text-balance">
-            Clarity and security matter—especially when parting with a collection you have kept for
-            years. See how our streamlined approach compares to traditional routes.
+            Clarity and security matter—especially when selling stamps. See how our streamlined approach compares to traditional routes.
           </p>
         </div>
 

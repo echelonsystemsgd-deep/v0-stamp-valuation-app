@@ -50,7 +50,7 @@ export const shippingFAQs: FAQItem[] = [
   },
   {
     question: 'How long does the entire process take?',
-    answer: 'From initial enquiry to payment, the typical timeline is 2-3 weeks. Valuations are provided within 48 hours of submission. Once you accept and we receive your collection, verification takes 2 working days, with payment processed within 7 days.',
+    answer: 'From initial enquiry to payment, the typical timeline is fast and direct. Valuations are provided within 1-12 hours of submission. Once you accept and we receive your collection, verification and payment are processed same day.',
   },
 ]
 

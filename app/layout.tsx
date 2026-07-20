@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     url: 'https://sellyourstamps.co.uk',
     siteName: 'Sell Your Stamps UK',
     title: 'Sell Your Stamps UK | Professional Stamp Valuation & Buying',
-    description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience. Get a fair price for your collection today.',
+    description: 'Expert UK-based stamp valuations and buying service with over 10 years of experience. Get a fair price for your collection today.',
     images: [
       {
         url: '/opengraph-image.png',
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Sell Your Stamps UK | Professional Stamp Valuation & Buying',
-    description: 'Expert UK-based stamp valuations and buying service with over 25 years of experience.',
+    description: 'Expert UK-based stamp valuations and buying service with over 10 years of experience.',
     creator: '@SellYourStampsUK',
     images: ['/twitter-image.png'],
   },

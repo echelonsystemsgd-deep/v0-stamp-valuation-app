@@ -18,7 +18,7 @@ const timelineSteps = [
     title: 'Receive Your Free Valuation',
     description: 'Our expert philatelists will carefully review your submission. We examine the details and photos you provide to give you a fair, comprehensive valuation based on current market conditions.',
     tips: [
-      'Valuations are typically provided within 48 hours',
+      'Valuations are typically provided within 1-12 hours',
       'We may request additional photos if needed',
       'All valuations are provided free of charge',
     ],
@@ -56,7 +56,7 @@ const timelineSteps = [
   {
     icon: Banknote,
     title: 'Receive Payment',
-    description: 'Once the final valuation is agreed, we process your payment immediately. Most customers receive funds within 7 days of their collection arriving with us.',
+    description: 'Once the final valuation is agreed, we process your payment immediately. Most customers receive funds same day of their collection arriving with us.',
     tips: [
       'Bank transfer to your UK account',
       'No hidden fees or deductions',

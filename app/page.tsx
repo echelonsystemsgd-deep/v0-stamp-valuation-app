@@ -28,7 +28,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-24 mb-20 lg:mt-32 lg:mb-24">
           <InlineSellCTA 
             variant="featured" 
-            title="Ready to Value Your Collection?"
+            title="Get An Instant Price Today"
             description="Our expert team is standing by to provide a professional assessment of your stamps. Get started with a fair, no-obligation valuation today."
             showSecondaryActions={true}
             showContactAction={true}

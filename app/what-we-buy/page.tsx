@@ -66,8 +66,10 @@ export default function WhatWeBuyPage() {
               </div>
               <InlineSellCTA
                 variant="featured"
-                title="Ready for a real offer?"
-                description="Use our sell page to run instant estimates or upload photos for a full appraisal. Same team—one clear place to take action."
+                title="Get An Instant Price Today"
+                description="Our expert team is standing by to provide a professional assessment of your stamps. Get started with a fair, no-obligation valuation today."
+                showSecondaryActions={true}
+                showContactAction={true}
                 className="my-0"
               />
             </div>

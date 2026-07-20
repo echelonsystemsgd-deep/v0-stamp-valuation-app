@@ -12,7 +12,7 @@ import { howToSellSlideshow } from '@/data/slideshows'
 
 export const metadata: Metadata = {
   title: 'How to Sell Your Stamps',
-  description: 'Learn about our simple, secure process for selling your stamp collection. Free valuations, insured shipping, and payment within 7 days.',
+  description: 'Learn about our simple, secure process for selling your stamp collection. Free valuations, insured shipping, and same-day payment.',
 }
 
 const trustPoints = [
@@ -24,12 +24,12 @@ const trustPoints = [
   {
     icon: Clock,
     title: 'Fast Turnaround',
-    description: 'Valuations within 48 hours, payment within 7 days of collection receipt.',
+    description: 'Valuations within 1-12 hours, payment processed same day.',
   },
   {
     icon: Award,
     title: 'Expert Valuers',
-    description: 'Our team includes members of leading philatelic societies with decades of experience.',
+    description: 'Our team has decades of combined experience.',
   },
 ]
 
@@ -194,8 +194,10 @@ export default function HowToSellPage() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <InlineSellCTA 
               variant="featured"
-              title="Ready to Start the Process?"
-              description="Join thousands of UK collectors who have trusted us with their collections. Our expert team is ready to provide a fair, professional assessment today."
+              title="Get An Instant Price Today"
+              description="Our expert team is standing by to provide a professional assessment of your stamps. Get started with a fair, no-obligation valuation today."
+              showSecondaryActions={true}
+              showContactAction={true}
             />
           </div>
         </section>

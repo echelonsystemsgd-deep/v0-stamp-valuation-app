@@ -96,7 +96,7 @@ export function InlineSellCTA({
             <div className="mt-8 pt-8 border-t border-primary/10 grid grid-cols-1 sm:grid-cols-3 gap-6">
               {[
                 { icon: BadgeCheck, text: "UK Master Valuers" },
-                { icon: Zap, text: "Results within 48h" },
+                { icon: Zap, text: "Results within 1-12 hours" },
                 { icon: Tag, text: "Highest Market Rates" }
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3">

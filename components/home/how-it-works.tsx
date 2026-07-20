@@ -14,7 +14,7 @@ const steps = [
     icon: Package,
     title: 'Send Your Stamps',
     description: [
-      'If you\'re happy with the valuation, send your stamps to us for review. We recommend Royal Mail Special Delivery so your items are fully insured and securely delivered straight to our team.',
+      'If you\'re happy with the valuation, send your stamps to us for review. We recommend Royal Mail Special Delivery / Signed For Service so your items are fully insured and securely delivered straight to our team.',
     ],
   },
   {

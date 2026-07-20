@@ -259,7 +259,7 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
           </h2>
           <p className="text-muted-foreground mb-6 max-w-md mx-auto">
             We have received your collection details. Our team will review your submission 
-            and provide a valuation within 48 hours.
+            and provide a valuation within 1-12 hours.
           </p>
           <p className="text-sm text-muted-foreground mb-8">
             A confirmation email has been sent to <strong>{formData.email}</strong>

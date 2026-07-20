@@ -13,7 +13,7 @@ import { InlineSellCTA } from '@/components/sections/sell-cta'
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about Sell Your Stamps UK - over 25 years of expertise in stamp valuation and philately. Meet our team of expert valuers.',
+  description: 'Learn about Sell Your Stamps UK - over 10 years of expertise in stamp valuation and philately. Meet our team of expert valuers.',
 }
 
 const values = [
@@ -25,20 +25,19 @@ const values = [
   {
     icon: Award,
     title: 'Expert Knowledge',
-    description: 'Our team includes members of leading philatelic societies with decades of combined experience.',
+    description: 'Our team has decades of combined experience.',
   },
   {
     icon: Users,
     title: 'Customer First',
-    description: 'We treat every collection with care and every customer with respect, regardless of collection size.',
+    description: 'We treat every sale with care and every customer with respect, regardless of the sale size.',
   },
 ]
 
 const commitments = [
   'Free, no-obligation valuations',
   'Fair market prices based on current trends',
-  'Fully insured collection and shipping',
-  'Fast payment within 7 days',
+  'Fast payments within same day',
   'Expert advice at every stage',
   'UK-based team you can trust',
 ]
@@ -51,7 +50,7 @@ export default function AboutUsPage() {
         <HeroSlideshow 
           images={aboutSlideshow} 
           title="About Us"
-          subtitle="For over 25 years, we have been helping collectors across the United Kingdom discover the value of their stamp collections and receive fair prices."
+          subtitle="For over 10 years, we have been buying postage stamps across the United Kingdom and getting sellers paid out fast and discreetly."
         />
 
         <AboutNarrative />
@@ -94,9 +93,9 @@ export default function AboutUsPage() {
                   <span className="text-gold text-sm font-semibold tracking-wider uppercase">Our Promise</span>
                 </div>
                 <h2 id="commitment-heading" className="font-serif text-3xl md:text-4xl font-bold text-white mb-6">Our Commitment to You</h2>
-                <p className="text-xl text-white/80 leading-relaxed max-w-xl">
+                <p className="text-xl text-slate-100 font-medium leading-relaxed max-w-xl">
                   When you choose Sell Your Stamps UK, you&apos;re working with a team that genuinely 
-                  cares about philately and respects the effort that goes into building a collection.
+                  cares about buying your stamps and aims to purchase them as efficiently as possible.
                 </p>
               </div>
               <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 lg:p-10 border border-white/10 shadow-2xl">
@@ -120,8 +119,10 @@ export default function AboutUsPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-20 lg:mb-24">
           <InlineSellCTA 
             variant="featured" 
-            title="Is your collection the next we value?"
-            description="Our expert team is ready to provide a fair, professional assessment of your stamp collection. No matter the size, we treat every collector with respect."
+            title="Get An Instant Price Today"
+            description="Our expert team is standing by to provide a professional assessment of your stamps. Get started with a fair, no-obligation valuation today."
+            showSecondaryActions={true}
+            showContactAction={true}
           />
         </div>
       </main>

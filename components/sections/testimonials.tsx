@@ -57,7 +57,7 @@ export function Testimonials() {
           </p>
           <h2 id="testimonials-heading" className="text-3xl sm:text-4xl font-bold text-navy font-serif">Trust &amp; Excellence</h2>
           <p className="mt-4 text-lg text-muted-foreground font-medium leading-relaxed">
-            Join the hundreds of satisfied collectors who have secured fair, professional valuations for their heritage collections.
+            Join the hundreds of satisfied collectors who have secured fair, professional valuations for their stamps.
           </p>
         </div>
 

@@ -35,7 +35,7 @@ const readinessItems = [
   },
   {
     title: "Secure Payout Methods",
-    description: "Choose your preferred secure payment method, including direct bank transfers (BACS) or PayPal, within 7 days.",
+    description: "Choose your preferred secure payment method, including direct bank transfers (BACS) or PayPal, for same-day payout.",
     icon: CreditCard,
     color: "text-oxford-blue",
     bgColor: "bg-oxford-blue/10"

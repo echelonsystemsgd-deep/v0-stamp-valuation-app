@@ -157,7 +157,7 @@ export function SellYourStampsView() {
                       <div className="mb-10 text-center">
                         <h2 className="text-3xl font-black text-slate-900 mb-3">Professional Stamp Valuation</h2>
                         <p className="text-slate-500 text-lg">
-                          Upload photos of your collection and our experts will provide a detailed appraisal within 48 hours.
+                          Upload photos of your collection and our experts will provide a detailed appraisal within 1-12 hours.
                         </p>
                       </div>
                       <SavedEstimateBanner lowOffer={offerLow} highOffer={offerHigh} />

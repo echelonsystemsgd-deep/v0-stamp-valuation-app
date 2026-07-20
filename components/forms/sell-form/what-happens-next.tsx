@@ -10,7 +10,7 @@ const steps = [
   {
     icon: Search,
     title: 'Expert Review',
-    description: 'Our specialists review your submission within 48 hours.',
+    description: 'Our specialists review your submission within 1-12 hours.',
   },
   {
     icon: HandCoins,
@@ -25,7 +25,7 @@ const steps = [
   {
     icon: Banknote,
     title: 'Get Paid',
-    description: 'Receive payment within 7 days of collection arrival.',
+    description: 'Receive same-day payment upon collection arrival.',
   },
 ]
 

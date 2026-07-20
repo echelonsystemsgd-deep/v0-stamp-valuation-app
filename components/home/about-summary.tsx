@@ -20,7 +20,7 @@ export function AboutSummary() {
         </h2>
         <div className="mt-8 space-y-6 text-lg text-muted-foreground leading-relaxed text-left md:text-center md:text-balance">
           <p>
-            Our aim is to remove the stress and uncertainty from selling your unused postage stamps. As a fully independent UK-based company, we provide a straightforward and efficient way to turn your stamps into value.
+            Our aim is to remove the stress and uncertainty from selling your unused postage stamps. As a fully independent UK-based company, we provide a straightforward and efficient way to turn your stamps into cash.
           </p>
           <p>
             Rather than spending time on platforms like eBay or Amazon—dealing with fees, delays, and unreliable buyers—we offer a simple alternative: we purchase your stamps directly in one transaction, with prompt and secure payment.

@@ -68,9 +68,11 @@ export default function ContactPage() {
         <section className="py-20 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <InlineSellCTA 
-              variant="simple"
-              title="Not sure if your stamps are valuable?"
-              description="Our expert valuation service is free and carries no obligation to sell. Join the thousands of collectors we've helped since 1998."
+              variant="featured"
+              title="Get An Instant Price Today"
+              description="Our expert team is standing by to provide a professional assessment of your stamps. Get started with a fair, no-obligation valuation today."
+              showSecondaryActions={true}
+              showContactAction={true}
             />
           </div>
         </section>

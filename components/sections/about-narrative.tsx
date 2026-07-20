@@ -26,12 +26,6 @@ export function AboutNarrative() {
               <p>
                 Our aim is to provide sellers with highly competitive rates for unused UK postage stamps. To do this, we’ve developed a process that is efficient and easy to follow for both our customers and our team.
               </p>
-              <p>
-                Providing precise counts, reviewing formats, issuing individual quotes, and offering tailored postage guidance can be time-intensive. As a result, this level of service is typically reserved for larger collections. For stamp quantities with a face value of £500 or less, we kindly ask sellers to follow the clear packaging and posting instructions available through our online forms.
-              </p>
-              <p>
-                For collections exceeding £500 in face value, we still recommend using the online form, as it remains the quickest and most efficient way to proceed and receive payment. However, if you prefer to get in touch directly, you are welcome to email us, and we will respond as promptly as possible.
-              </p>
             </div>
 
             {/* Trust Highlight Block */}
@@ -39,7 +33,7 @@ export function AboutNarrative() {
               <div className="flex gap-4">
                 <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-primary shrink-0" />
                 <p className="font-bold text-primary leading-tight text-sm md:text-base">
-                  All collections are carefully checked and professionally assessed by our lead philatelists before any purchase.
+                  All stamps are carefully checked by our head buyer before any purchase.
                 </p>
               </div>
             </div>
@@ -68,7 +62,7 @@ export function AboutNarrative() {
               {/* Float Badge */}
               <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-2xl border border-slate-50 hidden md:block">
                 <div className="text-center">
-                  <p className="text-3xl font-black text-primary">25+</p>
+                  <p className="text-3xl font-black text-primary">10+</p>
                   <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Years Experience</p>
                 </div>
               </div>
