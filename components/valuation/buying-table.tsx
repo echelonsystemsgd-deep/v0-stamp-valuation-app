@@ -222,7 +222,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
               </div>
             </div>
 
-            <div className="flex items-center justify-between gap-6 pt-2">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between items-start gap-4 pt-2">
               {item.allowDecimal ? (
                 <div className="flex items-center rounded-2xl border-2 border-border/80 bg-background shadow-inner overflow-hidden focus-within:border-primary/50 transition-colors px-4">
                   <Input
@@ -262,7 +262,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
                   </Button>
                 </div>
               )}
-              <div className="text-right">
+              <div className="text-left sm:text-right w-full sm:w-auto">
                 <span className="text-[11px] text-slate-400 uppercase tracking-widest font-black block mb-1">Subtotal</span>
                 <div className="text-3xl sm:text-4xl font-black text-primary font-mono tracking-tighter">
                   £{calculateSubtotal(item).toFixed(2)}

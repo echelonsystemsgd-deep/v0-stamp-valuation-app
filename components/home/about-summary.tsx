@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 export function AboutSummary() {
   return (
     <section
-      className="py-20 md:py-28 lg:py-32 bg-white border-b border-border/60 overflow-hidden relative"
+      className="py-12 md:py-24 lg:py-32 bg-white border-b border-border/60 overflow-hidden relative"
       aria-labelledby="about-summary-heading"
     >
       <div className="absolute inset-0 bg-cancellation-lines opacity-5 pointer-events-none" />

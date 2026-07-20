@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 
 export function CTASection() {
   return (
-    <section className="py-20 lg:py-24" aria-labelledby="cta-heading">
+    <section className="py-12 md:py-24" aria-labelledby="cta-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="bg-secondary rounded-xl p-8 lg:p-12 text-center">
           <h2 id="cta-heading" className="text-3xl sm:text-4xl font-bold tracking-tight text-primary max-w-2xl mx-auto text-balance">

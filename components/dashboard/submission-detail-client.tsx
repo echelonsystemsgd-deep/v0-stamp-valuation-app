@@ -466,7 +466,7 @@ export function SubmissionDetailClient({
                       )}>
                         {isCompleted ? <Check className="h-3.5 w-3.5 stroke-[3px]" /> : <span className="text-xs font-bold">{index + 1}</span>}
                       </div>
-                      {index < STEPPER_STATES.length - 1 && (
+                      {index < Math.min(STEPPER_STATES.length - 1, activeIndex + 1) && (
                         <div className={cn("w-[2px] h-8 my-1 bg-slate-100", isCompleted && "bg-[#14452F]")} />
                       )}
                     </div>

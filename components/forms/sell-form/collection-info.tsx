@@ -140,7 +140,7 @@ export function CollectionInfoStep({ formData, updateFormData, errors }: Collect
         {/* Quick description helper chips */}
         <div className="flex flex-col gap-1.5 mt-1">
           <span className="text-xs font-bold text-slate-400">Tap to add descriptions:</span>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2.5">
             {[
               { label: "Inherited Collection 👥", text: "This is an inherited collection." },
               { label: "Stored in Albums 📘", text: "Stamps are stored in protective albums." },
@@ -158,7 +158,7 @@ export function CollectionInfoStep({ formData, updateFormData, errors }: Collect
                     updateFormData({ description: currentDesc + separator + chip.text });
                   }
                 }}
-                className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-forest-green/10 text-forest-green hover:bg-forest-green/20 cursor-pointer"
+                className="inline-flex items-center rounded-full border px-4 py-2 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-forest-green/10 text-forest-green hover:bg-forest-green/20 cursor-pointer"
               >
                 + {chip.label}
               </button>

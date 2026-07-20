@@ -84,10 +84,61 @@ Updated all pages (Home, About Us, How to Sell, What We Buy, Contact) to consist
 
 ---
 
+## Part 2: Layout & Sizing Audit Fixes (Pending Implementation)
+
+The following layout, sizing, and accessibility fixes have been identified during a comprehensive audit and are being implemented:
+
+### 1. Element Sizing & Overflow Issues
+* **Buying Table Component** ([buying-table.tsx](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/components/valuation/buying-table.tsx)):
+  * **Issue:** Inside `renderMobileCards`, the quantity controls and subtotal output are displayed side-by-side. The controls require a fixed width of `192px`. On mobile screens below `375px`, this leaves less than `60px` for the subtotal. High payouts will wrap awkwardly or bleed.
+  * **Fix:** Refactor the flex layout to wrap/stack vertically on mobile screens (`flex-col sm:flex-row sm:items-center sm:justify-between items-start gap-4`).
+* **Submission Detail Client** ([submission-detail-client.tsx](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/components/dashboard/submission-detail-client.tsx)):
+  * **Issue:** In the mobile/tablet vertical stepper, future pending steps are collapsed. The connector line loop continues anyway, leaving a stray vertical line hanging under the last visible step.
+  * **Fix:** Update the connector line condition to only render if the next step is actually visible.
+
+### 2. Touch Targets Audit (Minimum ~44x44px)
+* **Product Card Component** ([product-card.tsx](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/components/catalog/product-card.tsx)):
+  * **Issue:** The increment and decrement quantity buttons are sized to `h-9 w-9` (36px), which is too small for mobile touch controls.
+  * **Fix:** Upgrade button sizes to `h-11 w-11` (44px) on mobile viewports using responsive utilities: `h-11 w-11 sm:h-9 sm:w-9`.
+* **Contact Details Form** ([contact-details.tsx](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/components/forms/sell-form/contact-details.tsx)):
+  * **Issue:** The preferred contact radio inputs are `w-5 h-5` with small inline text labels, offering narrow clickable areas.
+  * **Fix:** Style the radio options as modern interactive card buttons with `p-3.5 border rounded-xl hover:bg-slate-50/50 flex items-center gap-3 w-full sm:w-auto cursor-pointer`.
+* **Collection Info Form** ([collection-info.tsx](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/components/forms/sell-form/collection-info.tsx)):
+  * **Issue:** The description quick-helper chips have small dimensions (`px-2.5 py-0.5 text-xs`, height ~22px) and are packed tightly.
+  * **Fix:** Increase chip padding to `px-4 py-2` (height ~36px) and increase the flex layout gap (`gap-2.5`).
+* **Appraiser Workbench** ([appraiser-workbench.tsx](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/components/admin/appraiser-workbench.tsx)):
+  * **Issue:** The Claim button on the arrivals list uses `px-2.5 py-1.5 text-[10px]` resulting in a height of ~24px.
+  * **Fix:** Change to responsive padding: `px-4 py-2.5 sm:px-2.5 sm:py-1.5`.
+
+### 3. Responsive Layout & Sticky Collisions
+* **Sticky CTA Component** ([sticky-cta.tsx](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/components/layout/sticky-cta.tsx)):
+  * **Issue:** Redundant sticky bar overlay on `/sell-your-stamps` which is the destination page itself, competing with the payout sticky bar on mobile.
+  * **Fix:** Update route check to return `null` on `/sell-your-stamps`.
+* **Back To Top Component** ([back-to-top.tsx](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/components/layout/back-to-top.tsx)):
+  * **Issue:** The BackToTop button (`bottom-24`) collides with the calculator sticky bar on mobile.
+  * **Fix:** Shift the bottom position of `BackToTop` to `bottom-36` on mobile screens when on `/sell-your-stamps`.
+
+### 4. Spacing, Whitespace, & Typography
+* **Vertical Spacing on Sections** (How It Works, Why Choose Us, About Summary, About Narrative, CTA Section):
+  * **Issue:** Section paddings use `py-20 md:py-28 lg:py-32` which creates excessive vertical blank space on small mobile screens.
+  * **Fix:** Standardise to `py-12 md:py-24 lg:py-32` across these components.
+* **Important Notice Component** ([important-notice.tsx](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/components/sections/important-notice.tsx)):
+  * **Issue:** Layout has too much padding on small devices (`p-6 sm:p-8`).
+  * **Fix:** Reduce mobile padding to `p-4 sm:p-6 lg:p-8`.
+* **Global Typography Scale** ([globals.css](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/app/globals.css)):
+  * **Issue:** Large `h1` headings scale to `text-4xl` (36px) on mobile, which is oversized for small mobile viewports (e.g. 320px/360px width) and causes word wrapping issues.
+  * **Fix:** Change `h1` to scale down to `text-3xl` (30px) below the `sm` (640px) breakpoint.
+
+---
+
 ## Verification Plan
 
 ### Automated Tests
-- Clean `.next` cache and run `npm run build` to verify there are no compilation or TypeScript errors. (Completed with **zero errors**).
+- Run `npm run build` to verify there are no compilation or TypeScript errors.
+- Run `npm run lint` to verify that there are no linter/ESLint errors or warnings.
 
 ### Manual Verification
-- Verified site layout responsiveness locally.
+- Verify site layout responsiveness locally.
+- Confirm all button and input touch targets are at least 44x44px on mobile viewports.
+- Confirm no element overlap or stray connector lines in the vertical stepper.
+

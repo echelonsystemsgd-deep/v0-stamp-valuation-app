@@ -9,7 +9,7 @@ export function ImportantNotice() {
 
   return (
     <div 
-      className="bg-[#FBFBF9] dark:bg-navy/20 border border-rose-100 dark:border-rose-900/30 rounded-3xl p-6 sm:p-8 shadow-xl shadow-rose-900/5 relative overflow-hidden transition-all duration-300"
+      className="bg-[#FBFBF9] dark:bg-navy/20 border border-rose-100 dark:border-rose-900/30 rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl shadow-rose-900/5 relative overflow-hidden transition-all duration-300"
       aria-labelledby="notice-heading"
     >
       {/* Decorative top strip */}

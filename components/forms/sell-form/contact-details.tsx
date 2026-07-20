@@ -89,7 +89,12 @@ export function ContactDetailsStep({ formData, updateFormData, errors }: Contact
           ].map((method) => (
             <label
               key={method.value}
-              className="flex items-center gap-2 cursor-pointer"
+              className={cn(
+                "flex items-center gap-3 px-4 py-3.5 border rounded-2xl transition-all cursor-pointer select-none w-full sm:w-auto",
+                formData.preferredContact === method.value
+                  ? "border-forest-green bg-forest-green/5 text-primary dark:border-gold dark:bg-gold/5 dark:text-gold"
+                  : "border-border hover:border-muted-foreground/30 hover:bg-secondary/40 bg-white dark:bg-slate-900"
+              )}
             >
               <input
                 type="radio"
@@ -97,9 +102,9 @@ export function ContactDetailsStep({ formData, updateFormData, errors }: Contact
                 value={method.value}
                 checked={formData.preferredContact === method.value}
                 onChange={(e) => updateFormData({ preferredContact: e.target.value })}
-                className="w-5 h-5 accent-forest-green"
+                className="w-5 h-5 accent-forest-green dark:accent-gold cursor-pointer shrink-0"
               />
-              <span className="text-sm">{method.label}</span>
+              <span className="text-sm font-bold">{method.label}</span>
             </label>
           ))}
         </div>

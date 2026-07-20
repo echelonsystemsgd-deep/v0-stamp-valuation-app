@@ -238,7 +238,7 @@ export function AppraiserWorkbench({
                     <button
                       onClick={() => handleClaim(sub.id)}
                       disabled={isPending}
-                      className="px-2.5 py-1.5 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-lg text-[10px] font-bold uppercase transition-all shadow-sm flex items-center gap-1 cursor-pointer disabled:opacity-40"
+                      className="px-4 py-2.5 sm:px-2.5 sm:py-1.5 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-lg text-xs sm:text-[10px] font-bold uppercase transition-all shadow-sm flex items-center gap-1 cursor-pointer disabled:opacity-40"
                     >
                       {isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Claim'}
                     </button>
@@ -283,7 +283,7 @@ export function AppraiserWorkbench({
                       <Link 
                         href={`/admin/submissions/${sub.id}`} 
                         onClick={() => setShowAssignedModal(false)}
-                        className="px-4 py-2 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md text-center"
+                        className="px-4 py-2.5 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md text-center"
                       >
                         Open Desk
                       </Link>
@@ -332,7 +332,7 @@ export function AppraiserWorkbench({
                           setShowUnassignedModal(false)
                         }}
                         disabled={isPending}
-                        className="px-4 py-2 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                        className="px-4 py-2.5 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                       >
                         {isPending && <Loader2 className="h-3 w-3 animate-spin" />}
                         Claim Appraisal

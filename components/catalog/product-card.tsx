@@ -74,7 +74,7 @@ export function ProductCard({ product, quantity = 0, onQuantityChange }: Product
                     onClick={handleDecrement}
                     disabled={quantity === 0}
                     aria-label="Decrease quantity"
-                    className="h-9 w-9"
+                    className="h-11 w-11 sm:h-9 sm:w-9"
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
@@ -86,7 +86,7 @@ export function ProductCard({ product, quantity = 0, onQuantityChange }: Product
                     size="icon-sm"
                     onClick={handleIncrement}
                     aria-label="Increase quantity"
-                    className="h-9 w-9"
+                    className="h-11 w-11 sm:h-9 sm:w-9"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>

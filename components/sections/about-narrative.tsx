@@ -8,7 +8,7 @@ import { CheckCircle2 } from 'lucide-react'
 
 export function AboutNarrative() {
   return (
-    <section className="py-20 md:py-28 lg:py-32 bg-white" aria-labelledby="about-heading">
+    <section className="py-12 md:py-24 lg:py-32 bg-white" aria-labelledby="about-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-14 lg:gap-24 items-center">
           {/* Left Column: Narrative */}
