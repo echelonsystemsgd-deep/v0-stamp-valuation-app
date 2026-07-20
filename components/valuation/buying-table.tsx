@@ -89,7 +89,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
       {items.map((item, index) => (
         <div
           key={item.id}
-          className={`grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 p-6 transition-all duration-200 hover:bg-primary/5 ${
+          className={`grid grid-cols-[1.2fr_1.6fr_80px_90px_120px_110px] items-center gap-4 p-6 transition-all duration-200 hover:bg-primary/5 ${
             index % 2 === 0 ? "bg-background" : "bg-muted/5"
           } animate-fade-in-up`}
         >
@@ -165,7 +165,7 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
   )
 
   const renderMobileCards = (items: BuyingRateItem[]) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:hidden gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:hidden gap-6">
       {items.map((item) => (
         <Card
           key={item.id}
@@ -286,10 +286,10 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
             <div className="h-px flex-1 bg-slate-200" />
           </div>
 
-          <div className="hidden lg:block overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
+          <div className="hidden xl:block overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
             <div className="w-full overflow-x-auto">
-              <div className="min-w-[1000px]">
-                <div className="grid grid-cols-[1.2fr_1.8fr_100px_100px_160px_140px] items-center gap-4 bg-navy p-6 font-bold text-white text-sm uppercase tracking-wider">
+              <div className="min-w-[800px]">
+                <div className="grid grid-cols-[1.2fr_1.6fr_80px_90px_120px_110px] items-center gap-4 bg-navy p-6 font-bold text-white text-sm uppercase tracking-wider">
                   <div>Product</div>
                   <div>Description</div>
                   <div className="text-right">Face Price</div>
