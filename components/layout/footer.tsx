@@ -139,9 +139,23 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/20 py-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-sm text-primary-foreground/60">
-              &copy; {currentYear} {contactInfo.businessName}. All rights reserved.
-            </p>
+            <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:gap-3 sm:text-left text-sm text-primary-foreground/60">
+              <p>
+                &copy; {currentYear} {contactInfo.businessName}. All rights reserved.
+              </p>
+              <span className="hidden sm:inline" aria-hidden="true">&bull;</span>
+              <p>
+                Built by{' '}
+                <a
+                  href="https://mercianwealth.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary-foreground transition-colors underline-offset-4 hover:underline"
+                >
+                  Mercian Wealth
+                </a>
+              </p>
+            </div>
             <div className="flex items-center gap-6">
               <Link
                 href="/privacy"
