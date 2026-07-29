@@ -80,7 +80,7 @@ export function AdminSidebarWrapper({ user, profile, children }: AdminSidebarWra
 
       {/* Sidebar Desktop + Mobile Menu */}
       <aside className={cn(
-        "fixed lg:static inset-y-0 left-0 z-50 w-64 bg-[#0B1D2E] text-white flex flex-col justify-between transition-transform duration-200 ease-in-out border-r border-[#C5A059]/20 shadow-xl shrink-0",
+        "fixed lg:sticky lg:top-0 lg:h-screen lg:self-start inset-y-0 left-0 z-50 w-64 bg-[#0B1D2E] text-white flex flex-col justify-between transition-transform duration-200 ease-in-out border-r border-[#C5A059]/20 shadow-xl shrink-0 overflow-y-auto",
         mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
         <div>
