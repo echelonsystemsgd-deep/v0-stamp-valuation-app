@@ -226,22 +226,20 @@ export function Header() {
                   <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-805/50 my-1" />
                   <DropdownMenuItem asChild>
                     <Link
-                      href={profile?.role === 'admin' || profile?.role === 'staff' ? '/admin' : '/dashboard'}
+                      href={profile?.role === 'admin' ? '/admin' : '/worker'}
                       className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-semibold rounded-lg text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
                     >
                       <UserIcon className="h-4 w-4 text-slate-400" />
-                      {profile?.role === 'admin' || profile?.role === 'staff'
-                        ? (profile?.role === 'staff' ? 'Appraiser Console' : 'Admin Console')
-                        : 'Valuation Console'}
+                      {profile?.role === 'admin' ? 'Admin Console' : 'Worker Console'}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link
-                      href={profile?.role === 'admin' ? '/admin/settings' : (profile?.role === 'staff' ? '/admin/profile' : '/dashboard/profile')}
+                      href="/admin/settings"
                       className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-semibold rounded-lg text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
                     >
                       <Settings className="h-4 w-4 text-slate-400" />
-                      Profile Settings
+                      Settings
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-805/50 my-1" />
@@ -356,30 +354,16 @@ export function Header() {
                         </span>
                       </div>
                       <Link
-                        href={profile?.role === 'admin' || profile?.role === 'staff' ? '/admin' : '/dashboard'}
+                        href={profile?.role === 'admin' ? '/admin' : '/worker'}
                         onClick={() => setIsOpen(false)}
                         className={cn(
                           'flex items-center px-4 py-3.5 text-lg font-serif font-bold rounded-xl transition-all',
-                          pathname === '/dashboard' || pathname === '/admin'
+                          pathname === '/worker' || pathname === '/admin'
                             ? 'bg-[#14452F]/10 text-[#14452F] translate-x-2'
                             : 'text-foreground hover:bg-muted'
                         )}
                       >
-                        {profile?.role === 'admin' || profile?.role === 'staff'
-                          ? (profile?.role === 'staff' ? 'Appraiser Console' : 'Admin Console')
-                          : 'Valuation Console'}
-                      </Link>
-                      <Link
-                        href={profile?.role === 'admin' ? '/admin/settings' : (profile?.role === 'staff' ? '/admin/profile' : '/dashboard/profile')}
-                        onClick={() => setIsOpen(false)}
-                        className={cn(
-                          'flex items-center px-4 py-3.5 text-lg font-serif font-bold rounded-xl transition-all',
-                          pathname === '/dashboard/profile' || pathname === '/admin/settings' || pathname === '/admin/profile'
-                            ? 'bg-[#14452F]/10 text-[#14452F] translate-x-2'
-                            : 'text-foreground hover:bg-muted'
-                        )}
-                      >
-                        Profile Settings
+                        {profile?.role === 'admin' ? 'Admin Console' : 'Worker Console'}
                       </Link>
                       <button
                         onClick={async () => {

@@ -1,430 +1,230 @@
 'use client'
 
-import React, { useEffect, useState, useTransition } from 'react'
+import React, { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { useOnlinePresence } from '@/lib/presence-context'
 import { 
   Search, 
   Users, 
   Loader2, 
-  Check, 
-  X, 
-  ShieldAlert, 
-  Ban,
-  UserCheck,
-  AlertTriangle
+  Mail, 
+  Phone, 
+  MapPin, 
+  FileSpreadsheet, 
+  ArrowRight,
+  Calendar
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 
-interface Profile {
-  id: string
+interface CustomerSubmitter {
   email: string
-  full_name: string | null
-  role: 'user' | 'seller' | 'admin' | 'staff'
-  is_suspended: boolean
-  created_at: string
+  name: string
+  phone: string
+  postcode: string
+  submissionCount: number
+  lastSubmissionDate: string
 }
 
-export default function SellerAccountsPage() {
-  const [profiles, setProfiles] = useState<Profile[]>([])
+export default function CustomerDirectoryPage() {
+  const [customers, setCustomers] = useState<CustomerSubmitter[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [activeTab, setActiveTab] = useState<'all' | 'online' | 'offline' | 'suspended'>('all')
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [currentAdminId, setCurrentAdminId] = useState<string | null>(null)
-  const [currentAdminRole, setCurrentAdminRole] = useState<'admin' | 'staff' | 'user' | null>(null)
-  const { onlineUserIds } = useOnlinePresence()
-
-  // Ban/Restrict Modal states
-  const [showBanModal, setShowBanModal] = useState(false)
-  const [banReason, setBanReason] = useState('')
-  const [banType, setBanType] = useState<'restricted' | 'banned'>('restricted')
-
-  const [isPending, startTransition] = useTransition()
   const supabase = createClient()
 
-
-  // Fetch profiles list
-  const fetchProfiles = async () => {
+  const fetchCustomerDirectory = async () => {
     setLoading(true)
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        setCurrentAdminId(user.id)
-        const { data: prof } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id)
-          .single()
-        setCurrentAdminRole(prof?.role || 'staff')
-      }
-
       const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('role', 'seller')
+        .from('submissions')
+        .select('guest_email, guest_name, guest_phone, guest_postcode, created_at')
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      setProfiles(data || [])
+
+      // Group submissions by guest_email
+      const groupedMap = new Map<string, CustomerSubmitter>()
+
+      ;(data || []).forEach(sub => {
+        const email = sub.guest_email || 'unknown@guest.com'
+        if (!groupedMap.has(email)) {
+          groupedMap.set(email, {
+            email,
+            name: sub.guest_name || 'Guest Submitter',
+            phone: sub.guest_phone || 'N/A',
+            postcode: sub.guest_postcode || 'N/A',
+            submissionCount: 1,
+            lastSubmissionDate: sub.created_at
+          })
+        } else {
+          const existing = groupedMap.get(email)!
+          existing.submissionCount += 1
+          // Keep newest name/phone/postcode if available
+          if (!existing.name && sub.guest_name) existing.name = sub.guest_name
+          if (!existing.phone && sub.guest_phone) existing.phone = sub.guest_phone
+          if (!existing.postcode && sub.guest_postcode) existing.postcode = sub.guest_postcode
+        }
+      })
+
+      setCustomers(Array.from(groupedMap.values()))
     } catch (err: any) {
-      toast.error('Failed to load accounts list: ' + err.message)
+      console.error('Directory fetch error:', err)
+      toast.error('Failed to load customer submitter directory.')
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    fetchProfiles()
+    fetchCustomerDirectory()
   }, [])
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search)
-      const q = params.get('search')
-      if (q) {
-        setSearch(q)
-      }
-    }
-  }, [])
-
-  const filteredProfiles = profiles.filter(p => {
-    const matchesSearch = 
-      p.email.toLowerCase().includes(search.toLowerCase()) ||
-      (p.full_name || '').toLowerCase().includes(search.toLowerCase())
-
-    if (!matchesSearch) return false
-
-    if (activeTab === 'all') return true
-    if (activeTab === 'online') return !p.is_suspended && onlineUserIds.has(p.id)
-    if (activeTab === 'offline') return !p.is_suspended && !onlineUserIds.has(p.id)
-    if (activeTab === 'suspended') return p.is_suspended
-    return true
+  const filteredCustomers = customers.filter(c => {
+    const q = search.toLowerCase()
+    return (
+      c.email.toLowerCase().includes(q) ||
+      c.name.toLowerCase().includes(q) ||
+      c.phone.toLowerCase().includes(q) ||
+      c.postcode.toLowerCase().includes(q)
+    )
   })
-
-  // Select Row handlers
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setSelectedIds(filteredProfiles.map(p => p.id).filter(id => id !== currentAdminId))
-    } else {
-      setSelectedIds([])
-    }
-  }
-
-  const handleSelectRow = (id: string, checked: boolean) => {
-    if (checked) {
-      setSelectedIds(prev => [...prev, id])
-    } else {
-      setSelectedIds(prev => prev.filter(item => item !== id))
-    }
-  }
-
-  // Bulk Status updates — toggle is_suspended on selected profiles
-  const handleBulkStatusChange = async (suspend: boolean, reason?: string) => {
-    if (selectedIds.length === 0) return
-
-    startTransition(async () => {
-      try {
-        const { error } = await supabase
-          .from('profiles')
-          .update({ is_suspended: suspend })
-          .in('id', selectedIds)
-
-        if (error) throw error
-
-        // Write audit log entries
-        if (currentAdminId) {
-          for (const targetId of selectedIds) {
-            await supabase.from('admin_audit_logs').insert({
-              admin_id: currentAdminId,
-              action_type: suspend ? 'account_suspended' : 'account_activated',
-              target_user_id: targetId,
-              reason: reason || (suspend ? 'Suspended by admin' : 'Account reactivated by admin')
-            })
-          }
-        }
-
-        toast.success(`Successfully ${suspend ? 'suspended' : 'activated'} ${selectedIds.length} account(s).`)
-        setSelectedIds([])
-        setShowBanModal(false)
-        setBanReason('')
-        fetchProfiles()
-      } catch (err: any) {
-        toast.error('Bulk update failed: ' + err.message)
-      }
-    })
-  }
 
   return (
     <main className="flex-1 bg-[#FBFBF9] py-8 px-6 sm:px-8 overflow-y-auto min-h-screen">
       <div className="max-w-7xl mx-auto space-y-8">
-        
-        {/* Header Block */}
-        <div>
-          <h1 className="font-serif text-3xl font-bold text-[#0B1D2E]">Seller Accounts Directory</h1>
-          <p className="text-sm text-slate-500 mt-1">Audit profile status, restrict accounts, or manage security parameters.</p>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
+          <div>
+            <span className="text-[10px] font-black uppercase tracking-widest text-[#C5A059] block mb-1">
+              Customer CRM Directory
+            </span>
+            <h1 className="font-serif text-3xl font-bold text-[#0B1D2E]">
+              Guest Submitters Directory
+            </h1>
+            <p className="text-xs text-slate-500 mt-1">
+              Search and view past valuation request submitters aggregated by email address.
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold flex items-center gap-1.5">
+              <Users className="h-3.5 w-3.5" />
+              {customers.length} Unique Submitters
+            </span>
+          </div>
         </div>
 
-        {currentAdminRole === 'staff' && (
-          <div className="p-4 bg-amber-50 rounded-2xl border border-amber-200/50 flex gap-3 text-amber-800 text-xs shadow-xs animate-in fade-in duration-200">
-            <ShieldAlert className="h-5 w-5 shrink-0 text-amber-600 mt-0.5" />
-            <div>
-              <span className="font-bold text-sm">Read-Only Staff Account</span>
-              <p className="text-xs text-slate-500 mt-1">
-                Your account is logged in as staff. You can view registered profiles, joined dates, and restriction logs, but modification of account status (restrict, ban, activate) is restricted strictly to Administrator roles.
-              </p>
+        {/* Search Bar */}
+        <div className="bg-white p-4 rounded-2xl border border-slate-150 shadow-xs flex flex-col sm:flex-row items-center gap-4">
+          <div className="relative flex-1 w-full">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search submitter name, email, phone, or postcode..."
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C5A059]"
+            />
+          </div>
+        </div>
+
+        {/* Table / List */}
+        {loading ? (
+          <div className="bg-white rounded-2xl border border-slate-150 p-12 text-center flex flex-col items-center justify-center min-h-[250px]">
+            <Loader2 className="animate-spin h-8 w-8 text-[#C5A059] mb-3" />
+            <p className="text-xs text-slate-500 font-medium">Loading customer submitter directory...</p>
+          </div>
+        ) : filteredCustomers.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-slate-150 p-12 text-center min-h-[250px] flex flex-col items-center justify-center">
+            <Users className="h-10 w-10 text-slate-300 mb-3" />
+            <h3 className="text-sm font-bold text-slate-700">No Submitters Found</h3>
+            <p className="text-xs text-slate-500 mt-1">No guest submitters matched your search filter.</p>
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl border border-slate-150 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-50/80 border-b border-slate-150 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    <th className="py-3.5 px-6">Submitter Name</th>
+                    <th className="py-3.5 px-6">Contact Info</th>
+                    <th className="py-3.5 px-6">Postcode</th>
+                    <th className="py-3.5 px-6 text-center">Submissions Count</th>
+                    <th className="py-3.5 px-6">Last Active</th>
+                    <th className="py-3.5 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-xs">
+                  {filteredCustomers.map((cust) => (
+                    <tr key={cust.email} className="hover:bg-slate-50/60 transition-colors">
+                      <td className="py-4 px-6 font-bold text-[#0B1D2E]">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-[#14452F]/10 text-[#14452F] font-bold flex items-center justify-center shrink-0">
+                            {cust.name[0]?.toUpperCase() || 'G'}
+                          </div>
+                          <div>
+                            <span className="block font-bold text-slate-800">{cust.name}</span>
+                            <span className="text-[10px] text-slate-400 font-mono">Guest Record</span>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="py-4 px-6">
+                        <div className="space-y-1">
+                          <a 
+                            href={`mailto:${cust.email}`} 
+                            className="inline-flex items-center gap-1.5 font-mono text-slate-600 hover:text-[#C5A059] hover:underline"
+                          >
+                            <Mail className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                            {cust.email}
+                          </a>
+                          {cust.phone && cust.phone !== 'N/A' && (
+                            <a 
+                              href={`tel:${cust.phone.replace(/\s/g, '')}`} 
+                              className="inline-flex items-center gap-1.5 text-slate-500 hover:text-[#0B1D2E] block"
+                            >
+                              <Phone className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                              {cust.phone}
+                            </a>
+                          )}
+                        </div>
+                      </td>
+
+                      <td className="py-4 px-6 font-mono text-slate-600">
+                        <div className="inline-flex items-center gap-1.5">
+                          <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                          {cust.postcode}
+                        </div>
+                      </td>
+
+                      <td className="py-4 px-6 text-center">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 font-bold text-slate-700 text-xs">
+                          <FileSpreadsheet className="h-3.5 w-3.5 text-slate-400" />
+                          {cust.submissionCount} parcel{cust.submissionCount > 1 ? 's' : ''}
+                        </span>
+                      </td>
+
+                      <td className="py-4 px-6 text-slate-500 font-mono text-[11px]">
+                        <div className="inline-flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                          {new Date(cust.lastSubmissionDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </div>
+                      </td>
+
+                      <td className="py-4 px-6 text-right space-x-2">
+                        <Link
+                          href={`/admin/submissions?search=${encodeURIComponent(cust.email)}`}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#0B1D2E] hover:bg-[#0B1D2E]/90 text-white text-xs font-bold transition-all shadow-xs"
+                        >
+                          View Submissions <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
-
-        {/* Tab Filters */}
-        {/* Tab Filters */}
-        <div className="border-b border-slate-200/60 flex gap-4 scrollbar-none">
-          {(['all', 'online', 'offline', 'suspended'] as const).map(tab => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={cn(
-                'px-4 py-3 text-sm font-semibold border-b-2 transition-all cursor-pointer whitespace-nowrap capitalize',
-                activeTab === tab 
-                  ? 'border-[#C5A059] text-[#0B1D2E]' 
-                  : 'border-transparent text-slate-400 hover:text-slate-700'
-              )}
-            >
-              {tab === 'all' ? 'All Accounts' : tab === 'online' ? 'Online' : tab === 'offline' ? 'Offline' : 'Suspended'}
-            </button>
-          ))}
-        </div>
-
-        {/* Grid Card */}
-        <div className="bg-white rounded-2xl border border-slate-150 shadow-sm overflow-hidden">
-          
-          {/* Search Row */}
-          <div className="p-4 border-b border-slate-100 flex flex-col md:flex-row gap-4 items-center">
-            <div className="relative w-full md:max-w-md">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-450" />
-              <input
-                type="text"
-                placeholder="Search by full name or email address..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 border border-slate-200 focus:border-[#C5A059] focus:outline-none rounded-xl text-sm transition-all"
-              />
-            </div>
-            <div className="ml-auto text-xs text-slate-450">
-              Total {filteredProfiles.length} profiles listed
-            </div>
-          </div>
-
-          {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-100 text-left">
-                  <th className="py-4 px-6 text-center w-12">
-                    <input
-                      type="checkbox"
-                      disabled={currentAdminRole === 'staff'}
-                      checked={filteredProfiles.length > 0 && selectedIds.length === filteredProfiles.filter(p => p.id !== currentAdminId).length}
-                      onChange={handleSelectAll}
-                      className="rounded border-slate-300 text-[#14452F] focus:ring-[#14452F] h-4 w-4 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
-                    />
-                  </th>
-                  <th className="py-4 px-4 font-serif text-[#0B1D2E] font-bold text-xs uppercase tracking-wider">Seller Profile</th>
-                  <th className="py-4 px-4 font-serif text-[#0B1D2E] font-bold text-xs uppercase tracking-wider">Joined Date</th>
-                  <th className="py-4 px-4 font-serif text-[#0B1D2E] font-bold text-xs uppercase tracking-wider">Account Role</th>
-                  <th className="py-4 px-4 font-serif text-[#0B1D2E] font-bold text-xs uppercase tracking-wider text-center">Status</th>
-                  <th className="py-4 px-6 font-serif text-[#0B1D2E] font-bold text-xs uppercase tracking-wider">Ban Reason / Notes</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {loading ? (
-                  <tr>
-                    <td colSpan={6} className="py-12 text-center text-sm text-slate-400">
-                      <Loader2 className="h-6 w-6 animate-spin text-[#C5A059] mx-auto mb-2" />
-                      Loading accounts directory...
-                    </td>
-                  </tr>
-                ) : filteredProfiles.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-12 text-center text-sm text-slate-450">
-                      No accounts listed matching filters.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredProfiles.map(p => {
-                    const isSelected = selectedIds.includes(p.id)
-                    const isSelf = p.id === currentAdminId
-
-                    return (
-                      <tr 
-                        key={p.id} 
-                        className={cn(
-                          'group hover:bg-[#FBFBF9]/80 transition-all cursor-pointer duration-100',
-                          isSelected ? 'bg-amber-50/20' : '',
-                          currentAdminRole === 'staff' ? 'cursor-default hover:bg-white' : ''
-                        )}
-                        onClick={() => !isSelf && currentAdminRole !== 'staff' && handleSelectRow(p.id, !isSelected)}
-                      >
-                        <td className="py-4 px-6 text-center w-12" onClick={e => e.stopPropagation()}>
-                          <input
-                            type="checkbox"
-                            disabled={isSelf || currentAdminRole === 'staff'}
-                            checked={isSelected}
-                            onChange={e => handleSelectRow(p.id, e.target.checked)}
-                            className="rounded border-slate-300 text-[#14452F] focus:ring-[#14452F] h-4 w-4 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
-                          />
-                        </td>
-                        <td className="py-4 px-4 text-sm">
-                          <p className="font-bold text-[#0B1D2E]">{p.full_name || 'Not provided'}</p>
-                          <p className="text-xs text-slate-405">{p.email} {isSelf && <span className="text-[10px] bg-slate-100 text-slate-500 px-1 py-0.5 rounded font-bold uppercase">(You)</span>}</p>
-                        </td>
-                        <td className="py-4 px-4 text-xs text-slate-500 font-medium">
-                          {new Date(p.created_at).toLocaleDateString('en-GB', {
-                            day: '2-digit',
-                            month: 'short',
-                            year: 'numeric'
-                          })}
-                        </td>
-                        <td className="py-4 px-4 text-xs font-bold text-amber-600 capitalize">
-                          {p.role}
-                        </td>
-                        <td className="py-4 px-4 text-center">
-                          {p.is_suspended ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border bg-red-50 text-red-700 border-red-200">
-                              <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                              Suspended
-                            </span>
-                          ) : onlineUserIds.has(p.id) ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border bg-emerald-50 text-emerald-700 border-emerald-200">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                              Online
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border bg-slate-50 text-slate-600 border-slate-200">
-                              <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                              Offline
-                            </span>
-                          )}
-                        </td>
-                        <td className="py-4 px-6 text-xs text-slate-500 italic max-w-xs truncate">
-                          {p.is_suspended ? 'Account suspended by admin' : '-'}
-                        </td>
-                      </tr>
-                    )
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
-
-      {/* Floating Bulk Actions Sticky Footer Bar */}
-      {selectedIds.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#0B1D2E] text-white border border-[#C5A059]/30 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-6 z-40 animate-in fade-in slide-in-from-bottom-4 duration-200">
-          <div className="text-sm font-semibold border-r border-slate-700/60 pr-4">
-            <span className="text-[#C5A059] font-black">{selectedIds.length}</span> selected
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => handleBulkStatusChange(false)}
-              disabled={isPending}
-              className="flex items-center gap-1.5 bg-[#14452F] hover:bg-[#14452F]/90 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-[#14452F]/30 transition-all cursor-pointer disabled:opacity-50"
-            >
-              {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <UserCheck className="h-3.5 w-3.5" />}
-              Activate
-            </button>
-
-            <button
-              onClick={() => {
-                setBanType('restricted')
-                setShowBanModal(true)
-              }}
-              className="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-amber-600/30 transition-all cursor-pointer"
-            >
-              <AlertTriangle className="h-3.5 w-3.5" /> Suspend
-            </button>
-
-            <button
-              onClick={() => {
-                setBanType('banned')
-                setShowBanModal(true)
-              }}
-              className="flex items-center gap-1.5 bg-red-650 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-red-650/30 transition-all cursor-pointer"
-            >
-              <Ban className="h-3.5 w-3.5" /> Ban Accounts
-            </button>
-          </div>
-
-          <button
-            onClick={() => setSelectedIds([])}
-            className="p-1 rounded hover:bg-white/5 text-slate-450 hover:text-white transition-all cursor-pointer"
-            title="Deselect all"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-      )}
-
-      {/* Ban / Restriction Modal Dialog */}
-      {showBanModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full overflow-hidden relative animate-in zoom-in-95 duration-150">
-            <div className={cn('h-1', banType === 'restricted' ? 'bg-amber-500' : 'bg-red-500')} />
-            
-            <div className="p-6 sm:p-8 space-y-6">
-              <div>
-                <h3 className="font-serif text-xl font-bold text-[#0B1D2E]">
-                  {banType === 'restricted' ? 'Restrict Accounts' : 'Ban Seller Accounts'}
-                </h3>
-                <p className="text-xs text-slate-500 mt-1">
-                  This will change the status of {selectedIds.length} profiles to {banType}. They will be notified of the restriction.
-                </p>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-450 uppercase tracking-wider block">Reason for restriction / ban</label>
-                <textarea
-                  required
-                  rows={3}
-                  placeholder="Explain why this action is taken (e.g. spamming fake listings, payment disputes)..."
-                  value={banReason}
-                  onChange={(e) => setBanReason(e.target.value)}
-                  className="w-full p-3.5 border border-slate-200 focus:border-[#C5A059] focus:outline-none rounded-xl text-sm transition-all resize-none"
-                />
-              </div>
-
-              <div className="flex gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowBanModal(false)
-                    setBanReason('')
-                  }}
-                  className="flex-1 py-3 text-xs font-bold uppercase tracking-wider text-slate-650 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer text-center"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  disabled={isPending || !banReason.trim()}
-                  onClick={() => handleBulkStatusChange(true, banReason)}
-                  className={cn(
-                    'flex-1 py-3 text-xs font-bold uppercase tracking-wider text-white rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50',
-                    banType === 'restricted' ? 'bg-amber-600 hover:bg-amber-700' : 'bg-red-650 hover:bg-red-750'
-                  )}
-                >
-                  {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-                  Confirm Actions
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   )
 }

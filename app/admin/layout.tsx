@@ -1,7 +1,7 @@
 import React from 'react'
 import { redirect } from 'next/navigation'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
-import { ResponsiveSidebarWrapper } from '@/components/dashboard/responsive-sidebar-wrapper'
+import { AdminSidebarWrapper } from '@/components/admin/admin-sidebar-wrapper'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,12 +24,12 @@ export default async function AdminLayout({
     .single()
 
   if (!profile || (profile.role !== 'admin' && profile.role !== 'staff')) {
-    redirect('/dashboard')
+    redirect('/unauthorized')
   }
 
   return (
-    <ResponsiveSidebarWrapper user={{ id: user.id, email: user.email || '' }} profile={profile}>
+    <AdminSidebarWrapper user={{ id: user.id, email: user.email || '' }} profile={profile}>
       {children}
-    </ResponsiveSidebarWrapper>
+    </AdminSidebarWrapper>
   )
 }

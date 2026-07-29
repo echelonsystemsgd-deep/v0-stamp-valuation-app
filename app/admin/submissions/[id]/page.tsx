@@ -23,7 +23,11 @@ import {
   Shield,
   CreditCard,
   MessageSquare,
-  ClipboardList
+  ClipboardList,
+  Printer,
+  Copy,
+  ExternalLink,
+  Mail
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -192,11 +196,26 @@ export default function SubmissionWorkspace() {
   const [staffNote, setStaffNote] = useState('')
   const [currentAdminUser, setCurrentAdminUser] = useState<{ id: string; role: string } | null>(null)
   
-  // Split resizer, Canned replies, & Active bonus codes states
   const [splitWidth, setSplitWidth] = useState(65)
   const [isResizing, setIsResizing] = useState(false)
   const [showCannedDropdown, setShowCannedDropdown] = useState(false)
   const [activeBonusCodes, setActiveBonusCodes] = useState<{ id: string; code: string; percentage_bonus: number }[]>([])
+  const [showPrintModal, setShowPrintModal] = useState(false)
+
+  const handleCopyQuoteEmail = () => {
+    if (!submission) return
+    const customerName = sellerProfile?.full_name || submission.guest_name || 'Valued Customer'
+    const text = `Dear ${customerName},\n\nThank you for submitting your ${submission.collection_type.replace(/_/g, ' ')} collection for valuation.\n\nValuation Ref: VAL-${submission.id.slice(0, 8).toUpperCase()}\nCollection Era: ${submission.estimated_era}\nCalculated Payout Offer: ${formatGBP(finalPayoutTotal)}\n\nIf you accept this valuation offer, please confirm by replying to this email or logging into your seller portal.\n\nBest regards,\nUK Stamp Valuations Desk`
+    navigator.clipboard.writeText(text)
+    toast.success('Copied Valuation Quote email text to clipboard!')
+  }
+
+  const handleCopyShippingAdvice = () => {
+    if (!submission) return
+    const text = `Shipping Instructions for Valuation VAL-${submission.id.slice(0, 8).toUpperCase()}:\n\n1. Package your stamp collection securely using padded envelopes or cardboard boxes.\n2. Include a slip with your Valuation Reference (VAL-${submission.id.slice(0, 8).toUpperCase()}) inside the parcel.\n3. Send via Royal Mail Signed For or Special Delivery to ensure tracking.\n\nReturn Address:\nUK Stamp Valuations Processing Desk\nAttn: Valuation Team\nUnited Kingdom`
+    navigator.clipboard.writeText(text)
+    toast.success('Copied Shipping Instructions to clipboard!')
+  }
 
   const [isPending, startTransition] = useTransition()
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -825,6 +844,14 @@ export default function SubmissionWorkspace() {
 
         {/* Audit status actions */}
         <div className="flex items-center gap-2 flex-wrap w-full md:w-auto justify-start md:justify-end">
+          <button
+            onClick={() => setShowPrintModal(true)}
+            className="px-3.5 py-2 border border-slate-200 hover:border-slate-300 text-xs font-bold uppercase tracking-wider rounded-xl bg-white text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer"
+            title="Print Parcel Slip for Physical Sorting Desk"
+          >
+            <Printer className="h-3.5 w-3.5 text-[#C5A059]" /> Print Slip
+          </button>
+
           {(submission.status === 'quote_requested' || submission.status === 'received' || submission.status === 'under_review') && (
             <button
               onClick={() => handleTransitionStatus('under_review')}
@@ -1315,6 +1342,46 @@ export default function SubmissionWorkspace() {
                   )}
                 </div>
               )}
+
+              {/* Quick Communication Actions */}
+              <div className="pt-3 border-t border-slate-100 space-y-2">
+                <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider block">Manual Outreach Helpers</span>
+                {(() => {
+                  const email = sellerProfile?.email || submission.guest_email
+                  const name = sellerProfile?.full_name || submission.guest_name || 'Customer'
+                  const mailtoUrl = email ? `mailto:${email}?subject=${encodeURIComponent(`UK Stamp Valuations - Valuation Request #VAL-${submission.id.slice(0, 8).toUpperCase()}`)}&body=${encodeURIComponent(`Dear ${name},\n\nThank you for submitting your ${submission.collection_type.replace(/_/g, ' ')} collection for valuation.\n\nValuation Reference: VAL-${submission.id.slice(0, 8).toUpperCase()}\nCalculated Payout Offer: ${formatGBP(finalPayoutTotal)}\n\nNext Steps:\nIf you wish to proceed, please post your stamps safely packaged to our processing center.\n\nBest regards,\nUK Stamp Valuations Team`)}` : '#'
+
+                  return (
+                    <div className="flex flex-col gap-2">
+                      {email && (
+                        <a
+                          href={mailtoUrl}
+                          className="w-full py-2 px-3 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                        >
+                          <Mail className="h-3.5 w-3.5 text-[#C5A059]" /> Open Email Launcher
+                        </a>
+                      )}
+                      
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={handleCopyQuoteEmail}
+                          className="py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-[10px] font-bold text-slate-700 transition-all flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <Copy className="h-3 w-3 text-slate-400" /> Copy Quote
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleCopyShippingAdvice}
+                          className="py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-[10px] font-bold text-slate-700 transition-all flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <Copy className="h-3 w-3 text-slate-400" /> Copy Pack Advice
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })()}
+              </div>
             </div>
 
             {/* 3. Internal Staff Notes */}
@@ -1599,6 +1666,117 @@ export default function SubmissionWorkspace() {
                 >
                   {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                   Confirm Reject
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Print Parcel Slip Modal */}
+      {showPrintModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 print:p-0 print:bg-white print:static">
+          <div className="bg-white rounded-3xl border border-slate-150 shadow-2xl max-w-2xl w-full overflow-hidden relative animate-in zoom-in-95 duration-150 print:border-none print:shadow-none print:max-w-none print:rounded-none">
+            <div className="h-2 bg-gradient-to-r from-[#C5A059] to-[#14452F] print:hidden" />
+            
+            <div className="p-6 sm:p-8 space-y-6">
+              {/* Header */}
+              <div className="flex justify-between items-start border-b border-slate-200 pb-4">
+                <div>
+                  <h2 className="font-serif text-2xl font-bold text-[#0B1D2E]">UK Stamp Valuations</h2>
+                  <p className="text-xs text-slate-500 font-medium">Physical Sorting Deck Audit Slip</p>
+                </div>
+                <div className="text-right">
+                  <span className="font-mono font-bold text-sm text-[#0B1D2E] block">VAL-{submission.id.slice(0, 8).toUpperCase()}</span>
+                  <span className="text-[10px] text-slate-400 font-bold block uppercase">{new Date(submission.created_at).toLocaleDateString('en-GB')}</span>
+                </div>
+              </div>
+
+              {/* Grid 1: Customer Details */}
+              <div className="grid grid-cols-2 gap-4 p-4 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs">
+                <div>
+                  <span className="text-[10px] font-black uppercase text-slate-400 block tracking-wider">Customer Name</span>
+                  <span className="font-bold text-[#0B1D2E] text-sm">{sellerProfile?.full_name || submission.guest_name || 'Guest User'}</span>
+                  <span className="text-slate-500 block mt-0.5">{sellerProfile?.email || submission.guest_email || '-'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-black uppercase text-slate-400 block tracking-wider">Location & Contact</span>
+                  <span className="font-bold text-[#0B1D2E] block uppercase">{sellerProfile?.postcode || submission.guest_postcode || 'No Postcode'}</span>
+                  <span className="text-slate-500 block">{sellerProfile?.phone || submission.guest_phone || 'No Phone'}</span>
+                </div>
+              </div>
+
+              {/* Grid 2: Collection Overview */}
+              <div className="space-y-2 text-xs">
+                <div className="grid grid-cols-3 gap-2 p-3 bg-slate-50/60 rounded-xl border border-slate-100 font-semibold text-slate-700">
+                  <div>Type: <span className="font-bold capitalize">{submission.collection_type.replace(/_/g, ' ')}</span></div>
+                  <div>Quantity: <span className="font-bold">{submission.approx_quantity}</span></div>
+                  <div>Era: <span className="font-bold">{submission.estimated_era}</span></div>
+                </div>
+
+                {submission.description && (
+                  <div className="p-3 bg-slate-50/40 rounded-xl border border-slate-100 text-slate-600 italic">
+                    <span className="font-bold not-italic text-slate-700 block text-[10px] uppercase font-mono">Description:</span>
+                    {submission.description}
+                  </div>
+                )}
+              </div>
+
+              {/* Items Table */}
+              <div className="space-y-2">
+                <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider block">Audited Item Breakdown</span>
+                <table className="w-full text-xs border-collapse text-left border border-slate-200 rounded-xl overflow-hidden">
+                  <thead>
+                    <tr className="bg-slate-100 text-slate-600 font-bold border-b border-slate-200">
+                      <th className="py-2 px-3">Category</th>
+                      <th className="py-2 px-3 text-center">Claimed</th>
+                      <th className="py-2 px-3 text-center">Audited</th>
+                      <th className="py-2 px-3 text-right">Rate</th>
+                      <th className="py-2 px-3 text-right">Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {items.map(item => {
+                      const editQty = auditedQuantities[item.id] !== undefined ? auditedQuantities[item.id] : item.quantity
+                      const subtotal = editQty * item.rate_at_submission
+                      return (
+                        <tr key={item.id}>
+                          <td className="py-2 px-3 font-semibold text-slate-800">{item.stamp_categories?.name || 'Category'}</td>
+                          <td className="py-2 px-3 text-center font-mono text-slate-500">{item.quantity}</td>
+                          <td className="py-2 px-3 text-center font-mono font-bold text-[#0B1D2E]">{editQty}</td>
+                          <td className="py-2 px-3 text-right font-mono text-slate-500">{formatGBP(item.rate_at_submission)}</td>
+                          <td className="py-2 px-3 text-right font-mono font-bold text-slate-800">{formatGBP(subtotal)}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Total Banner */}
+              <div className="flex justify-between items-center p-4 bg-[#0B1D2E] text-white rounded-2xl font-serif">
+                <div>
+                  <span className="text-[10px] uppercase font-mono tracking-widest text-[#C5A059] block">Final Net Payout Offer</span>
+                  <span className="text-xs text-slate-300 font-sans">Status: <span className="capitalize font-bold text-white">{submission.status.replace(/_/g, ' ')}</span></span>
+                </div>
+                <span className="text-2xl font-black font-mono text-emerald-400">{formatGBP(finalPayoutTotal)}</span>
+              </div>
+
+              {/* Actions Footer */}
+              <div className="flex justify-between items-center pt-2 border-t border-slate-100 print:hidden">
+                <button
+                  type="button"
+                  onClick={() => setShowPrintModal(false)}
+                  className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="px-6 py-2.5 bg-[#14452F] hover:bg-[#14452F]/90 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Printer className="h-4 w-4" /> Print Parcel Slip
                 </button>
               </div>
             </div>

@@ -7,14 +7,14 @@ import {
   FileText, 
   LayoutGrid, 
   Award, 
-  Gift, 
-  Megaphone, 
   CheckCircle2, 
   ArrowRight,
   TrendingUp,
   BarChart3,
   DollarSign,
-  Activity
+  Activity,
+  Clock,
+  Check
 } from 'lucide-react'
 import { RecentUsersTable } from '@/components/admin/recent-users-table'
 import { AppraiserWorkbench } from '@/components/admin/appraiser-workbench'
@@ -34,7 +34,7 @@ export default async function AdminPage() {
     .single()
 
   if (!profile || (profile.role !== 'admin' && profile.role !== 'staff')) {
-    redirect('/dashboard')
+    redirect('/unauthorized')
   }
 
   // Staff view
@@ -67,33 +67,31 @@ export default async function AdminPage() {
     )
   }
 
-  // Admin metrics
-  const { count: totalUsers } = await supabase
-    .from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'seller')
+  // Admin metrics queries
+  const { data: allSubmissions } = await supabase
+    .from('submissions')
+    .select('id, guest_name, guest_email, guest_phone, status, estimated_valuation, final_reviewed_valuation, created_at, collection_type')
+    .order('created_at', { ascending: false })
 
-  const { count: totalSubmissions } = await supabase
-    .from('submissions').select('*', { count: 'exact', head: true })
+  const submissions_list = allSubmissions || []
+
+  // Unique guest submitters count
+  const uniqueSubmitters = new Set(submissions_list.map(s => s.guest_email || 'guest')).size
 
   const { count: totalCategories } = await supabase
     .from('stamp_categories').select('*', { count: 'exact', head: true })
 
-  const { count: activeBonuses } = await supabase
-    .from('payout_bonus_codes').select('*', { count: 'exact', head: true }).eq('is_active', true)
+  const pendingAppraisals = submissions_list.filter(s => ['received', 'under_review', 'quote_requested'].includes(s.status)).length
+  const quotesGivenCount = submissions_list.filter(s => ['quote_given', 'approved', 'paid'].includes(s.status)).length
 
-  const { count: totalCampaigns } = await supabase
-    .from('marketing_campaigns').select('*', { count: 'exact', head: true })
-
-  const { data: recentUsers } = await supabase
-    .from('profiles').select('*').eq('role', 'seller')
-    .order('created_at', { ascending: false }).limit(5)
-
-  // Analytics data
-  const { data: allSubmissions } = await supabase
-    .from('submissions')
-    .select('status, estimated_valuation, final_reviewed_valuation, created_at, collection_type')
-    .order('created_at', { ascending: false })
-
-  const submissions_list = allSubmissions || []
+  // Recent 5 guest submitter records
+  const recentSubmitters = submissions_list.slice(0, 5).map(s => ({
+    id: s.id,
+    email: s.guest_email || 'guest@ukstampvaluations.co.uk',
+    name: s.guest_name || 'Guest Submitter',
+    phone: s.guest_phone || 'N/A',
+    createdAt: s.created_at
+  }))
 
   const statusBreakdown = {
     inPipeline: submissions_list.filter(s => ['received','under_review'].includes(s.status)).length,
@@ -142,13 +140,12 @@ export default async function AdminPage() {
           <div className="space-y-2">
             <span className="text-[10px] font-black uppercase tracking-widest text-[#C5A059] block">Control Panel Overview</span>
             <h1 className="font-serif text-3xl font-bold tracking-tight text-[#0B1D2E]">
-              {greeting}, {profile.full_name?.split(' ')[0] || 'Appraiser'}!
+              {greeting}, {profile.full_name?.split(' ')[0] || 'Administrator'}!
             </h1>
             <p className="text-sm text-slate-500 max-w-lg">
-              Welcome back to your administration command deck. Your store processes are running smoothly.
+              Welcome back to your administration command deck. All valuation processes are active and running.
             </p>
           </div>
-
         </div>
 
         {/* 2. Operations Snapshot */}
@@ -158,7 +155,7 @@ export default async function AdminPage() {
               <h2 className="font-serif text-xl font-bold text-[#0B1D2E] flex items-center gap-2">
                 <BarChart3 className="h-5 w-5 text-[#C5A059]" /> Operations Snapshot
               </h2>
-              <p className="text-xs text-slate-500 mt-1">Live pipeline health and submission activity overview.</p>
+              <p className="text-xs text-slate-500 mt-1">Live valuation pipeline health and submission activity overview.</p>
             </div>
             <Link href="/admin/reports" className="flex items-center gap-1 text-xs font-bold text-[#14452F] hover:underline">
               Full Reports <ArrowRight className="h-3.5 w-3.5" />
@@ -245,11 +242,11 @@ export default async function AdminPage() {
         </div>
 
         {/* 3. Quick Metrics Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <Link href="/admin/sellers" className="bg-white p-5 rounded-2xl border border-slate-150 shadow-sm flex items-center justify-between hover:border-[#C5A059]/40 hover:shadow-md transition-all cursor-pointer">
             <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sellers</span>
-              <p className="text-2xl font-black text-[#0B1D2E] mt-0.5">{totalUsers || 0}</p>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Customers</span>
+              <p className="text-2xl font-black text-[#0B1D2E] mt-0.5">{uniqueSubmitters}</p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
               <Users className="h-5 w-5" />
@@ -258,11 +255,21 @@ export default async function AdminPage() {
 
           <Link href="/admin/submissions" className="bg-white p-5 rounded-2xl border border-slate-150 shadow-sm flex items-center justify-between hover:border-[#C5A059]/40 hover:shadow-md transition-all cursor-pointer">
             <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Submissions</span>
-              <p className="text-2xl font-black text-[#0B1D2E] mt-0.5">{totalSubmissions || 0}</p>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Submissions</span>
+              <p className="text-2xl font-black text-[#0B1D2E] mt-0.5">{submissions_list.length}</p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
               <FileText className="h-5 w-5" />
+            </div>
+          </Link>
+
+          <Link href="/admin/submissions?tab=pending" className="bg-white p-5 rounded-2xl border border-slate-150 shadow-sm flex items-center justify-between hover:border-[#C5A059]/40 hover:shadow-md transition-all cursor-pointer">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pending Appraisals</span>
+              <p className="text-2xl font-black text-[#0B1D2E] mt-0.5">{pendingAppraisals}</p>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+              <Clock className="h-5 w-5" />
             </div>
           </Link>
 
@@ -273,26 +280,6 @@ export default async function AdminPage() {
             </div>
             <div className="w-10 h-10 rounded-xl bg-amber-50/50 flex items-center justify-center text-[#C5A059]">
               <LayoutGrid className="h-5 w-5" />
-            </div>
-          </Link>
-
-          <Link href="/admin/bonuses" className="bg-white p-5 rounded-2xl border border-slate-150 shadow-sm flex items-center justify-between hover:border-[#C5A059]/40 hover:shadow-md transition-all cursor-pointer">
-            <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Bonuses</span>
-              <p className="text-2xl font-black text-[#0B1D2E] mt-0.5">{activeBonuses || 0}</p>
-            </div>
-            <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
-              <Gift className="h-5 w-5" />
-            </div>
-          </Link>
-
-          <Link href="/admin/marketing" className="bg-white p-5 rounded-2xl border border-slate-150 shadow-sm flex items-center justify-between hover:border-[#C5A059]/40 hover:shadow-md transition-all cursor-pointer">
-            <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Dispatched Emails</span>
-              <p className="text-2xl font-black text-[#0B1D2E] mt-0.5">{totalCampaigns || 0}</p>
-            </div>
-            <div className="w-10 h-10 rounded-xl bg-[#14452F]/10 flex items-center justify-center text-[#14452F]">
-              <Megaphone className="h-5 w-5" />
             </div>
           </Link>
         </div>
@@ -343,7 +330,7 @@ export default async function AdminPage() {
 
           <div className="pt-2 border-t border-slate-100">
             <Link
-              href="/admin/submissions?tab=appraising"
+              href="/admin/submissions"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#0B1D2E] hover:bg-[#0B1D2E]/90 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md"
             >
               <FileText className="h-3.5 w-3.5" /> Assign Submissions to Staff
@@ -351,11 +338,19 @@ export default async function AdminPage() {
           </div>
         </div>
 
-        {/* 5. Recent Registrations + Access Credentials */}
+        {/* 5. Recent Guest Submitters + Access Credentials */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-150 shadow-sm p-6 sm:p-8">
-            <h2 className="font-serif text-xl font-bold text-[#0B1D2E] mb-5">Recent Seller Registrations</h2>
-            <RecentUsersTable initialUsers={recentUsers || []} />
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h2 className="font-serif text-xl font-bold text-[#0B1D2E]">Recent Guest Submitters</h2>
+                <p className="text-xs text-slate-500 mt-0.5">Latest valuation requests submitted by public guests.</p>
+              </div>
+              <Link href="/admin/sellers" className="text-xs font-bold text-[#14452F] hover:underline flex items-center gap-1">
+                View All <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+            <RecentUsersTable initialUsers={recentSubmitters} />
           </div>
 
           <div className="bg-[#0B1D2E] text-white rounded-3xl border border-[#C5A059]/20 shadow-xl p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
@@ -366,7 +361,7 @@ export default async function AdminPage() {
               </div>
               <h2 className="font-serif text-xl font-bold text-white mb-2">Access Credentials</h2>
               <p className="text-xs text-slate-400 leading-relaxed mb-6">
-                You are currently accessing this workspace with full Administrative clearance. Keep appraiser operations confidential.
+                You are accessing this control panel with full Administrative clearance. Staff workstations and guest valuations remain secure.
               </p>
             </div>
             <div className="space-y-4 pt-4 border-t border-white/10 text-xs">
@@ -384,9 +379,9 @@ export default async function AdminPage() {
         <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-6 sm:p-8 space-y-6">
           <div>
             <h2 className="font-serif text-lg font-bold text-[#0B1D2E] flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-[#C5A059]" /> Setup Guide Checklist
+              <CheckCircle2 className="h-5 w-5 text-[#C5A059]" /> Admin Setup Checklist
             </h2>
-            <p className="text-xs text-slate-500 mt-1">Follow these simple steps to configure catalog values and run active outreach campaigns.</p>
+            <p className="text-xs text-slate-500 mt-1">Configure live buying rates, manage staff workstations, and review valuation submissions.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Link href="/admin/categories" className="p-4 rounded-2xl bg-slate-50 hover:bg-slate-100/60 border border-slate-200/60 transition-all flex flex-col justify-between group space-y-3">
@@ -400,26 +395,26 @@ export default async function AdminPage() {
             <Link href="/admin/sellers" className="p-4 rounded-2xl bg-slate-50 hover:bg-slate-100/60 border border-slate-200/60 transition-all flex flex-col justify-between group space-y-3">
               <div>
                 <span className="text-[10px] font-black text-[#C5A569] uppercase font-mono block">Step 2</span>
-                <h4 className="text-xs font-bold text-[#0B1D2E] mt-1 group-hover:text-[#14452F] transition-all">Review Accounts</h4>
-                <p className="text-[11px] text-slate-450 mt-1 leading-normal">Audit registered profiles, verify credentials, or restrict access.</p>
+                <h4 className="text-xs font-bold text-[#0B1D2E] mt-1 group-hover:text-[#14452F] transition-all">Customer Directory</h4>
+                <p className="text-[11px] text-slate-450 mt-1 leading-normal">Search and view past guest submitters by email and postcode.</p>
               </div>
-              <span className="text-[10px] font-bold text-[#14452F] inline-flex items-center gap-1">Review Accounts <ArrowRight className="h-3 w-3" /></span>
+              <span className="text-[10px] font-bold text-[#14452F] inline-flex items-center gap-1">View Directory <ArrowRight className="h-3 w-3" /></span>
             </Link>
-            <Link href="/admin/bonuses" className="p-4 rounded-2xl bg-slate-50 hover:bg-slate-100/60 border border-slate-200/60 transition-all flex flex-col justify-between group space-y-3">
+            <Link href="/admin/submissions" className="p-4 rounded-2xl bg-slate-50 hover:bg-slate-100/60 border border-slate-200/60 transition-all flex flex-col justify-between group space-y-3">
               <div>
                 <span className="text-[10px] font-black text-[#C5A569] uppercase font-mono block">Step 3</span>
-                <h4 className="text-xs font-bold text-[#0B1D2E] mt-1 group-hover:text-[#14452F] transition-all">Payout Bonuses</h4>
-                <p className="text-[11px] text-slate-450 mt-1 leading-normal">Create active promo codes to boost payouts and incentivize fast ship-ins.</p>
+                <h4 className="text-xs font-bold text-[#0B1D2E] mt-1 group-hover:text-[#14452F] transition-all">Submissions Queue</h4>
+                <p className="text-[11px] text-slate-450 mt-1 leading-normal">Assign arrivals to staff appraisers and review valuation quotes.</p>
               </div>
-              <span className="text-[10px] font-bold text-[#14452F] inline-flex items-center gap-1">Bonuses Panel <ArrowRight className="h-3 w-3" /></span>
+              <span className="text-[10px] font-bold text-[#14452F] inline-flex items-center gap-1">Manage Submissions <ArrowRight className="h-3 w-3" /></span>
             </Link>
-            <Link href="/admin/marketing" className="p-4 rounded-2xl bg-slate-50 hover:bg-slate-100/60 border border-slate-200/60 transition-all flex flex-col justify-between group space-y-3">
+            <Link href="/admin/reports" className="p-4 rounded-2xl bg-slate-50 hover:bg-slate-100/60 border border-slate-200/60 transition-all flex flex-col justify-between group space-y-3">
               <div>
                 <span className="text-[10px] font-black text-[#C5A569] uppercase font-mono block">Step 4</span>
-                <h4 className="text-xs font-bold text-[#0B1D2E] mt-1 group-hover:text-[#14452F] transition-all">Outreach Marketing</h4>
-                <p className="text-[11px] text-slate-450 mt-1 leading-normal">Compose and dispatch campaign bulletins to re-engage sellers.</p>
+                <h4 className="text-xs font-bold text-[#0B1D2E] mt-1 group-hover:text-[#14452F] transition-all">Reports & Analytics</h4>
+                <p className="text-[11px] text-slate-450 mt-1 leading-normal">Review monthly payout totals, category trends, and appraiser speed.</p>
               </div>
-              <span className="text-[10px] font-bold text-[#14452F] inline-flex items-center gap-1">Outreach Console <ArrowRight className="h-3 w-3" /></span>
+              <span className="text-[10px] font-bold text-[#14452F] inline-flex items-center gap-1">View Reports <ArrowRight className="h-3 w-3" /></span>
             </Link>
           </div>
         </div>

@@ -27,19 +27,42 @@ function LoginForm() {
     }
 
     startTransition(async () => {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        })
 
-      if (error) {
-        toast.error(error.message || 'Invalid email or password')
-        return
+        if (error) {
+          toast.error(error.message || 'Invalid email or password')
+          return
+        }
+
+        if (data.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', data.user.id)
+            .single()
+
+          if (!profile || (profile.role !== 'admin' && profile.role !== 'staff')) {
+            await supabase.auth.signOut()
+            toast.error('Access restricted to internal staff personnel.')
+            return
+          }
+
+          toast.success('Successfully logged in!')
+          router.refresh()
+          if (profile.role === 'staff') {
+            router.push('/worker')
+          } else {
+            router.push('/admin')
+          }
+        }
+      } catch (err: any) {
+        console.error('Login error:', err)
+        toast.error('Connection Error: Unable to reach authentication server. Please check your network connection or verify your Supabase configuration.')
       }
-
-      toast.success('Successfully logged in!')
-      router.refresh()
-      router.push(redirectedFrom)
     })
   }
 
@@ -51,17 +74,22 @@ function LoginForm() {
     }
 
     startTransition(async () => {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
-      })
+      try {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+        })
 
-      if (error) {
-        toast.error(error.message || 'Failed to send password reset email')
-        return
+        if (error) {
+          toast.error(error.message || 'Failed to send password reset email')
+          return
+        }
+
+        toast.success('If a staff account exists, a password reset link has been sent!')
+        setShowForgotPassword(false)
+      } catch (err: any) {
+        console.error('Reset password error:', err)
+        toast.error('Connection Error: Unable to reach authentication server. Please check your network connection.')
       }
-
-      toast.success('If an account exists, a password reset link has been sent!')
-      setShowForgotPassword(false)
     })
   }
 
@@ -75,19 +103,19 @@ function LoginForm() {
           onClick={() => setShowForgotPassword(false)}
           className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white mb-6 transition-all bg-transparent border-0 cursor-pointer"
         >
-          <ArrowLeft className="h-3 w-3" /> Back to Login
+          <ArrowLeft className="h-3 w-3" /> Back to Staff Login
         </button>
 
         <form className="space-y-6" onSubmit={handleForgotPassword}>
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-white font-serif mb-1">Reset Password</h3>
+            <h3 className="text-lg font-bold text-white font-serif mb-1">Reset Staff Password</h3>
             <p className="text-xs text-slate-300">
-              Enter your email address and we'll send you a link to reset your password.
+              Enter your staff email address to receive password reset instructions.
             </p>
             
             <div>
               <label htmlFor="forgot-email" className="block text-xs font-bold uppercase tracking-wider text-[#C5A059] mb-2">
-                Email Address
+                Staff Email Address
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -101,7 +129,7 @@ function LoginForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-3 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C5A059] focus:border-transparent text-sm transition-all"
-                  placeholder="you@example.com"
+                  placeholder="staff@ukstampvaluations.co.uk"
                   disabled={isPending}
                 />
               </div>
@@ -137,7 +165,7 @@ function LoginForm() {
       <form className="space-y-6" onSubmit={handlePasswordLogin}>
         <div>
           <label htmlFor="pwd-email" className="block text-xs font-bold uppercase tracking-wider text-[#C5A059] mb-2">
-            Email Address
+            Staff Email Address
           </label>
           <div className="relative">
             <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -152,7 +180,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="block w-full pl-10 pr-3 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C5A059] focus:border-transparent text-sm transition-all"
-              placeholder="you@example.com"
+              placeholder="staff@ukstampvaluations.co.uk"
               disabled={isPending}
             />
           </div>
@@ -198,25 +226,16 @@ function LoginForm() {
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin h-5 w-5" /> Signing in...
+                <Loader2 className="animate-spin h-5 w-5" /> Authenticating...
               </>
             ) : (
               <>
-                Sign In <ArrowRight className="h-4 w-4" />
+                Staff Sign In <ArrowRight className="h-4 w-4" />
               </>
             )}
           </button>
         </div>
       </form>
-
-      <div className="mt-8 text-center border-t border-white/10 pt-6">
-        <p className="text-sm text-slate-300">
-          Don't have an account?{' '}
-          <Link href="/signup" className="font-bold text-[#C5A059] hover:underline">
-            Register Here
-          </Link>
-        </p>
-      </div>
     </div>
   )
 }

@@ -573,6 +573,21 @@ export default function SubmissionsPage() {
                           )}>
                             {status.label}
                           </span>
+
+                          {/* Staff manual action indicator */}
+                          {['quote_requested', 'received'].includes(sub.status) ? (
+                            <span className="block mt-1 text-[9px] font-black uppercase tracking-wider text-red-600 bg-red-50 border border-red-200 px-1.5 py-0.5 rounded-md">
+                              🔴 Action Needed
+                            </span>
+                          ) : ['under_review', 'quote_given'].includes(sub.status) ? (
+                            <span className="block mt-1 text-[9px] font-black uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-md">
+                              🟡 Relay Needed
+                            </span>
+                          ) : ['in_transit', 'approved', 'paid'].includes(sub.status) ? (
+                            <span className="block mt-1 text-[9px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-md">
+                              🟢 Processing
+                            </span>
+                          ) : null}
                         </td>
                         <td className="py-4 px-6 text-right whitespace-nowrap" onClick={e => e.stopPropagation()}>
                           <Link

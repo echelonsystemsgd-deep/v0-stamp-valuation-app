@@ -1,72 +1,66 @@
 'use client'
 
 import React from 'react'
-import { useRouter } from 'next/navigation'
-import { useOnlinePresence } from '@/lib/presence-context'
+import Link from 'next/link'
+import { Mail, Phone, Calendar, ArrowRight } from 'lucide-react'
 
-interface UserProfile {
+interface GuestSubmitterItem {
   id: string
   email: string
-  full_name: string | null
-  role: string
-  is_suspended: boolean
+  name: string
+  phone: string
+  createdAt: string
 }
 
 interface RecentUsersTableProps {
-  initialUsers: UserProfile[]
+  initialUsers: GuestSubmitterItem[]
 }
 
 export function RecentUsersTable({ initialUsers }: RecentUsersTableProps) {
-  const { onlineUserIds } = useOnlinePresence()
-  const router = useRouter()
-
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-slate-100">
+      <table className="min-w-full divide-y divide-slate-100 text-left">
         <thead>
-          <tr>
-            <th className="text-left text-xs font-bold text-slate-400 uppercase tracking-wider pb-4">Email</th>
-            <th className="text-left text-xs font-bold text-slate-400 uppercase tracking-wider pb-4">Name</th>
-            <th className="text-left text-xs font-bold text-slate-400 uppercase tracking-wider pb-4">Role</th>
-            <th className="text-left text-xs font-bold text-slate-400 uppercase tracking-wider pb-4">Status</th>
+          <tr className="text-[11px] font-bold text-slate-400 uppercase tracking-wider pb-4">
+            <th className="pb-3 px-2">Submitter Name</th>
+            <th className="pb-3 px-2">Email Address</th>
+            <th className="pb-3 px-2">Phone</th>
+            <th className="pb-3 px-2 text-right">Date</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100">
+        <tbody className="divide-y divide-slate-100 text-xs">
           {initialUsers && initialUsers.length > 0 ? (
             initialUsers.map((u) => (
               <tr 
                 key={u.id} 
-                onClick={() => router.push(`/admin/sellers?search=${encodeURIComponent(u.email)}`)}
-                className="hover:bg-slate-50 cursor-pointer transition-all"
-                title="Click to view in sellers list"
+                className="hover:bg-slate-50 transition-all"
               >
-                <td className="py-3 text-sm font-semibold text-slate-700">{u.email}</td>
-                <td className="py-3 text-sm text-slate-500">{u.full_name || 'Not provided'}</td>
-                <td className="py-3 text-sm font-bold text-amber-600 capitalize">{u.role}</td>
-                <td className="py-3 text-sm">
-                  {u.is_suspended ? (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                      Suspended
-                    </span>
-                  ) : onlineUserIds.has(u.id) ? (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      Online
-                    </span>
+                <td className="py-3 px-2 font-bold text-slate-800">{u.name}</td>
+                <td className="py-3 px-2 font-mono text-slate-600">
+                  <a href={`mailto:${u.email}`} className="hover:text-[#C5A059] hover:underline flex items-center gap-1.5">
+                    <Mail className="h-3 w-3 text-slate-400" />
+                    {u.email}
+                  </a>
+                </td>
+                <td className="py-3 px-2 text-slate-500">
+                  {u.phone !== 'N/A' ? (
+                    <a href={`tel:${u.phone.replace(/\s/g, '')}`} className="hover:text-slate-800 flex items-center gap-1.5">
+                      <Phone className="h-3 w-3 text-slate-400" />
+                      {u.phone}
+                    </a>
                   ) : (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-200">
-                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                      Offline
-                    </span>
+                    <span className="text-slate-400 font-mono">N/A</span>
                   )}
+                </td>
+                <td className="py-3 px-2 text-right text-slate-400 font-mono text-[11px]">
+                  {new Date(u.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={4} className="py-6 text-center text-sm text-slate-400">
-                No users registered.
+              <td colSpan={4} className="py-6 text-center text-xs text-slate-400">
+                No guest submitters recorded yet.
               </td>
             </tr>
           )}

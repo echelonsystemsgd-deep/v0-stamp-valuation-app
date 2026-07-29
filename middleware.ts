@@ -34,8 +34,8 @@ export async function middleware(request: NextRequest) {
   const url = new URL(request.url)
   const path = url.pathname
 
-  // 1. If not logged in and accessing protected routes -> redirect to /login
-  if (!user && (path.startsWith('/dashboard') || path.startsWith('/admin') || path.startsWith('/reset-password'))) {
+  // 1. If not logged in and accessing protected internal routes -> redirect to /login
+  if (!user && (path.startsWith('/admin') || path.startsWith('/worker') || path.startsWith('/reset-password'))) {
     const redirectUrl = new URL('/login', request.url)
     redirectUrl.searchParams.set('redirectedFrom', path)
     return NextResponse.redirect(redirectUrl)
@@ -51,24 +51,13 @@ export async function middleware(request: NextRequest) {
     
     const role = profile?.role ?? 'user'
 
-    // If user is trying to access /login or /signup
-    if (path.startsWith('/login') || path.startsWith('/signup')) {
-      if (role === 'admin' || role === 'staff') {
-        return NextResponse.redirect(new URL('/admin', request.url))
-      }
-      return NextResponse.redirect(new URL('/unauthorized', request.url))
+    // Fallback redirect for retired routes
+    if (path.startsWith('/admin/marketing') || path.startsWith('/admin/bonuses') || path.startsWith('/admin/profile') || path.startsWith('/dashboard')) {
+      return NextResponse.redirect(new URL('/admin', request.url))
     }
 
-    // If accessing /dashboard
-    if (path.startsWith('/dashboard')) {
-      if (role === 'admin' || role === 'staff') {
-        return NextResponse.redirect(new URL('/admin', request.url))
-      }
-      return NextResponse.redirect(new URL('/unauthorized', request.url))
-    }
-
-    // If accessing /admin, ensure they are an admin or staff
-    if (path.startsWith('/admin')) {
+    // If accessing /admin or /worker, ensure role is admin or staff
+    if (path.startsWith('/admin') || path.startsWith('/worker')) {
       if (role !== 'admin' && role !== 'staff') {
         return NextResponse.redirect(new URL('/unauthorized', request.url))
       }
