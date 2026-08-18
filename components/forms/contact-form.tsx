@@ -156,6 +156,8 @@ export function ContactForm() {
             <Input
               id="contact-email"
               type="email"
+              inputMode="email"
+              autoCapitalize="none"
               placeholder="your@email.com"
               value={formData.email}
               onChange={(e) => updateField('email', e.target.value)}

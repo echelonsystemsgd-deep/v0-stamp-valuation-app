@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Upload, X, Image as ImageIcon } from 'lucide-react'
+import { Upload, X, Image as ImageIcon, Camera } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { FormData } from './index'
 import { cn } from '@/lib/utils'
@@ -15,6 +15,7 @@ export function ImageUploadStep({ formData, updateFormData }: ImageUploadStepPro
   const [isDragging, setIsDragging] = React.useState(false)
   const [previews, setPreviews] = React.useState<string[]>([])
   const fileInputRef = React.useRef<HTMLInputElement>(null)
+  const cameraInputRef = React.useRef<HTMLInputElement>(null)
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
@@ -38,6 +39,7 @@ export function ImageUploadStep({ formData, updateFormData }: ImageUploadStepPro
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
     addFiles(files)
+    if (e.target) e.target.value = ''
   }
 
   const addFiles = (files: File[]) => {
@@ -69,10 +71,51 @@ export function ImageUploadStep({ formData, updateFormData }: ImageUploadStepPro
         </p>
       </div>
 
-      {/* Drop Zone */}
+      {/* Hidden Inputs */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        multiple
+        onChange={handleFileSelect}
+        className="hidden"
+        aria-hidden="true"
+      />
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        onChange={handleFileSelect}
+        className="hidden"
+        aria-hidden="true"
+      />
+
+      {/* Quick Action Buttons for Mobile */}
+      <div className="grid grid-cols-2 gap-3 sm:hidden">
+        <Button
+          type="button"
+          variant="outline"
+          className="h-13 border-forest-green/30 text-forest-green hover:bg-forest-green/10 flex items-center justify-center gap-2 font-bold text-sm rounded-xl"
+          onClick={() => cameraInputRef.current?.click()}
+        >
+          <Camera className="w-5 h-5 shrink-0" />
+          <span>Take Photo</span>
+        </Button>
+        <Button
+          type="button"
+          className="h-13 bg-forest-green hover:bg-forest-green/90 text-white flex items-center justify-center gap-2 font-bold text-sm rounded-xl"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <Upload className="w-5 h-5 shrink-0" />
+          <span>Choose Photos</span>
+        </Button>
+      </div>
+
+      {/* Drop Zone (Desktop & Large Mobile) */}
       <div
         className={cn(
-          'border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer',
+          'border-2 border-dashed rounded-2xl p-6 sm:p-8 text-center transition-colors cursor-pointer',
           isDragging
             ? 'border-forest-green bg-forest-green/5'
             : 'border-border hover:border-muted-foreground'
@@ -90,30 +133,18 @@ export function ImageUploadStep({ formData, updateFormData }: ImageUploadStepPro
         }}
         aria-label="Upload images"
       >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          multiple
-          onChange={handleFileSelect}
-          className="hidden"
-          aria-hidden="true"
-        />
         <div className="flex flex-col items-center gap-3">
-          <div className="w-14 h-14 rounded-full bg-secondary flex items-center justify-center">
-            <Upload className="w-6 h-6 text-muted-foreground" />
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-secondary flex items-center justify-center">
+            <Upload className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" />
           </div>
           <div>
-            <p className="font-medium text-foreground">
-              Drag and drop images here
+            <p className="font-medium text-foreground text-sm sm:text-base">
+              Drag and drop images here, or tap to browse
             </p>
-            <p className="text-sm text-muted-foreground mt-1">
-              or click to browse
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+              Supports JPEG, PNG, or WebP (max 10MB each)
             </p>
           </div>
-          <p className="text-xs text-muted-foreground">
-            JPG, PNG or WebP (max 10MB each)
-          </p>
         </div>
       </div>
 

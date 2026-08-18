@@ -201,8 +201,12 @@ export function BuyingTable({ onAction }: { onAction?: (quantities: Record<strin
                   </Badge>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <button type="button" className="text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-200 transition-colors cursor-pointer focus:outline-none p-0.5" aria-label="Valuation Rate Guide">
-                        <HelpCircle className="h-3.5 w-3.5" />
+                      <button 
+                        type="button" 
+                        className="text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-200 transition-colors cursor-pointer focus:outline-none p-2 -m-1 inline-flex items-center justify-center rounded-full" 
+                        aria-label="Valuation Rate Guide"
+                      >
+                        <HelpCircle className="h-4 w-4" />
                       </button>
                     </PopoverTrigger>
                     <PopoverContent className="w-80 p-4 text-left font-normal normal-case bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-border/80 rounded-xl shadow-xl z-50" align="end">

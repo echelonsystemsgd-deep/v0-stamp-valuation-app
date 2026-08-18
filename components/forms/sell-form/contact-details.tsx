@@ -49,12 +49,14 @@ export function ContactDetailsStep({ formData, updateFormData, errors }: Contact
         <Input
           id="email"
           type="email"
+          inputMode="email"
           placeholder="john@example.com"
           value={formData.email}
           onChange={(e) => updateFormData({ email: e.target.value })}
           className={cn('h-11', errors.email && 'border-destructive')}
           aria-invalid={!!errors.email}
           autoComplete="email"
+          autoCapitalize="none"
         />
         {errors.email && (
           <p className="text-sm text-destructive">{errors.email}</p>
@@ -69,6 +71,7 @@ export function ContactDetailsStep({ formData, updateFormData, errors }: Contact
         <Input
           id="phone"
           type="tel"
+          inputMode="tel"
           placeholder="+44 7123 456789"
           value={formData.phone}
           onChange={(e) => updateFormData({ phone: e.target.value })}

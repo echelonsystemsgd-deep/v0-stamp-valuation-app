@@ -77,6 +77,7 @@ export const HeroSlideshow = React.memo(function HeroSlideshow({
           src={videoSrc}
           muted
           playsInline
+          preload="metadata"
           onEnded={handleVideoEnded}
           className={cn(
             'absolute inset-0 w-full h-full object-cover transition-opacity duration-1000',

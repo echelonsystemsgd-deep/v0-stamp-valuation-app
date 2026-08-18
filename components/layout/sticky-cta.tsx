@@ -50,7 +50,7 @@ export function StickyCTA() {
       {/* Mobile Sticky Bar */}
       <div 
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-border shadow-xl py-2 transition-all duration-300 lg:hidden",
+          "fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-navy/95 backdrop-blur-md border-t border-border shadow-xl pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] transition-all duration-300 lg:hidden",
           isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
         )}
       >
