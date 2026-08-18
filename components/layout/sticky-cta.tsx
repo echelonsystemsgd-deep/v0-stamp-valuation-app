@@ -12,20 +12,28 @@ export function StickyCTA() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
+    let ticking = false
+
     const toggleVisibility = () => {
-      const scrollY = window.scrollY
-      const docHeight = document.documentElement.scrollHeight
-      const windowHeight = window.innerHeight
-      const footerElement = document.querySelector('footer')
-      const footerHeight = footerElement ? footerElement.offsetHeight : 400
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY
+          const docHeight = document.documentElement.scrollHeight
+          const windowHeight = window.innerHeight
+          const footerElement = document.querySelector('footer')
+          const footerHeight = footerElement ? footerElement.offsetHeight : 400
 
-      const scrolledPastHeader = scrollY > 96
-      const hitFooter = docHeight - (scrollY + windowHeight) < footerHeight
+          const scrolledPastHeader = scrollY > 96
+          const hitFooter = docHeight - (scrollY + windowHeight) < footerHeight
 
-      if (scrolledPastHeader && !hitFooter) {
-        setIsVisible(true)
-      } else {
-        setIsVisible(false)
+          if (scrolledPastHeader && !hitFooter) {
+            setIsVisible(true)
+          } else {
+            setIsVisible(false)
+          }
+          ticking = false
+        })
+        ticking = true
       }
     }
 
@@ -50,7 +58,7 @@ export function StickyCTA() {
       {/* Mobile Sticky Bar */}
       <div 
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-navy/95 backdrop-blur-md border-t border-border shadow-xl pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] transition-all duration-300 lg:hidden",
+          "fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-navy/95 backdrop-blur-md border-t border-border shadow-xl pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] transition-all duration-300 transform-gpu lg:hidden",
           isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
         )}
       >
@@ -78,8 +86,8 @@ export function StickyCTA() {
       {/* Desktop Sticky Bar (Bottom) */}
       <div 
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-border shadow-2xl py-3 transition-all duration-500 hidden lg:block",
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+          "fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-navy/95 backdrop-blur-md border-t border-border shadow-2xl py-3 transition-all duration-500 transform-gpu hidden lg:block",
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
         )}
       >
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 sm:px-6 lg:px-8 xl:flex-row xl:items-center xl:justify-between xl:gap-6">

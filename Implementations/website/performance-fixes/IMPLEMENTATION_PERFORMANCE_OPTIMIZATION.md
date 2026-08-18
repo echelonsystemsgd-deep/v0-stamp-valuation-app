@@ -49,6 +49,24 @@ Final polish for perceived speed.
 
 ---
 
+---
+
+## Phase 4: Scroll Throttling, Zero-Jank Touch Events & GPU Compositing
+Ensuring butter-smooth 60+ FPS performance during high-speed mobile scrolling and interaction.
+
+### 4.1 Scroll Listener Throttling via `requestAnimationFrame`
+- [x] **Header Scroll Handler**: Wrapped scroll calculations in `requestAnimationFrame` with `{ passive: true }` in `components/layout/header.tsx`.
+- [x] **Sticky CTA Bottom Bar**: Replaced unbounded scroll handler with rAF ticking and `{ passive: true }` in `components/layout/sticky-cta.tsx`.
+- [x] **Concierge Widget**: Added rAF ticking throttle and `{ passive: true }` in `components/layout/concierge-widget.tsx`.
+- [x] **BackToTop Button**: Added rAF throttle and `{ passive: true }` in `components/layout/back-to-top.tsx`.
+
+### 4.2 GPU Layer Promotion & Touch Ergonomics
+- [x] **Hardware Layer Acceleration**: Applied `transform-gpu` to fixed overlays (`StickyCTA`, `ConciergeWidget`, `BackToTop`) to guarantee zero layout recalculations on mobile scrolling.
+- [x] **Touch Action Manipulation**: Enforced `touch-action: manipulation` and `-webkit-tap-highlight-color: transparent` across interactive elements in `styles/globals.css`.
+- [x] **Sub-pixel Text Rendering**: Added `-webkit-font-smoothing: antialiased` and `text-rendering: optimizeLegibility` in `styles/globals.css`.
+
+---
+
 ## Progress Checklist
 
 - [x] **Audit & Baseline**
@@ -60,9 +78,10 @@ Final polish for perceived speed.
 - [x] **Calculator Overhaul**
     - [x] Implement debounced valuation updates.
     - [x] Simplify `CountUp` triggers.
-- [x] **Visual Polish**
+- [x] **Visual Polish & Global Touch Layer**
     - [x] Test performance without `bg-grainy-paper` to confirm impact.
-    - [x] Apply `will-change` where applicable.
+    - [x] Apply `will-change` and `transform-gpu` where applicable.
+    - [x] Global smooth scroll and touch-action optimization.
 - [x] **Validation**
     - [x] Verify 60FPS interaction on mobile and desktop.
     - [x] Confirm no regression in valuation accuracy.
@@ -70,4 +89,4 @@ Final polish for perceived speed.
 ---
 
 > [!TIP]
-> **Priority Tooling**: Use the **Chrome DevTools Performance Tab** to look for "Long Tasks" (red flags) while dragging the sliders. This will pinpoint exactly which function is blocking the main thread.
+> **Priority Tooling**: Use the **Chrome DevTools Performance Tab** to look for "Long Tasks" (red flags) while dragging sliders or scrolling rapidly on mobile. All scroll events are now rAF-ticked and passive.

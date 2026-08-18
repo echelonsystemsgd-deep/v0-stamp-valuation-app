@@ -14,20 +14,28 @@ export function ConciergeWidget() {
   const [isMobileOpen, setIsMobileOpen] = React.useState(false)
 
   React.useEffect(() => {
+    let ticking = false
+
     const handleScroll = () => {
-      const scrollY = window.scrollY
-      const docHeight = document.documentElement.scrollHeight
-      const windowHeight = window.innerHeight
-      const footerElement = document.querySelector('footer')
-      const footerHeight = footerElement ? footerElement.offsetHeight : 400
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY
+          const docHeight = document.documentElement.scrollHeight
+          const windowHeight = window.innerHeight
+          const footerElement = document.querySelector('footer')
+          const footerHeight = footerElement ? footerElement.offsetHeight : 400
 
-      const scrolledPastHeader = scrollY > 96
-      const hitFooter = docHeight - (scrollY + windowHeight) < footerHeight
+          const scrolledPastHeader = scrollY > 96
+          const hitFooter = docHeight - (scrollY + windowHeight) < footerHeight
 
-      if (scrolledPastHeader && !hitFooter) {
-        if (!isDismissed) setIsVisible(true)
-      } else {
-        setIsVisible(false)
+          if (scrolledPastHeader && !hitFooter) {
+            if (!isDismissed) setIsVisible(true)
+          } else {
+            setIsVisible(false)
+          }
+          ticking = false
+        })
+        ticking = true
       }
     }
 
@@ -53,7 +61,7 @@ export function ConciergeWidget() {
       {/* Mobile Compact FAB (Screens < md) */}
       <div
         className={cn(
-          "fixed bottom-20 left-4 z-[45] transition-all duration-500 transform md:hidden",
+          "fixed bottom-20 left-4 z-[45] transition-all duration-500 transform-gpu md:hidden",
           isVisible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0 pointer-events-none"
         )}
       >

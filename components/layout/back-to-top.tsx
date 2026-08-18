@@ -11,15 +11,21 @@ export function BackToTop() {
   const [isVisible, setIsVisible] = React.useState(false)
 
   React.useEffect(() => {
+    let ticking = false
+
     const toggleVisibility = () => {
-      if (window.scrollY > 300) {
-        setIsVisible(true)
-      } else {
-        setIsVisible(false)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsVisible(window.scrollY > 300)
+          ticking = false
+        })
+        ticking = true
       }
     }
 
-    window.addEventListener('scroll', toggleVisibility)
+    window.addEventListener('scroll', toggleVisibility, { passive: true })
+    toggleVisibility()
+
     return () => window.removeEventListener('scroll', toggleVisibility)
   }, [])
 
@@ -44,12 +50,12 @@ export function BackToTop() {
       variant="secondary"
       size="icon"
       className={cn(
-        'fixed right-6 z-50 h-10 w-10 rounded-full shadow-lg transition-all duration-300 hover:scale-110 focus-visible:ring-2 focus-visible:ring-forest-green',
+        'fixed right-4 sm:right-6 z-50 h-10 w-10 rounded-full shadow-lg transition-all duration-300 transform-gpu hover:scale-110 focus-visible:ring-2 focus-visible:ring-forest-green cursor-pointer',
         isVisible 
           ? pathname === '/sell-your-stamps'
             ? 'bottom-36 lg:bottom-28 opacity-100'
-            : 'bottom-24 lg:bottom-28 opacity-100'
-          : 'bottom-24 lg:bottom-28 opacity-0 pointer-events-none shadow-none'
+            : 'bottom-20 md:bottom-24 lg:bottom-28 opacity-100'
+          : 'bottom-20 md:bottom-24 lg:bottom-28 opacity-0 pointer-events-none shadow-none'
       )}
       onClick={scrollToTop}
       aria-label="Back to top"
