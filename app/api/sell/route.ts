@@ -2,11 +2,14 @@ import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { createClient } from '@supabase/supabase-js'
 
-// Initialize Supabase Admin client using service role key for storage metadata validation
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabaseAdmin() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !serviceKey) {
+    throw new Error('Supabase environment variables (NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY) are required.')
+  }
+  return createClient(url, serviceKey)
+}
 
 interface ParsedItem {
   categoryId: string
@@ -167,6 +170,8 @@ export async function POST(req: Request) {
       )
     }
 
+    const supabaseAdmin = imageList.length > 0 ? getSupabaseAdmin() : null
+
     for (const img of imageList) {
       if (!img.file_path || !img.image_url) {
         return NextResponse.json(
@@ -185,7 +190,7 @@ export async function POST(req: Request) {
       }
 
       // Fetch storage file metadata via admin client to bypass client-level RLS restrictions
-      const { data: metadata, error: metaError } = await supabaseAdmin.storage
+      const { data: metadata, error: metaError } = await supabaseAdmin!.storage
         .from('submissions')
         .info(img.file_path)
 
