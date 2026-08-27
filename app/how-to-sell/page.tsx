@@ -4,6 +4,8 @@ import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { ProcessTimeline } from '@/components/content/process-timeline'
 import { FAQAccordion, shippingFAQs, generalFAQs } from '@/components/content/faq-accordion'
+import { allFAQs } from '@/data/faq'
+import { JsonLd } from '@/components/seo/json-ld'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Shield, Clock, Award, ClipboardCheck, Truck, PoundSterling, ShieldCheck, MessageCircle, ArrowRight } from 'lucide-react'
@@ -202,6 +204,8 @@ export default function HowToSellPage() {
           </div>
         </section>
       </main>
+      <JsonLd type="FAQPage" data={{ items: allFAQs }} />
+      <JsonLd type="Service" data={{ name: 'Stamp Valuation & Mail-in Appraisal Service' }} />
       <Footer />
     </>
   )

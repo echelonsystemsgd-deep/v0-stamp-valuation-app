@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Tag } from 'lucide-react'
+import { ArrowRight, Tag, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
+import { BUSINESS_CONFIG } from '@/data/business'
 
 export function StickyCTA() {
   const pathname = usePathname()
@@ -62,21 +63,25 @@ export function StickyCTA() {
           isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
         )}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 sm:px-6">
           <Button
             asChild
-            variant="ghost"
-            className="h-10 px-3 text-sm font-semibold text-primary hover:text-forest-green"
+            variant="outline"
+            className="h-10 px-3 text-xs font-semibold border-forest-green/30 text-forest-green hover:bg-forest-green/10 shrink-0"
+            aria-label="Call Sell Your Stamps UK"
           >
-            <Link href="/how-to-sell">How to Sell</Link>
+            <a href={`tel:${BUSINESS_CONFIG.phoneRaw}`} className="flex items-center gap-1.5">
+              <Phone className="h-3.5 w-3.5" />
+              <span>Call Us</span>
+            </a>
           </Button>
           <Button
             asChild
-            className="group h-10 px-4 text-sm font-bold bg-forest-green text-white hover:bg-forest-green/90"
+            className="group h-10 flex-1 px-4 text-xs font-bold bg-forest-green text-white hover:bg-forest-green/90 shadow-sm"
             aria-label="Request a Free Valuation"
           >
-            <Link href="/sell-your-stamps" className="flex items-center gap-2">
-              <Tag className="h-4 w-4" />
+            <Link href="/sell-your-stamps" className="flex items-center justify-center gap-1.5">
+              <Tag className="h-3.5 w-3.5" />
               <span>Free Valuation</span>
             </Link>
           </Button>

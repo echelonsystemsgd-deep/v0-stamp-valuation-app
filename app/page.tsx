@@ -7,6 +7,7 @@ import { StampTypesPreview } from '@/components/home/stamp-types-preview'
 import { HowItWorks } from '@/components/home/how-it-works'
 import { WhyChooseUs } from '@/components/home/why-choose-us'
 import { InlineSellCTA } from '@/components/sections/sell-cta'
+import { JsonLd } from '@/components/seo/json-ld'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default function HomePage() {
           />
         </div>
       </main>
+      <JsonLd type="Service" data={{ name: 'Great Britain & Commonwealth Stamp Valuation Service' }} />
       <Footer />
     </>
   )

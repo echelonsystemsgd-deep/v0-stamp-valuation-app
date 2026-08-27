@@ -1,3 +1,5 @@
+import { BUSINESS_CONFIG } from './business'
+
 export const mainNavigation = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about-us' },
@@ -24,10 +26,12 @@ export const footerNavigation = {
 } as const
 
 export const contactInfo = {
-  businessName: 'Sell Your Stamps UK Ltd',
-  address: '123 Philately House, London, EC1A 1AA',
-  phone: '+44 (0)20 1234 5678',
-  email: 'info@sellyourstamps.co.uk',
-  hours: 'Monday - Friday: 9am - 5pm',
-  tagline: 'EXPERT VALUATIONS. FAIR PRICES. TRUSTED BUYERS.',
+  businessName: BUSINESS_CONFIG.legalName,
+  address: `${BUSINESS_CONFIG.address.street}, ${BUSINESS_CONFIG.address.city}, ${BUSINESS_CONFIG.address.postalCode}`,
+  phone: BUSINESS_CONFIG.phone,
+  phoneRaw: BUSINESS_CONFIG.phoneRaw,
+  email: BUSINESS_CONFIG.email,
+  hours: BUSINESS_CONFIG.operatingHours.display,
+  tagline: BUSINESS_CONFIG.tagline,
 } as const
+
