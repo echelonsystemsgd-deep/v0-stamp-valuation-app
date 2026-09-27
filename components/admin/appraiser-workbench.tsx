@@ -7,14 +7,11 @@ import { toast } from 'sonner'
 import { 
   Briefcase, 
   Inbox, 
-  Coins, 
   ArrowRight, 
   ClipboardCheck, 
-  Clock, 
   Loader2,
   X
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 interface Submission {
   id: string

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { createClient } from '@supabase/supabase-js'
+import { notifyNewValuationLead } from '@/lib/notifications'
 
 function getSupabaseAdmin() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -314,6 +315,24 @@ export async function POST(req: Request) {
         )
       }
     }
+
+    // Trigger business notification alert
+    await notifyNewValuationLead({
+      submissionId: submission.id,
+      fullName: fullName.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone ? phone.trim() : '',
+      postcode: postcode.trim().toUpperCase(),
+      collectionType,
+      quantity,
+      era,
+      description,
+      valuableItems: valuableItems ? valuableItems.trim() : null,
+      estimatedValuation,
+      imageCount: imageList.length,
+    }).catch((err) => {
+      console.error('Failed to notify new valuation lead:', err)
+    })
 
     return NextResponse.json(
       { message: 'Submission received successfully', submissionId: submission.id },

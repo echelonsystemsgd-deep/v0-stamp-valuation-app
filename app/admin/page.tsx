@@ -87,7 +87,7 @@ export default async function AdminPage() {
   // Recent 5 guest submitter records
   const recentSubmitters = submissions_list.slice(0, 5).map(s => ({
     id: s.id,
-    email: s.guest_email || 'guest@ukstampvaluations.co.uk',
+    email: s.guest_email || 'guest@sellyourstamps.co.uk',
     name: s.guest_name || 'Guest Submitter',
     phone: s.guest_phone || 'N/A',
     createdAt: s.created_at

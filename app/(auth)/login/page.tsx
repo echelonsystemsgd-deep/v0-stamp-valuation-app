@@ -129,7 +129,7 @@ function LoginForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-3 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C5A059] focus:border-transparent text-sm transition-all"
-                  placeholder="staff@ukstampvaluations.co.uk"
+                  placeholder="staff@sellyourstamps.co.uk"
                   disabled={isPending}
                 />
               </div>
@@ -180,7 +180,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="block w-full pl-10 pr-3 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C5A059] focus:border-transparent text-sm transition-all"
-              placeholder="staff@ukstampvaluations.co.uk"
+              placeholder="staff@sellyourstamps.co.uk"
               disabled={isPending}
             />
           </div>

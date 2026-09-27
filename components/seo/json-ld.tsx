@@ -20,11 +20,11 @@ export interface ServiceSchemaData {
 
 interface JsonLdProps {
   type: 'LocalBusiness' | 'FAQPage' | 'Service' | 'BreadcrumbList' | 'Organization'
-  data?: any
+  data?: Record<string, unknown>
 }
 
 export function JsonLd({ type, data = {} }: JsonLdProps) {
-  let schema: any = {
+  let schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': type,
   }
@@ -36,9 +36,9 @@ export function JsonLd({ type, data = {} }: JsonLdProps) {
       name: BUSINESS_CONFIG.name,
       legalName: BUSINESS_CONFIG.legalName,
       description: BUSINESS_CONFIG.description,
-      image: 'https://sellyourstamps.co.uk/opengraph-image.png',
-      '@id': 'https://sellyourstamps.co.uk/#organization',
-      url: 'https://sellyourstamps.co.uk',
+      image: `${BUSINESS_CONFIG.siteUrl}/opengraph-image.png`,
+      '@id': `${BUSINESS_CONFIG.siteUrl}/#organization`,
+      url: BUSINESS_CONFIG.siteUrl,
       telephone: BUSINESS_CONFIG.phone,
       email: BUSINESS_CONFIG.email,
       priceRange: '££',
@@ -73,12 +73,12 @@ export function JsonLd({ type, data = {} }: JsonLdProps) {
   } else if (type === 'Service') {
     schema = {
       ...schema,
-      name: data.name || 'Philatelic Valuation & Stamp Purchasing',
-      description: data.description || BUSINESS_CONFIG.description,
+      name: (data.name as string) || 'Philatelic Valuation & Stamp Purchasing',
+      description: (data.description as string) || BUSINESS_CONFIG.description,
       provider: {
         '@type': 'ProfessionalService',
         name: BUSINESS_CONFIG.name,
-        url: 'https://sellyourstamps.co.uk',
+        url: BUSINESS_CONFIG.siteUrl,
         telephone: BUSINESS_CONFIG.phone,
       },
       areaServed: {
@@ -86,11 +86,11 @@ export function JsonLd({ type, data = {} }: JsonLdProps) {
         name: 'United Kingdom',
       },
       serviceType: 'Stamp Appraisal and Buying',
-      termsOfService: 'https://sellyourstamps.co.uk/terms',
+      termsOfService: `${BUSINESS_CONFIG.siteUrl}/terms`,
       ...data,
     }
   } else if (type === 'FAQPage') {
-    const items: FAQItemSchema[] = data.items || []
+    const items: FAQItemSchema[] = Array.isArray(data.items) ? (data.items as FAQItemSchema[]) : []
     schema = {
       ...schema,
       mainEntity: items.map((item) => ({
@@ -103,7 +103,7 @@ export function JsonLd({ type, data = {} }: JsonLdProps) {
       })),
     }
   } else if (type === 'BreadcrumbList') {
-    const items: BreadcrumbItemSchema[] = data.items || []
+    const items: BreadcrumbItemSchema[] = (data.items as BreadcrumbItemSchema[]) || []
     schema = {
       ...schema,
       itemListElement: items.map((item, index) => ({

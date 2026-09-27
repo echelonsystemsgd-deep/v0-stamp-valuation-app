@@ -3,7 +3,6 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import { 
   Carousel, 
   CarouselContent, 
@@ -13,6 +12,13 @@ import {
 } from '@/components/ui/carousel'
 import { Star, Quote } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+
+/**
+ * CLIENT VERIFICATION REQUIRED (UK Consumer Protection - ASA & CMA):
+ * The testimonials and Trustpilot rating below are placeholder demonstration data.
+ * Before public launch, real verified client testimonials and a live Trustpilot profile link
+ * MUST replace these items to comply with UK Consumer Protection Regulations against misleading endorsements.
+ */
 
 const testimonials = [
   {

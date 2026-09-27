@@ -32,6 +32,10 @@ export const generalFAQs: FAQItem[] = [
     answer: 'We purchase virtually all forms of GB (Great Britain) postage: 1st and 2nd class barcoded stamps, commemorative sheets, presentation packs, decimal face-value postage, Victorian and Commonwealth collections, and historical postal covers.',
   },
   {
+    question: 'What stamps do you NOT buy?',
+    answer: 'To maintain fast turnaround times and competitive payouts, we do not purchase unsorted mixed collections, foreign or non-GB stamps, pre-decimal issues, or used and franked stamps. We specialize exclusively in genuine, unused Royal Mail British decimal postage stamps and sorted collectible GB issues.',
+  },
+  {
     question: 'Do you buy non-barcoded stamps?',
     answer: 'Yes. While modern non-barcoded Machin stamps are subject to Royal Mail swap-out policies, we purchase commemorative non-barcoded stamps, regional issues, and vintage collector issues at established market rates.',
   },
@@ -46,3 +50,37 @@ export const generalFAQs: FAQItem[] = [
 ];
 
 export const allFAQs: FAQItem[] = [...shippingFAQs, ...generalFAQs];
+
+export const homeFAQData: FAQItem[] = [
+  {
+    question: 'How much are my stamps worth?',
+    answer:
+      'Stamp values depend on format, denomination, and physical condition. For valid, modern UK postage (1st Class, 2nd Class, Large Letter, and Barcoded Definitives), we pay live, transparent rates up to 78% of face value for full sheets and booklets. For rare, vintage, or collectible stamps (such as Victorian Penny Blacks or commemorative first day covers), valuation is determined individually based on condition grading (MNH, MH, FU, GU) and current market catalog values.',
+  },
+  {
+    question: 'What stamps do you NOT buy?',
+    answer:
+      'To maintain fast turnarounds and premium payouts, we do not purchase unsorted mixed collections, foreign or non-GB stamps, pre-decimal issues, or used and franked stamps. We specialize exclusively in genuine, unused Royal Mail British decimal stamps (complete sheets, booklets, and sorted part-sheets) and catalogued Great Britain collectible issues. Collections must be pre-sorted before valuation.',
+  },
+  {
+    question: 'How fast is payment processed?',
+    answer:
+      'Initial digital appraisals are provided within 1 to 12 hours of submitting our online valuation form. Once your collection arrives at our inspection desk and stamp condition is physically confirmed, payment is issued the very same day directly into your UK bank account via Faster Payments transfer or by cheque.',
+  },
+  {
+    question: 'Is my collection insured during transit?',
+    answer:
+      'Yes, 100%. All collections dispatched to us are fully covered up to £50,000 via Royal Mail Special Delivery Guaranteed. For rare estates or specialized archives exceeding £50,000, we arrange bespoke, fully insured private courier transit at no extra charge to you.',
+  },
+  {
+    question: 'Are there any hidden fees or auction commissions?',
+    answer:
+      'Zero. Traditional auction houses typically charge sellers 15% to 30% in commission fees, plus cataloguing fees, insurance deductions, and unsold lot charges. Sell Your Stamps UK provides completely free valuations with 0% commission deducted. The price quoted is the exact net payment you receive.',
+  },
+  {
+    question: 'What if I decide not to sell after receiving my valuation?',
+    answer:
+      'There is absolutely no obligation to sell. Your stamps remain 100% your legal property until you formally accept our written offer. If you decline our valuation, we will return your collection to your UK address via tracked, insured delivery free of charge.',
+  },
+];
+

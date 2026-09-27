@@ -12,7 +12,6 @@ import {
 } from "@/components/what-we-buy/catalog-sections"
 import { HeroSlideshow } from "@/components/ui/hero-slideshow"
 import { whatWeBuySlideshow } from "@/data/slideshows"
-import { PackageSearch, Verified } from "lucide-react"
 
 export const metadata: Metadata = {
   title: 'What We Buy',

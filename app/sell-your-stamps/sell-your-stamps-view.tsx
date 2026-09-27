@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useCallback, useEffect, useState } from "react"
-import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { SellForm } from "@/components/forms/sell-form"
@@ -13,7 +12,7 @@ import { useSearchParams } from "next/navigation"
 import { SavedEstimateBanner } from "@/components/sell/saved-estimate-banner"
 import { HeroSlideshow } from "@/components/ui/hero-slideshow"
 import { sellYourStampsHero } from "@/data/slideshows"
-import { buyingRates } from "@/data/buying-rates"
+import { buyingRates, RATES_LAST_UPDATED } from "@/data/buying-rates"
 
 const CONDITION_LABEL: Record<string, string> = {
   mnh: "MNH",
@@ -142,7 +141,9 @@ export function SellYourStampsView() {
                         <div>
                           <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-800">1. Instant Buying Rates</h2>
                         </div>
-                        <span className="text-sm font-bold text-slate-400 shrink-0">UPDATED: APRIL 2024</span>
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider shrink-0 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">
+                          {RATES_LAST_UPDATED}
+                        </span>
                       </div>
                       <BuyingTable onAction={handleValuationAction} />
                     </div>

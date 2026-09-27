@@ -290,3 +290,20 @@ export const calculatePurchaseTotal = (
 ) => {
   return faceValue * quantity * rate;
 };
+
+/** Published date string for rate transparency */
+export const RATES_LAST_UPDATED = "Live Royal Mail Decimal Rates (Current Month)";
+
+/** Returns the maximum rate percentage for one or more groups, e.g. 0.78 */
+export function getMaxBuyingRateForGroup(groups: BuyingRateGroup | BuyingRateGroup[]): number {
+  const groupArr = Array.isArray(groups) ? groups : [groups];
+  const items = buyingRates.filter((i) => groupArr.includes(i.group));
+  if (items.length === 0) return 0;
+  return Math.max(...items.map((i) => i.rate));
+}
+
+/** Formatted rate label, e.g. "Up to 78%" */
+export function getMaxRateLabelForGroup(groups: BuyingRateGroup | BuyingRateGroup[]): string {
+  const maxRate = getMaxBuyingRateForGroup(groups);
+  return `Up to ${(maxRate * 100).toFixed(0)}%`;
+}

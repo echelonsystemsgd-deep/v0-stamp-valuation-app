@@ -37,7 +37,7 @@ export function WhatHappensNext() {
       </CardHeader>
       <CardContent>
         <ol className="relative border-l border-border ml-4">
-          {steps.map((step, index) => (
+          {steps.map((step) => (
             <li key={step.title} className="mb-6 ml-6 last:mb-0">
               <span className="absolute flex items-center justify-center w-8 h-8 bg-oxford-blue rounded-full -left-4">
                 <step.icon className="w-4 h-4 text-gold" aria-hidden="true" />

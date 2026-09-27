@@ -1,6 +1,4 @@
-import Link from 'next/link'
 import { Check, X, AlertTriangle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 
 type ComparisonFeature = {
   title: string;

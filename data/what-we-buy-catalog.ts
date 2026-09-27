@@ -21,6 +21,8 @@ export type WhatWeBuyCategory = {
 
 
 
+import { getMaxRateLabelForGroup } from "./buying-rates"
+
 export const whatWeBuyIntro = {
   headline: "Stamps we actively purchase",
   paragraphs: [
@@ -37,7 +39,7 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
     imageAlt: "1st Class purple barcoded stamp",
     description:
       "We buy 1st Class barcoded stamps, including standard purple issues and Christmas/festive designs in both sheets and booklets.",
-    rateLabel: "Up to 57%",
+    rateLabel: getMaxRateLabelForGroup("1st Class"),
   },
   {
     id: "2nd-class",
@@ -47,7 +49,7 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
     imageAlt: "2nd Class green barcoded stamp",
     description:
       "We buy 2nd Class barcoded stamps, including standard green issues and Christmas/festive designs.",
-    rateLabel: "Up to 78%",
+    rateLabel: getMaxRateLabelForGroup("2nd Class"),
   },
   {
     id: "large-letter",
@@ -57,7 +59,7 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
     imageAlt: "Commemorative large letter stamps",
     description:
       "We buy both 1st and 2nd Class Large Letter stamps, including barcoded, commemorative, and non-barcoded self-adhesive issues.",
-    rateLabel: "Up to 75%",
+    rateLabel: getMaxRateLabelForGroup(["1st Class Large", "2nd Class Large"]),
   },
   {
     id: "barcoded-values",
@@ -67,7 +69,7 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
     imageAlt: "Barcoded face value stamps",
     description:
       "We buy barcoded definitive stamps of various face values, from 5p to 50p (excluding 1p and 2p) and £1 to £5 denominations, in complete sheets or incomplete/loose condition.",
-    rateLabel: "Up to 55%",
+    rateLabel: getMaxRateLabelForGroup("Barcoded Values"),
   },
   {
     id: "collections",
@@ -80,3 +82,4 @@ export const whatWeBuyCategories: WhatWeBuyCategory[] = [
     rateLabel: "Custom Appraisal",
   },
 ]
+

@@ -6,9 +6,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { 
   Search, 
-  FileText, 
   Download, 
-  Printer, 
   Check, 
   X, 
   Loader2, 

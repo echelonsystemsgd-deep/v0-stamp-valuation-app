@@ -6,6 +6,7 @@ import { StickyCTA } from '@/components/layout/sticky-cta'
 import { JsonLd } from '@/components/seo/json-ld'
 import { ConciergeWidget } from '@/components/layout/concierge-widget'
 import { Toaster } from 'sonner'
+import { BUSINESS_CONFIG } from '@/data/business'
 import './globals.css'
 
 const inter = Inter({ 
@@ -21,7 +22,7 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://sellyourstamps.co.uk'),
+  metadataBase: new URL(BUSINESS_CONFIG.siteUrl),
   title: {
     default: 'Sell Your Stamps UK | Expert Valuations. Fair Prices. Trusted Buyers.',
     template: '%s | Sell Your Stamps UK',
@@ -47,7 +48,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: 'https://sellyourstamps.co.uk',
+    url: BUSINESS_CONFIG.siteUrl,
     siteName: 'Sell Your Stamps UK',
     title: 'Sell Your Stamps UK | Professional Stamp Valuation & Buying',
     description: 'Expert UK-based stamp valuations and buying service with over 10 years of experience. Get a fair price for your collection today.',

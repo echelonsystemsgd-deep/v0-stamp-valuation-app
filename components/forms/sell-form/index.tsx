@@ -112,7 +112,7 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
   }, [initialQuantity, initialDescription, isLockInOffer])
 
   React.useEffect(() => {
-    const { images, ...persistentData } = formData
+    const { images: _images, ...persistentData } = formData
     localStorage.setItem('sell_form_progress', JSON.stringify(persistentData))
   }, [formData])
 
@@ -214,7 +214,7 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
           })
         }
 
-        const { images, ...payload } = formData
+        const { images: _images, ...payload } = formData
         const submissionPayload = {
           ...payload,
           images: uploadedImages

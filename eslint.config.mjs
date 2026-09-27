@@ -3,7 +3,7 @@ import nextTypescript from 'eslint-config-next/typescript'
 
 const eslintConfig = [
   {
-    ignores: ['scratch/**'],
+    ignores: ['.next/**', 'node_modules/**', 'scratch/**', '.temp/**'],
   },
   ...nextCoreWebVitals,
   ...nextTypescript,

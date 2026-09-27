@@ -9,7 +9,7 @@ interface LogoProps {
   size?: 'sm' | 'md' | 'lg'
 }
 
-export function Logo({ variant = 'light', scrolled = false, className, size }: LogoProps) {
+export function Logo({ variant: _variant = 'light', scrolled = false, className, size }: LogoProps) {
   return (
     <div className={cn("flex items-center gap-3 md:gap-4 group", className)}>
       <div className={cn(

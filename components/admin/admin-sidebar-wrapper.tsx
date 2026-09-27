@@ -15,8 +15,7 @@ import {
   Menu, 
   X,
   Briefcase,
-  Globe,
-  ShieldAlert
+  Globe
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'

@@ -3,8 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import Image from 'next/image'
-import { Phone, Mail, Clock, Landmark } from 'lucide-react'
+import { Phone, Mail, Clock } from 'lucide-react'
 import { footerNavigation, contactInfo } from '@/data/navigation'
 import { Logo } from '@/components/layout/logo'
 
@@ -171,6 +170,7 @@ export function Footer() {
               >
                 Terms of Service
               </Link>
+              {/* [Client Decision Required: Consider whether 'Sign In (Admin)' should remain publicly visible in footer or hidden before full launch] */}
               <Link
                 href="/login"
                 onClick={(e) => handleLinkClick(e, '/login')}
