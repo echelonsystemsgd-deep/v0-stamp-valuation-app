@@ -57,7 +57,7 @@ export const BUSINESS_CONFIG: BusinessConfig = {
   email: "info@sellyourstamps.co.uk",
   valuationEmail: "valuations@sellyourstamps.co.uk",
   address: {
-    street: "123 Philately House", // [Client Verification Required: Confirm physical trading address or registered office]
+    street: "123 High Street", // [Client Verification Required: Confirm physical trading address or registered office]
     city: "London",
     region: "Greater London",
     postalCode: "EC1A 1AA",

@@ -41,7 +41,7 @@ export const generalFAQs: FAQItem[] = [
   },
   {
     question: 'How do you calculate your buying rates?',
-    answer: 'Our rates are transparently published on our website and calculated as a competitive percentage of nominal face value for valid postage, or fair current market catalog value for rare and collectible philatelic items.',
+    answer: 'Our rates are transparently published on our website and calculated as a competitive percentage of nominal face value for valid postage, or fair current market catalog value for rare and collectible stamp items.',
   },
   {
     question: 'Are there any fees or hidden commissions?',

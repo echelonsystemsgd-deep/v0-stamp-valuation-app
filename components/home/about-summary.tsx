@@ -29,7 +29,7 @@ export function AboutSummary() {
         <Button
           asChild
           variant="outline"
-          className="mt-10 border-navy text-navy hover:bg-navy hover:text-white"
+          className="mt-8 md:mt-10 h-12 px-8 w-full sm:w-auto rounded-xl border-navy text-navy font-semibold text-base hover:bg-navy hover:text-white transition-all shadow-xs"
         >
           <Link href="/about-us">Read our full story</Link>
         </Button>

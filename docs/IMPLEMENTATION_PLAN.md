@@ -5,7 +5,7 @@
 
 ## 1. Executive Summary & Objective
 
-**Sell Your Stamps UK** is a specialised UK-wide philatelic valuation and stamp-purchasing platform. It bridges the gap between traditional heritage stamp appraisal and modern, transparent digital selling funnels.
+**Sell Your Stamps UK** is a specialised UK-wide stamp valuation and purchasing platform. It bridges the gap between traditional heritage stamp appraisal and modern, transparent digital selling funnels.
 
 * **Core Mission:** Provide collectors, heirs, and hobbyists with a transparent, fast, secure, and expert-led method to appraise and liquidate stamp collections.
 * **Guiding Principle:** **Preserve and enhance all existing functionality** (interactive calculator, multi-step appraisal submission, admin workstation, Supabase real-time sync, and media galleries) while elevating trust signals, mobile conversion, accessibility (WCAG 2.2 AA), structured local/national SEO, and centralized data management.
@@ -17,7 +17,7 @@
 
 ### 2.1 The Business
 * **Trade Name:** Sell Your Stamps UK
-* **Industry:** Philately / Valuations & Antique Collectables Purchasing
+* **Industry:** Stamp Valuations & Collectables Purchasing
 * **Service Model:** 
   1. *Primary:* UK-Wide Mail-In Appraisal & Valuation via tracked & insured Royal Mail Special Delivery.
   2. *Secondary:* High-Value In-Person Appraisal Consultations (for collections valued > £10,000).
@@ -25,7 +25,7 @@
   * Transparent pricing calculations based on active market rates.
   * Specialized transit insurance up to £50,000.
   * Fast payment (within 7 working days) via direct bank transfer or cheque.
-  * Over 25+ years of combined philatelic appraisal experience.
+  * Over 10+ years of combined stamp appraisal experience.
 
 ### 2.2 Customer Personas & Buying Journey
 
@@ -40,10 +40,10 @@ flowchart LR
 ```
 
 1. **The Heir / Estate Executor ("The Inheritor"):**
-   * *Profile:* Inherited an album or shoebox of stamps; has zero philatelic knowledge; fears getting ripped off or throwing away value.
+   * *Profile:* Inherited an album or shoebox of stamps; has zero stamp knowledge; fears getting ripped off or throwing away value.
    * *Core Objection:* "Is this genuine? How do I know I'm getting a fair price?"
    * *Site Solution:* Simple condition guides, photo-upload appraisal, clear explanation of postal insurance, transparent timeline.
-2. **The Active Philatelist ("The Downsizing Collector"):**
+2. **The Active Collector ("The Downsizing Collector"):**
    * *Profile:* Experienced collector looking to liquidate duplicates, unused modern postage, or specialized collections.
    * *Core Objection:* "Do they pay realistic market rates? Are their classifications accurate?"
    * *Site Solution:* Interactive decimal rate calculator, breakdown of barcoded vs non-barcoded 1st/2nd class postage, itemized quote locks.
@@ -87,7 +87,7 @@ The visual identity leverages an authoritative, heritage-editorial aesthetic:
 * **Typography:**
   * **Display & Headings:** `Playfair Display` (Classic serif reflecting historical authority).
   * **Body & UI Components:** `Inter` (Optimized for clean legibility across all viewport sizes).
-* **Anti-AI Rule:** Zero generic 3-card repeating boxes, zero generic buzzwords ("Elevate your collection"). Art-directed layouts with real philatelic terminology and clear step-by-step guidance.
+* **Anti-AI Rule:** Zero generic 3-card repeating boxes, zero generic buzzwords ("Elevate your collection"). Art-directed layouts with accurate stamp terminology and clear step-by-step guidance.
 
 ---
 
@@ -126,7 +126,7 @@ export const BUSINESS_CONFIG = {
   phone: "+44 (0) 800 000 0000",        // [Client Verification Required]
   email: "valuations@sellyourstamps.co.uk",
   address: {
-    street: "123 Philatelic Way",      // [Client Verification Required]
+    street: "123 High Street",          // [Client Verification Required]
     city: "London",
     postcode: "SW1A 1AA",
     country: "GB"
@@ -143,7 +143,7 @@ export const BUSINESS_CONFIG = {
 
 ### 7.1 Schema.org Structured Data
 * **`LocalBusiness` / `FinancialService`:** Complete schema including business address, operating hours, telephone, and geo-coordinates.
-* **`Service`:** Explicit markup for Philatelic Appraisal & Stamp Purchasing services.
+* **`Service`:** Explicit markup for Stamp Appraisal & Purchasing services.
 * **`FAQPage`:** Structured questions & answers for rich snippets on Google Search.
 * **`BreadcrumbList`:** Clean hierarchical navigation across all subpages.
 

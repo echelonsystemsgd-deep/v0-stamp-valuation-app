@@ -63,25 +63,25 @@ export function StickyCTA() {
           isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
         )}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 sm:px-6">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-2.5 px-4 sm:px-6">
           <Button
             asChild
             variant="outline"
-            className="h-10 px-3 text-xs font-semibold border-forest-green/30 text-forest-green hover:bg-forest-green/10 shrink-0"
+            className="h-11 px-3.5 text-xs sm:text-sm font-semibold border-forest-green/30 text-forest-green hover:bg-forest-green/10 shrink-0 rounded-xl"
             aria-label="Call Sell Your Stamps UK"
           >
             <a href={`tel:${BUSINESS_CONFIG.phoneRaw}`} className="flex items-center gap-1.5">
-              <Phone className="h-3.5 w-3.5" />
+              <Phone className="h-4 w-4" />
               <span>Call Us</span>
             </a>
           </Button>
           <Button
             asChild
-            className="group h-10 flex-1 px-4 text-xs font-bold bg-forest-green text-white hover:bg-forest-green/90 shadow-sm"
+            className="group h-11 flex-1 px-4 text-xs sm:text-sm font-bold bg-forest-green text-white hover:bg-forest-green/90 shadow-sm rounded-xl"
             aria-label="Request a Free Valuation"
           >
             <Link href="/sell-your-stamps" className="flex items-center justify-center gap-1.5">
-              <Tag className="h-3.5 w-3.5" />
+              <Tag className="h-4 w-4" />
               <span>Free Valuation</span>
             </Link>
           </Button>

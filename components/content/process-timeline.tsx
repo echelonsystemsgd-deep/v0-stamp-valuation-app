@@ -16,7 +16,7 @@ const timelineSteps = [
   {
     icon: Search,
     title: 'Receive Your Free Valuation',
-    description: 'Our expert philatelists will carefully review your submission. We examine the details and photos you provide to give you a fair, comprehensive valuation based on current market conditions.',
+    description: 'Our expert appraisers will carefully review your submission. We examine the details and photos you provide to give you a fair, comprehensive valuation based on current market conditions.',
     tips: [
       'Valuations are typically provided within 1-12 hours',
       'We may request additional photos if needed',
@@ -48,7 +48,7 @@ const timelineSteps = [
     title: 'Expert Verification',
     description: 'Once we receive your collection, our specialists conduct a thorough in-person examination. If the condition matches the description, we confirm the agreed price. If we discover additional value, we will increase our offer.',
     tips: [
-      'Professional examination by qualified philatelists',
+      'Professional examination by experienced stamp specialists',
       'Final valuation confirmed within 2 working days',
       'We only adjust downward if condition was misrepresented',
     ],

@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     template: '%s | Sell Your Stamps UK',
   },
   description: 'The UK\'s most trusted stamp valuation and buying service. Expert valuations, fair prices, and trusted buyers for your stamp collection.',
-  keywords: ['sell stamps UK', 'stamp valuation', 'stamp buyers', 'Great Britain stamps', 'professional philately', 'stamp collection value'],
+  keywords: ['sell stamps UK', 'stamp valuation', 'stamp buyers', 'Great Britain stamps', 'professional stamp valuation', 'stamp collection value'],
   authors: [{ name: 'Sell Your Stamps UK' }],
   creator: 'Sell Your Stamps UK',
   publisher: 'Sell Your Stamps UK',

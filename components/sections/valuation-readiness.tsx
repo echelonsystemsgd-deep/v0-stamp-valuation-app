@@ -56,7 +56,7 @@ const readinessItems = [
   },
   {
     title: "Expert Valuation",
-    description: "Our philatelic experts provide a detailed breakdown of your collection's market value based on catalogue rates.",
+    description: "Our stamp valuation experts provide a detailed breakdown of your collection's market value based on catalogue rates.",
     icon: History,
     color: "text-oxford-blue",
     bgColor: "bg-oxford-blue/10"
@@ -115,7 +115,7 @@ export const ValuationReadiness = () => {
               </div>
               <div className="p-10 md:w-2/3">
                 <p className="text-charcoal font-semibold text-lg mb-6">
-                  To maintain the highest standards of philatelic integrity, we strictly do not accept:
+                  To maintain the highest standards of inspection and quality, we strictly do not accept:
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                   {[

@@ -21,7 +21,7 @@ export function AuthoritySignals() {
     {
       icon: Award,
       title: '10+ Years Experience',
-      detail: 'Specialist British philatelic appraisers offering fair, catalog-backed market valuations.',
+      detail: 'Specialist British stamp appraisers offering fair, catalog-backed market valuations.',
     },
   ]
 
@@ -37,7 +37,7 @@ export function AuthoritySignals() {
               Fast, Fair &amp; Transparent
             </span>
             <h2 className="font-serif text-xl sm:text-2xl font-bold text-navy dark:text-white mt-1">
-              Guaranteed British Philatelic Standards
+              Guaranteed British Stamp Valuation Standards
             </h2>
           </div>
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 bg-slate-50 dark:bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-200/60 dark:border-slate-700 shrink-0 self-center md:self-auto">

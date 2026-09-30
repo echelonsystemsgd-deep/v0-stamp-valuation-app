@@ -73,7 +73,7 @@ export function JsonLd({ type, data = {} }: JsonLdProps) {
   } else if (type === 'Service') {
     schema = {
       ...schema,
-      name: (data.name as string) || 'Philatelic Valuation & Stamp Purchasing',
+      name: (data.name as string) || 'Stamp Valuation & Purchasing Services',
       description: (data.description as string) || BUSINESS_CONFIG.description,
       provider: {
         '@type': 'ProfessionalService',

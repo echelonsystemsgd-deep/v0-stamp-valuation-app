@@ -13,7 +13,7 @@ import { InlineSellCTA } from '@/components/sections/sell-cta'
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about Sell Your Stamps UK - over 10 years of expertise in stamp valuation and philately. Meet our team of expert valuers.',
+  description: 'Learn about Sell Your Stamps UK - over 10 years of expertise in stamp valuation and purchasing. Meet our team of expert valuers.',
 }
 
 const values = [
@@ -49,8 +49,8 @@ export default function AboutUsPage() {
       <main id="main-content" className="flex-1 flex flex-col w-full">
         <HeroSlideshow 
           images={aboutSlideshow} 
-          title="About Us"
-          subtitle="For over 10 years, we have been buying postage stamps across the United Kingdom and getting sellers paid out fast and discreetly."
+          title="About Us &amp; Our Heritage"
+          subtitle="For over 10 years, we have provided UK sellers with a transparent, direct, and hassle-free alternative to auction houses and online marketplaces."
         />
 
         <AboutNarrative />
