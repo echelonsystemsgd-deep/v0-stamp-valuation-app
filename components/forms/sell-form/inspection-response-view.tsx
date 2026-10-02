@@ -10,7 +10,6 @@ import {
   Mail, 
   Clock, 
   ShieldCheck, 
-  Printer, 
   MessageSquare, 
   MapPin, 
   Package, 
@@ -21,10 +20,9 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { BUSINESS_CONFIG } from '@/data/business'
-import { getSellingOptionBadge, getPreferredContactBadge, getShippingPreferenceBadge } from '@/lib/submissions'
+import { getSellingOptionBadge, getPreferredContactBadge } from '@/lib/submissions'
 import type { FormData } from './index'
 
 interface InspectionResponseViewProps {
@@ -41,7 +39,6 @@ export function InspectionResponseView({
   onReset
 }: InspectionResponseViewProps) {
   const [copied, setCopied] = useState(false)
-  const [showSlipModal, setShowSlipModal] = useState(false)
 
   const handleCopyReference = () => {
     navigator.clipboard.writeText(referenceId)
@@ -52,7 +49,6 @@ export function InspectionResponseView({
 
   const sellingBadge = getSellingOptionBadge(formData.sellingOption || 'box_and_send')
   const contactBadge = getPreferredContactBadge(formData.preferredContact || 'phone')
-  const shippingBadge = getShippingPreferenceBadge(formData.shippingPreference || 'prepaid_qr_label')
 
   const isPhonePreferred = formData.preferredContact === 'phone' || formData.preferredContact === 'callback'
   const isEmailOnly = formData.preferredContact === 'email'
@@ -227,25 +223,14 @@ export function InspectionResponseView({
       {/* 4. Logistics & Dispatch Instructions */}
       <Card className="bg-grainy-paper border border-gold/25 rounded-3xl shadow-sm overflow-hidden">
         <CardContent className="p-6 sm:p-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
-            <div>
-              <h3 className="font-serif text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Package className="w-5 h-5 text-forest-green" />
-                Shipping & Hand-Off Preparation
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">
-                Selected method: <span className="font-bold text-slate-900">{shippingBadge.label}</span>
-              </p>
-            </div>
-
-            <Button
-              onClick={() => setShowSlipModal(true)}
-              variant="outline"
-              className="border-slate-300 hover:border-slate-400 bg-white font-bold text-xs h-10 px-4 rounded-xl shadow-xs"
-            >
-              <Printer className="w-4 h-4 mr-2 text-slate-700" />
-              View Printable Packing Slip
-            </Button>
+          <div className="border-b border-slate-200 pb-5">
+            <h3 className="font-serif text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Package className="w-5 h-5 text-forest-green" />
+              Postal Dispatch & Packaging Instructions
+            </h3>
+            <p className="text-xs text-slate-600 mt-1">
+              Follow these simple steps to post your stamps safely to our Bournemouth inspection office.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
@@ -273,14 +258,18 @@ export function InspectionResponseView({
                 <FileText className="w-3.5 h-3.5 text-forest-green" />
                 Parcel Packing Checklist
               </span>
-              <ul className="text-xs text-slate-600 space-y-1.5">
+              <ul className="text-xs text-slate-600 space-y-2">
                 <li className="flex items-start gap-1.5">
                   <span className="text-forest-green font-bold">✓</span>
-                  <span>Enclose a slip of paper with reference: <strong>{referenceId}</strong></span>
+                  <span>Enclose a slip of paper with reference: <strong className="font-mono">{referenceId}</strong> and your full name</span>
                 </li>
                 <li className="flex items-start gap-1.5">
                   <span className="text-forest-green font-bold">✓</span>
                   <span>Protect albums or sheets with waterproof envelope or bubble wrap</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="text-forest-green font-bold">✓</span>
+                  <span>Post via Royal Mail Special Delivery or Tracked to ensure insurance coverage</span>
                 </li>
                 <li className="flex items-start gap-1.5">
                   <span className="text-forest-green font-bold">✓</span>
@@ -345,93 +334,6 @@ export function InspectionResponseView({
           </Button>
         </div>
       </div>
-
-      {/* 6. Printable Packing Slip Modal */}
-      <Dialog open={showSlipModal} onOpenChange={setShowSlipModal}>
-        <DialogContent className="max-w-2xl bg-white p-6 sm:p-8 rounded-3xl border border-slate-300 shadow-2xl">
-          <DialogHeader>
-            <DialogTitle className="font-serif text-2xl text-slate-900 flex items-center justify-between">
-              <span>Official Stamp Dispatch Slip</span>
-              <span className="font-mono text-sm font-bold bg-slate-100 px-3 py-1 rounded-lg">
-                {referenceId}
-              </span>
-            </DialogTitle>
-            <DialogDescription className="text-slate-500 text-xs">
-              Print this slip and place it inside your parcel before shipping.
-            </DialogDescription>
-          </DialogHeader>
-
-          {/* Printable Content Block */}
-          <div id="printable-packing-slip" className="border-2 border-dashed border-slate-300 rounded-2xl p-6 space-y-5 bg-slate-50/50">
-            <div className="flex justify-between items-start border-b border-slate-200 pb-4">
-              <div>
-                <h4 className="font-bold text-slate-900 text-base">Sell Your Stamps UK</h4>
-                <p className="text-xs text-slate-500">PTS Member #20131 • Philatelic Valuation Service</p>
-              </div>
-              <div className="text-right text-xs">
-                <p className="font-bold text-slate-700">Date: {new Date().toLocaleDateString('en-GB')}</p>
-                <p className="text-slate-500">Ref: {referenceId}</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 text-xs">
-              <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
-                <span className="font-bold text-slate-400 uppercase text-[10px]">Seller Details</span>
-                <p className="font-bold text-slate-800">{formData.fullName}</p>
-                <p className="text-slate-600">{formData.phone || 'No phone'}</p>
-                <p className="text-slate-600">{formData.email}</p>
-                <p className="font-mono font-bold text-slate-700 uppercase">{formData.postcode}</p>
-              </div>
-
-              <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
-                <span className="font-bold text-slate-400 uppercase text-[10px]">Destination Address</span>
-                <p className="font-bold text-slate-800">UK Postage Stamps LTD</p>
-                <p className="text-slate-600">Office 214, Regus Bournemouth Oxford Point</p>
-                <p className="text-slate-600">19 Oxford Road</p>
-                <p className="font-mono font-bold text-slate-800">BH8 8GS</p>
-              </div>
-            </div>
-
-            <div className="p-3 bg-white rounded-xl border border-slate-200 text-xs space-y-1.5">
-              <span className="font-bold text-slate-400 uppercase text-[10px]">Declared Collection Details</span>
-              <div className="grid grid-cols-3 gap-2 text-slate-700 font-medium">
-                <div>Type: <span className="font-bold capitalize">{formData.collectionType.replace('_', ' ')}</span></div>
-                <div>Qty: <span className="font-bold">{formData.quantity}</span></div>
-                <div>Era: <span className="font-bold capitalize">{formData.era}</span></div>
-              </div>
-              {formData.description && (
-                <p className="text-slate-500 text-[11px] pt-1 border-t border-slate-100">
-                  Notes: {formData.description}
-                </p>
-              )}
-            </div>
-
-            <div className="text-[11px] text-slate-500 bg-amber-50 border border-amber-200 p-3 rounded-xl flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-amber-700 shrink-0" />
-              <span>
-                <strong>Appraisal Guarantee:</strong> Package will be video-recorded during unboxing and appraised immediately upon arrival.
-              </span>
-            </div>
-          </div>
-
-          <div className="flex justify-end gap-3 pt-3">
-            <Button
-              variant="outline"
-              onClick={() => setShowSlipModal(false)}
-              className="rounded-xl"
-            >
-              Close
-            </Button>
-            <Button
-              onClick={() => window.print()}
-              className="bg-forest-green hover:bg-forest-green/90 text-white font-bold rounded-xl"
-            >
-              <Printer className="w-4 h-4 mr-2" />
-              Print Now
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

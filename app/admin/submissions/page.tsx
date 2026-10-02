@@ -25,7 +25,9 @@ import {
   ShieldCheck,
   MapPin,
   Copy,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Trash2,
+  Tag
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -40,7 +42,8 @@ import {
   parseSubmissionMetadata, 
   getSellingOptionBadge, 
   getPreferredContactBadge, 
-  getShippingPreferenceBadge 
+  COLLECTION_CATEGORIES,
+  getCategoryLabel
 } from '@/lib/submissions'
 
 interface Profile {
@@ -131,6 +134,10 @@ export default function SubmissionsPage() {
   const [selectedStaffId, setSelectedStaffId] = useState<string>('')
   const [staffLoading, setStaffLoading] = useState(false)
 
+  // Bulk Category Modal State
+  const [showCategoryModal, setShowCategoryModal] = useState(false)
+  const [targetCategory, setTargetCategory] = useState<string>('loose')
+
   // Quick Inspection Modal State
   const [inspectingSub, setInspectingSub] = useState<Submission | null>(null)
   const [updatingStatusId, setUpdatingStatusId] = useState<string | null>(null)
@@ -177,6 +184,97 @@ export default function SubmissionsPage() {
     } finally {
       setUpdatingStatusId(null)
     }
+  }
+
+  // Update collection category (single)
+  const handleUpdateCategory = async (submissionId: string, newCategory: string) => {
+    try {
+      const { error } = await supabase
+        .from('submissions')
+        .update({ collection_type: newCategory })
+        .eq('id', submissionId)
+
+      if (error) throw error
+
+      toast.success(`Category updated to "${getCategoryLabel(newCategory)}"`)
+      setSubmissions(prev => prev.map(s => s.id === submissionId ? { ...s, collection_type: newCategory } : s))
+      if (inspectingSub?.id === submissionId) {
+        setInspectingSub(prev => prev ? { ...prev, collection_type: newCategory } : null)
+      }
+    } catch (err: any) {
+      toast.error('Failed to update category: ' + err.message)
+    }
+  }
+
+  // Delete submission (single)
+  const handleDeleteSubmission = async (submissionId: string) => {
+    const confirmed = window.confirm('Are you sure you want to permanently delete this submission? All associated photos, items, and notes will be deleted. This cannot be undone.')
+    if (!confirmed) return
+
+    try {
+      const { error } = await supabase
+        .from('submissions')
+        .delete()
+        .eq('id', submissionId)
+
+      if (error) throw error
+
+      toast.success('Submission permanently deleted.')
+      setSubmissions(prev => prev.filter(s => s.id !== submissionId))
+      setSelectedIds(prev => prev.filter(id => id !== submissionId))
+      if (inspectingSub?.id === submissionId) {
+        setInspectingSub(null)
+      }
+    } catch (err: any) {
+      toast.error('Failed to delete submission: ' + err.message)
+    }
+  }
+
+  // Bulk delete selected submissions
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return
+    const confirmed = window.confirm(`Are you sure you want to permanently delete ${selectedIds.length} submission(s)? This cannot be undone.`)
+    if (!confirmed) return
+
+    startTransition(async () => {
+      try {
+        const { error } = await supabase
+          .from('submissions')
+          .delete()
+          .in('id', selectedIds)
+
+        if (error) throw error
+
+        toast.success(`Successfully deleted ${selectedIds.length} submission(s).`)
+        setSelectedIds([])
+        fetchSubmissions()
+      } catch (err: any) {
+        toast.error('Bulk deletion failed: ' + err.message)
+      }
+    })
+  }
+
+  // Bulk update category for selected submissions
+  const handleBulkUpdateCategory = async () => {
+    if (selectedIds.length === 0 || !targetCategory) return
+
+    startTransition(async () => {
+      try {
+        const { error } = await supabase
+          .from('submissions')
+          .update({ collection_type: targetCategory })
+          .in('id', selectedIds)
+
+        if (error) throw error
+
+        toast.success(`Successfully re-categorized ${selectedIds.length} submission(s) as "${getCategoryLabel(targetCategory)}".`)
+        setShowCategoryModal(false)
+        setSelectedIds([])
+        fetchSubmissions()
+      } catch (err: any) {
+        toast.error('Bulk category update failed: ' + err.message)
+      }
+    })
   }
 
   useEffect(() => {
@@ -737,6 +835,14 @@ export default function SubmissionsPage() {
             </button>
 
             <button
+              onClick={() => setShowCategoryModal(true)}
+              disabled={isPending}
+              className="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-amber-500/30 transition-all cursor-pointer disabled:opacity-50"
+            >
+              <Tag className="h-3.5 w-3.5" /> Change Category
+            </button>
+
+            <button
               onClick={() => setShowPayoutModal(true)}
               className="flex items-center gap-1.5 bg-white/10 hover:bg-white/15 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-white/10 transition-all cursor-pointer"
             >
@@ -748,6 +854,14 @@ export default function SubmissionsPage() {
               className="flex items-center gap-1.5 bg-white/5 hover:bg-white/10 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-white/5 transition-all cursor-pointer"
             >
               <Download className="h-3.5 w-3.5 text-slate-400" /> Export CSV
+            </button>
+
+            <button
+              onClick={handleBulkDelete}
+              disabled={isPending}
+              className="flex items-center gap-1.5 bg-red-600/90 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl border border-red-500/30 transition-all cursor-pointer disabled:opacity-50"
+            >
+              <Trash2 className="h-3.5 w-3.5" /> Delete Selected
             </button>
           </div>
 
@@ -925,12 +1039,72 @@ export default function SubmissionsPage() {
         </div>
       )}
 
+      {/* Bulk Category Modal */}
+      {showCategoryModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full overflow-hidden relative animate-in zoom-in-95 duration-150">
+            <div className="h-1 bg-gradient-to-r from-amber-500 to-[#14452F]" />
+            <div className="p-6 sm:p-8 space-y-6">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-serif text-xl font-bold text-[#0B1D2E]">Re-Categorize Submissions</h3>
+                  <p className="text-xs text-slate-500 mt-1">Assign a new collection category to the {selectedIds.length} selected submission{selectedIds.length > 1 ? 's' : ''}.</p>
+                </div>
+                <button onClick={() => setShowCategoryModal(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-all cursor-pointer text-slate-450">
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-450 uppercase tracking-wider block">Select New Category</label>
+                <div className="space-y-1.5 max-h-[260px] overflow-y-auto pr-1">
+                  {COLLECTION_CATEGORIES.map(cat => (
+                    <button
+                      key={cat.value}
+                      type="button"
+                      onClick={() => setTargetCategory(cat.value)}
+                      className={cn(
+                        'w-full flex items-center justify-between p-3 rounded-xl border text-left text-xs font-bold transition-all cursor-pointer',
+                        targetCategory === cat.value
+                          ? 'border-[#14452F] bg-[#14452F]/5 text-[#14452F]'
+                          : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+                      )}
+                    >
+                      <span>{cat.label}</span>
+                      {targetCategory === cat.value && <Check className="h-4 w-4 text-[#14452F]" />}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCategoryModal(false)}
+                  className="flex-1 py-3 text-xs font-bold uppercase tracking-wider text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer text-center"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={isPending || !targetCategory}
+                  onClick={handleBulkUpdateCategory}
+                  className="flex-1 py-3 text-xs font-bold uppercase tracking-wider text-white bg-[#14452F] hover:bg-[#14452F]/90 rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
+                >
+                  {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                  Apply Category
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Quick Inspection Modal */}
       {inspectingSub && (() => {
         const meta = parseSubmissionMetadata(inspectingSub.description || '')
         const sellingBadge = getSellingOptionBadge(meta.sellingOption)
         const contactBadge = getPreferredContactBadge(meta.preferredContact)
-        const shippingBadge = getShippingPreferenceBadge(meta.shippingPreference)
         const sellerName = inspectingSub.profiles?.full_name || inspectingSub.guest_name || 'Guest Seller'
         const sellerEmail = inspectingSub.profiles?.email || inspectingSub.guest_email || 'No email'
         const sellerPhone = inspectingSub.profiles?.phone || inspectingSub.guest_phone || ''
@@ -1043,7 +1217,7 @@ export default function SubmissionsPage() {
                   </div>
                 </div>
 
-                {/* Selling Pathway & Logistics Tags */}
+                {/* Selling Pathway & Category Classification */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="p-3 bg-white border border-slate-200 rounded-xl space-y-1">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Selling Pathway</span>
@@ -1053,10 +1227,16 @@ export default function SubmissionsPage() {
                   </div>
 
                   <div className="p-3 bg-white border border-slate-200 rounded-xl space-y-1">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Shipping Preference</span>
-                    <span className={cn("inline-flex items-center gap-1.5 text-xs font-bold px-2 py-1 rounded-lg border", shippingBadge.className)}>
-                      <span>{shippingBadge.icon}</span> {shippingBadge.label}
-                    </span>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Assigned Category</span>
+                    <select
+                      value={inspectingSub.collection_type}
+                      onChange={(e) => handleUpdateCategory(inspectingSub.id, e.target.value)}
+                      className="w-full text-xs font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:border-[#C5A059] focus:outline-none cursor-pointer"
+                    >
+                      {COLLECTION_CATEGORIES.map(cat => (
+                        <option key={cat.value} value={cat.value}>{cat.label}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
@@ -1158,13 +1338,23 @@ export default function SubmissionsPage() {
 
                 {/* Footer Buttons */}
                 <div className="flex justify-between items-center pt-4 border-t border-slate-100">
-                  <button
-                    type="button"
-                    onClick={() => setInspectingSub(null)}
-                    className="px-4 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer"
-                  >
-                    Close
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setInspectingSub(null)}
+                      className="px-4 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer"
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteSubmission(inspectingSub.id)}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2.5 text-xs font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5 text-red-600" />
+                      Delete
+                    </button>
+                  </div>
 
                   <Link
                     href={`/admin/submissions/${inspectingSub.id}`}

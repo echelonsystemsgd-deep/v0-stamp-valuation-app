@@ -30,7 +30,6 @@ export interface FormData {
   email: string
   phone: string
   preferredContact: 'phone' | 'callback' | 'email' | 'either' | string
-  shippingPreference: 'prepaid_qr_label' | 'self_ship' | 'courier_pickup' | 'home_visit' | string
   postcode: string
   leadSource?: string
 }
@@ -47,7 +46,6 @@ const initialFormData: FormData = {
   email: '',
   phone: '',
   preferredContact: 'phone',
-  shippingPreference: 'prepaid_qr_label',
   postcode: '',
   leadSource: 'direct',
 }
@@ -95,6 +93,23 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
     }))
   }, [initialQuantity, initialDescription])
 
+  // Restore previously submitted valuation if user refreshed the page
+  React.useEffect(() => {
+    try {
+      const lastSubmission = localStorage.getItem('last_stamp_submission')
+      if (lastSubmission) {
+        const parsed = JSON.parse(lastSubmission)
+        if (parsed?.referenceId && parsed?.formData) {
+          setSubmittedReference(parsed.referenceId)
+          setSubmittedData(parsed.formData)
+          setIsSubmitted(true)
+        }
+      }
+    } catch (e) {
+      console.error('Failed to restore last submission', e)
+    }
+  }, [])
+
   // Persist form data to localStorage (excluding images)
   React.useEffect(() => {
     const savedData = localStorage.getItem("sell_form_progress")
@@ -106,7 +121,6 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
           ...parsedData,
           sellingOption: isLockInOffer ? "calculator" : parsedData.sellingOption || prev.sellingOption || "box_and_send",
           preferredContact: parsedData.preferredContact || prev.preferredContact || "phone",
-          shippingPreference: parsedData.shippingPreference || prev.shippingPreference || "prepaid_qr_label",
           quantity: initialQuantity || parsedData.quantity || prev.quantity,
           description: initialDescription || parsedData.description || prev.description,
           leadSource: isLockInOffer ? "homepage_calculator" : parsedData.leadSource || prev.leadSource || "direct",
@@ -123,9 +137,10 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
   }, [initialQuantity, initialDescription, isLockInOffer])
 
   React.useEffect(() => {
+    if (isSubmitted) return
     const { images: _images, ...persistentData } = formData
     localStorage.setItem('sell_form_progress', JSON.stringify(persistentData))
-  }, [formData])
+  }, [formData, isSubmitted])
 
   // Fetch logged-in user profile to pre-fill details
   React.useEffect(() => {
@@ -191,80 +206,103 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (validateStep(currentStep)) {
-      setIsSubmitting(true)
-      try {
-        const supabase = createClient()
-        const { data: { session } } = await supabase.auth.getSession()
-        const prefix = session?.user?.id ? session.user.id : 'guest'
 
-        // Upload images to Supabase Storage
-        const uploadedImages = []
-        for (const file of formData.images) {
-          const fileExt = file.name.split('.').pop()
-          const uniqueId = Math.random().toString(36).substring(2, 15)
-          const fileName = `${uniqueId}-${Date.now()}.${fileExt}`
-          const filePath = `${prefix}/${fileName}`
+    // Guard against premature submissions: user MUST be on step 3 to submit
+    if (currentStep < 3) {
+      handleNext()
+      return
+    }
 
-          const { error: uploadError } = await supabase.storage
-            .from('submissions')
-            .upload(filePath, file)
+    // Validate both Step 1 (collection details) and Step 3 (contact details)
+    const isStep1Valid = validateStep(1)
+    const isStep3Valid = validateStep(3)
+    if (!isStep1Valid || !isStep3Valid) {
+      if (!isStep1Valid) setCurrentStep(1)
+      return
+    }
 
-          if (uploadError) {
-            console.error('Error uploading file to storage:', file.name, uploadError)
-            throw new Error(`Failed to upload image: ${file.name}`)
-          }
+    setIsSubmitting(true)
+    try {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      const prefix = session?.user?.id ? session.user.id : 'guest'
 
-          const { data: { publicUrl } } = supabase.storage
-            .from('submissions')
-            .getPublicUrl(filePath)
+      // Upload images to Supabase Storage
+      const uploadedImages = []
+      for (const file of formData.images) {
+        const fileExt = file.name.split('.').pop()
+        const uniqueId = Math.random().toString(36).substring(2, 15)
+        const fileName = `${uniqueId}-${Date.now()}.${fileExt}`
+        const filePath = `${prefix}/${fileName}`
 
-          uploadedImages.push({
-            file_path: filePath,
-            image_url: publicUrl
-          })
+        const { error: uploadError } = await supabase.storage
+          .from('submissions')
+          .upload(filePath, file)
+
+        if (uploadError) {
+          console.error('Error uploading file to storage:', file.name, uploadError)
+          throw new Error(`Failed to upload image: ${file.name}`)
         }
 
-        const { images: _images, ...payload } = formData
-        const submissionPayload = {
-          ...payload,
-          images: uploadedImages
-        }
-        
-        const response = await fetch('/api/sell', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(submissionPayload)
+        const { data: { publicUrl } } = supabase.storage
+          .from('submissions')
+          .getPublicUrl(filePath)
+
+        uploadedImages.push({
+          file_path: filePath,
+          image_url: publicUrl
         })
-
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}))
-          throw new Error(errData.message || 'Submission failed')
-        }
-
-        const resData = await response.json()
-        const ref = resData.submissionId 
-          ? `VAL-${resData.submissionId.slice(0, 8).toUpperCase()}` 
-          : `VAL-${Math.random().toString(36).substring(2, 10).toUpperCase()}`
-
-        console.log('Form submitted successfully:', resData)
-        localStorage.removeItem('sell_form_progress')
-        setSubmittedReference(ref)
-        setSubmittedData(formData)
-        setIsSubmitted(true)
-      } catch (err: any) {
-        console.error('Submission error:', err)
-        setErrors((prev) => ({ 
-          ...prev, 
-          email: err.message || 'Submission failed. Please try again or contact us directly.' 
-        }))
-      } finally {
-        setIsSubmitting(false)
       }
+
+      const { images: _images, ...payload } = formData
+      const submissionPayload = {
+        ...payload,
+        images: uploadedImages
+      }
+      
+      const response = await fetch('/api/sell', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submissionPayload)
+      })
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}))
+        throw new Error(errData.message || 'Submission failed')
+      }
+
+      const resData = await response.json()
+      const ref = resData.submissionId 
+        ? `VAL-${resData.submissionId.slice(0, 8).toUpperCase()}` 
+        : `VAL-${Math.random().toString(36).substring(2, 10).toUpperCase()}`
+
+      console.log('Form submitted successfully:', resData)
+      localStorage.removeItem('sell_form_progress')
+      
+      // Persist submission record so page refresh keeps confirmation view
+      localStorage.setItem('last_stamp_submission', JSON.stringify({
+        referenceId: ref,
+        formData: formData,
+        submittedAt: Date.now()
+      }))
+
+      setSubmittedReference(ref)
+      setSubmittedData(formData)
+      setIsSubmitted(true)
+    } catch (err: any) {
+      console.error('Submission error:', err)
+      setErrors((prev) => ({ 
+        ...prev, 
+        email: err.message || 'Submission failed. Please try again or contact us directly.' 
+      }))
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   const handleReset = () => {
+    localStorage.removeItem('last_stamp_submission')
+    localStorage.removeItem('sell_form_progress')
     setFormData({
       ...initialFormData,
       sellingOption: isLockInOffer ? "calculator" : initialFormData.sellingOption,
@@ -298,7 +336,18 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
           <CardContent className="pt-8 px-6 sm:px-8">
             <StepIndicator currentStep={currentStep} totalSteps={3} steps={steps} />
             
-            <form onSubmit={handleSubmit}>
+            <form 
+              onSubmit={handleSubmit}
+              onKeyDown={(e) => {
+                // Prevent accidental Enter-key form submits on step 1 and step 2 input fields
+                if (e.key === 'Enter' && (e.target as HTMLElement).tagName !== 'TEXTAREA') {
+                  e.preventDefault()
+                  if (currentStep < 3) {
+                    handleNext()
+                  }
+                }
+              }}
+            >
               <input type="hidden" name="leadSource" value={formData.leadSource ?? "direct"} />
               {currentStep === 1 && (
                 <CollectionInfoStep

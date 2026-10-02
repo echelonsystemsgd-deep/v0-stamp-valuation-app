@@ -100,7 +100,6 @@ export async function POST(req: Request) {
       postcode,
       preferredContact = 'phone',
       sellingOption = 'box_and_send',
-      shippingPreference = 'prepaid_qr_label',
       collectionType,
       quantity,
       era,
@@ -248,7 +247,6 @@ export async function POST(req: Request) {
       const metaTags = [
         `[Selling Option: ${sellingOption}]`,
         `[Preferred Contact: ${preferredContact}]`,
-        `[Shipping Preference: ${shippingPreference}]`,
       ].join('\n')
       enrichedDescription = `${metaTags}\n\n${enrichedDescription}`
     }
@@ -346,7 +344,6 @@ export async function POST(req: Request) {
       imageCount: imageList.length,
       preferredContact,
       sellingOption,
-      shippingPreference,
     }).catch((err) => {
       console.error('Failed to notify new valuation lead:', err)
     })

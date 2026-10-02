@@ -29,7 +29,9 @@ import {
   ExternalLink,
   Mail,
   Phone,
-  Package
+  Package,
+  Trash2,
+  Tag
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -37,7 +39,8 @@ import {
   parseSubmissionMetadata, 
   getSellingOptionBadge, 
   getPreferredContactBadge, 
-  getShippingPreferenceBadge 
+  COLLECTION_CATEGORIES,
+  getCategoryLabel
 } from '@/lib/submissions'
 
 interface SubmissionItem {
@@ -220,9 +223,40 @@ export default function SubmissionWorkspace() {
 
   const handleCopyShippingAdvice = () => {
     if (!submission) return
-    const text = `Shipping Instructions for Valuation VAL-${submission.id.slice(0, 8).toUpperCase()}:\n\n1. Package your stamp collection securely using padded envelopes or cardboard boxes.\n2. Include a slip with your Valuation Reference (VAL-${submission.id.slice(0, 8).toUpperCase()}) inside the parcel.\n3. Send via Royal Mail Signed For or Special Delivery to ensure tracking.\n\nReturn Address:\nUK Stamp Valuations Processing Desk\nAttn: Valuation Team\nUnited Kingdom`
+    const text = `Postal Dispatch Instructions for Valuation VAL-${submission.id.slice(0, 8).toUpperCase()}:\n\n1. Package your stamps securely using padded envelopes or bubble wrap.\n2. Include a slip of paper with your Valuation Reference (VAL-${submission.id.slice(0, 8).toUpperCase()}) and your full name inside the parcel.\n3. Send via Royal Mail Special Delivery or Tracked to:\n\nUK Postage Stamps LTD\nOffice 214, Regus, Bournemouth Oxford Point\n19 Oxford Road\nBournemouth, Dorset\nBH8 8GS`
     navigator.clipboard.writeText(text)
-    toast.success('Copied Shipping Instructions to clipboard!')
+    toast.success('Copied Postal Dispatch Instructions to clipboard!')
+  }
+
+  const handleDeleteSubmission = async () => {
+    if (!submission) return
+    const confirmed = window.confirm(`Are you sure you want to permanently delete submission VAL-${submission.id.slice(0, 8).toUpperCase()}? All associated photos, items, and notes will be deleted. This cannot be undone.`)
+    if (!confirmed) return
+
+    try {
+      const { error } = await supabase.from('submissions').delete().eq('id', id)
+      if (error) throw error
+      toast.success('Submission permanently deleted.')
+      router.push('/admin/submissions')
+    } catch (err: any) {
+      toast.error('Failed to delete submission: ' + err.message)
+    }
+  }
+
+  const handleUpdateCategory = async (newCategory: string) => {
+    try {
+      const { error } = await supabase
+        .from('submissions')
+        .update({ collection_type: newCategory })
+        .eq('id', id)
+
+      if (error) throw error
+
+      toast.success(`Category updated to "${getCategoryLabel(newCategory)}"`)
+      setSubmission(prev => prev ? { ...prev, collection_type: newCategory } : null)
+    } catch (err: any) {
+      toast.error('Failed to update category: ' + err.message)
+    }
   }
 
   const [isPending, startTransition] = useTransition()
@@ -898,6 +932,15 @@ export default function SubmissionWorkspace() {
               <CreditCard className="h-3.5 w-3.5 text-[#C5A059]" /> Log Payout
             </button>
           )}
+
+          <button
+            onClick={handleDeleteSubmission}
+            disabled={isPending}
+            className="px-3.5 py-2 border border-red-200 hover:border-red-300 text-xs font-bold uppercase tracking-wider rounded-xl bg-red-50 hover:bg-red-100 text-red-650 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            title="Permanently delete this submission"
+          >
+            <Trash2 className="h-3.5 w-3.5 text-red-600" /> Delete
+          </button>
         </div>
       </div>
 
@@ -1250,7 +1293,6 @@ export default function SubmissionWorkspace() {
               const meta = parseSubmissionMetadata(submission.description || '')
               const sellingBadge = getSellingOptionBadge(meta.sellingOption)
               const contactBadge = getPreferredContactBadge(meta.preferredContact)
-              const shippingBadge = getShippingPreferenceBadge(meta.shippingPreference)
               const sellerPhone = sellerProfile?.phone || submission.guest_phone
 
               return (
@@ -1343,10 +1385,16 @@ export default function SubmissionWorkspace() {
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Shipping Preference</span>
-                      <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border", shippingBadge.className)}>
-                        <span>{shippingBadge.icon}</span> {shippingBadge.label}
-                      </span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Collection Category</span>
+                      <select
+                        value={submission.collection_type}
+                        onChange={(e) => handleUpdateCategory(e.target.value)}
+                        className="w-full text-xs font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:border-[#C5A059] focus:outline-none cursor-pointer"
+                      >
+                        {COLLECTION_CATEGORIES.map(cat => (
+                          <option key={cat.value} value={cat.value}>{cat.label}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 

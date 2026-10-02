@@ -15,7 +15,6 @@ export interface ValuationNotificationData {
   imageCount: number
   preferredContact?: string
   sellingOption?: string
-  shippingPreference?: string
 }
 
 export interface ContactNotificationData {
