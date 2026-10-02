@@ -27,10 +27,18 @@ import {
   Printer,
   Copy,
   ExternalLink,
-  Mail
+  Mail,
+  Phone,
+  Package
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { 
+  parseSubmissionMetadata, 
+  getSellingOptionBadge, 
+  getPreferredContactBadge, 
+  getShippingPreferenceBadge 
+} from '@/lib/submissions'
 
 interface SubmissionItem {
   id: string
@@ -1237,152 +1245,205 @@ export default function SubmissionWorkspace() {
               )}
             </div>
 
-            {/* 2. Seller Context Card */}
-            <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-4 sm:p-6 space-y-4">
-              <h3 className="font-serif text-md font-bold text-[#0B1D2E] border-b border-slate-100 pb-2 flex items-center gap-1.5">
-                <User className="h-4.5 w-4.5 text-[#C5A059]" /> Seller Details
-              </h3>
+              {/* 2. Seller Context Card */}
+            {(() => {
+              const meta = parseSubmissionMetadata(submission.description || '')
+              const sellingBadge = getSellingOptionBadge(meta.sellingOption)
+              const contactBadge = getPreferredContactBadge(meta.preferredContact)
+              const shippingBadge = getShippingPreferenceBadge(meta.shippingPreference)
+              const sellerPhone = sellerProfile?.phone || submission.guest_phone
 
-              {submission.user_id && sellerProfile ? (
-                <div className="space-y-3.5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 border border-slate-200">
-                      <User className="h-5 w-5" />
-                    </div>
-                    <div className="overflow-hidden">
-                      <p className="text-sm font-bold text-slate-700 truncate">{sellerProfile.full_name || 'Not provided'}</p>
-                      <p className="text-xs text-slate-450 truncate">{sellerProfile.email}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-slate-450">Verified Seller:</span>
-                      <span className="font-bold text-emerald-600 flex items-center gap-0.5">
-                        <Shield className="h-3 w-3" /> Yes
-                      </span>
-                    </div>
-                    {sellerProfile.phone && (
-                      <div className="flex justify-between">
-                        <span className="text-slate-450">Phone:</span>
-                        <span className="font-semibold text-slate-650">{sellerProfile.phone}</span>
-                      </div>
-                    )}
-                    {sellerProfile.postcode && (
-                      <div className="flex justify-between">
-                        <span className="text-slate-450">Postcode:</span>
-                        <span className="font-semibold text-slate-650 uppercase">{sellerProfile.postcode}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                /* Guest view */
-                <div className="space-y-3.5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-amber-600 border border-slate-200">
-                      <User className="h-5 w-5" />
-                    </div>
-                    <div className="overflow-hidden">
-                      <p className="text-sm font-bold text-slate-700 truncate">{submission.guest_name || 'Guest User'}</p>
-                      <p className="text-xs text-slate-450 truncate">{submission.guest_email || ''}</p>
-                    </div>
-                  </div>
+              return (
+                <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-4 sm:p-6 space-y-4">
+                  <h3 className="font-serif text-md font-bold text-[#0B1D2E] border-b border-slate-100 pb-2 flex items-center gap-1.5">
+                    <User className="h-4.5 w-4.5 text-[#C5A059]" /> Seller Details
+                  </h3>
 
-                  <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-slate-450">Access Profile:</span>
-                      <span className="font-bold text-amber-600">Guest</span>
-                    </div>
-                    {submission.guest_phone && (
-                      <div className="flex justify-between">
-                        <span className="text-slate-450">Phone:</span>
-                        <span className="font-semibold text-slate-650">{submission.guest_phone}</span>
+                  {submission.user_id && sellerProfile ? (
+                    <div className="space-y-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 border border-slate-200">
+                          <User className="h-5 w-5" />
+                        </div>
+                        <div className="overflow-hidden">
+                          <p className="text-sm font-bold text-slate-700 truncate">{sellerProfile.full_name || 'Not provided'}</p>
+                          <p className="text-xs text-slate-450 truncate">{sellerProfile.email}</p>
+                        </div>
                       </div>
-                    )}
-                    {submission.guest_postcode && (
-                      <div className="flex justify-between">
-                        <span className="text-slate-450">Postcode:</span>
-                        <span className="font-semibold text-slate-650 uppercase">{submission.guest_postcode}</span>
+                      
+                      <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-slate-450">Verified Seller:</span>
+                          <span className="font-bold text-emerald-600 flex items-center gap-0.5">
+                            <Shield className="h-3 w-3" /> Yes
+                          </span>
+                        </div>
+                        {sellerProfile.phone && (
+                          <div className="flex justify-between">
+                            <span className="text-slate-450">Phone:</span>
+                            <span className="font-semibold text-slate-650">{sellerProfile.phone}</span>
+                          </div>
+                        )}
+                        {sellerProfile.postcode && (
+                          <div className="flex justify-between">
+                            <span className="text-slate-450">Postcode:</span>
+                            <span className="font-semibold text-slate-650 uppercase">{sellerProfile.postcode}</span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Payout preference block */}
-              {sellerProfile?.payout_details && Object.keys(sellerProfile.payout_details).length > 0 && (
-                <div className="p-3.5 bg-slate-50 border border-slate-200/70 rounded-2xl text-xs space-y-2">
-                  <span className="font-bold text-[#0B1D2E] block uppercase text-[9px] tracking-wider">Payout Preference</span>
-                  
-                  {sellerProfile.payout_details.payout_method === 'bank_transfer' ? (
-                    <div className="grid grid-cols-2 gap-1 text-[11px]">
-                      <span className="text-slate-450">Method:</span>
-                      <span className="font-bold text-[#0B1D2E]">Bank Transfer</span>
-                      <span className="text-slate-450">Bank Name:</span>
-                      <span className="font-bold text-slate-750">{sellerProfile.payout_details.bank_name || '-'}</span>
-                      <span className="text-slate-450">Payee Name:</span>
-                      <span className="font-bold text-slate-750">{sellerProfile.payout_details.payee_name || '-'}</span>
-                      <span className="text-slate-450">Sort Code:</span>
-                      <span className="font-bold text-slate-750 font-mono">{sellerProfile.payout_details.sort_code || '-'}</span>
-                      <span className="text-slate-450">Acc Number:</span>
-                      <span className="font-bold text-slate-750 font-mono">{sellerProfile.payout_details.account_number || '-'}</span>
-                    </div>
-                  ) : sellerProfile.payout_details.payout_method === 'cheque' ? (
-                    <div className="grid grid-cols-2 gap-1 text-[11px]">
-                      <span className="text-slate-450">Method:</span>
-                      <span className="font-bold text-[#0B1D2E]">Cheque</span>
-                      <span className="text-slate-450">Recipient:</span>
-                      <span className="font-bold text-slate-750">{sellerProfile.payout_details.cheque_recipient || '-'}</span>
-                      <span className="text-slate-450">Address:</span>
-                      <span className="font-bold text-slate-750">{sellerProfile.payout_details.cheque_address || '-'}</span>
                     </div>
                   ) : (
-                    <p className="text-[10px] text-slate-400">No payout method selected.</p>
-                  )}
-                </div>
-              )}
+                    /* Guest view */
+                    <div className="space-y-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-amber-600 border border-slate-200">
+                          <User className="h-5 w-5" />
+                        </div>
+                        <div className="overflow-hidden">
+                          <p className="text-sm font-bold text-slate-700 truncate">{submission.guest_name || 'Guest User'}</p>
+                          <p className="text-xs text-slate-450 truncate">{submission.guest_email || ''}</p>
+                        </div>
+                      </div>
 
-              {/* Quick Communication Actions */}
-              <div className="pt-3 border-t border-slate-100 space-y-2">
-                <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider block">Manual Outreach Helpers</span>
-                {(() => {
-                  const email = sellerProfile?.email || submission.guest_email
-                  const name = sellerProfile?.full_name || submission.guest_name || 'Customer'
-                  const mailtoUrl = email ? `mailto:${email}?subject=${encodeURIComponent(`UK Stamp Valuations - Valuation Request #VAL-${submission.id.slice(0, 8).toUpperCase()}`)}&body=${encodeURIComponent(`Dear ${name},\n\nThank you for submitting your ${submission.collection_type.replace(/_/g, ' ')} collection for valuation.\n\nValuation Reference: VAL-${submission.id.slice(0, 8).toUpperCase()}\nCalculated Payout Offer: ${formatGBP(finalPayoutTotal)}\n\nNext Steps:\nIf you wish to proceed, please post your stamps safely packaged to our processing center.\n\nBest regards,\nUK Stamp Valuations Team`)}` : '#'
-
-                  return (
-                    <div className="flex flex-col gap-2">
-                      {email && (
-                        <a
-                          href={mailtoUrl}
-                          className="w-full py-2 px-3 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
-                        >
-                          <Mail className="h-3.5 w-3.5 text-[#C5A059]" /> Open Email Launcher
-                        </a>
-                      )}
-                      
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                          type="button"
-                          onClick={handleCopyQuoteEmail}
-                          className="py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-[10px] font-bold text-slate-700 transition-all flex items-center justify-center gap-1 cursor-pointer"
-                        >
-                          <Copy className="h-3 w-3 text-slate-400" /> Copy Quote
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleCopyShippingAdvice}
-                          className="py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-[10px] font-bold text-slate-700 transition-all flex items-center justify-center gap-1 cursor-pointer"
-                        >
-                          <Copy className="h-3 w-3 text-slate-400" /> Copy Pack Advice
-                        </button>
+                      <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-slate-450">Access Profile:</span>
+                          <span className="font-bold text-amber-600">Guest</span>
+                        </div>
+                        {submission.guest_phone && (
+                          <div className="flex justify-between">
+                            <span className="text-slate-450">Phone:</span>
+                            <span className="font-semibold text-slate-650">{submission.guest_phone}</span>
+                          </div>
+                        )}
+                        {submission.guest_postcode && (
+                          <div className="flex justify-between">
+                            <span className="text-slate-450">Postcode:</span>
+                            <span className="font-semibold text-slate-650 uppercase">{submission.guest_postcode}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  )
-                })()}
-              </div>
-            </div>
+                  )}
+
+                  {/* Customer Preferences & Selling Pathway */}
+                  <div className="pt-2 border-t border-slate-100 space-y-2 text-xs">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Contact Channel</span>
+                      <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border", contactBadge.className)}>
+                        <span>{contactBadge.icon}</span> {contactBadge.label}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Selling Pathway</span>
+                      <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border", sellingBadge.className)}>
+                        <span>{sellingBadge.icon}</span> {sellingBadge.label}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Shipping Preference</span>
+                      <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border", shippingBadge.className)}>
+                        <span>{shippingBadge.icon}</span> {shippingBadge.label}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Payout preference block */}
+                  {sellerProfile?.payout_details && Object.keys(sellerProfile.payout_details).length > 0 && (
+                    <div className="p-3.5 bg-slate-50 border border-slate-200/70 rounded-2xl text-xs space-y-2">
+                      <span className="font-bold text-[#0B1D2E] block uppercase text-[9px] tracking-wider">Payout Preference</span>
+                      
+                      {sellerProfile.payout_details.payout_method === 'bank_transfer' ? (
+                        <div className="grid grid-cols-2 gap-1 text-[11px]">
+                          <span className="text-slate-450">Method:</span>
+                          <span className="font-bold text-[#0B1D2E]">Bank Transfer</span>
+                          <span className="text-slate-450">Bank Name:</span>
+                          <span className="font-bold text-slate-750">{sellerProfile.payout_details.bank_name || '-'}</span>
+                          <span className="text-slate-450">Payee Name:</span>
+                          <span className="font-bold text-slate-750">{sellerProfile.payout_details.payee_name || '-'}</span>
+                          <span className="text-slate-450">Sort Code:</span>
+                          <span className="font-bold text-slate-750 font-mono">{sellerProfile.payout_details.sort_code || '-'}</span>
+                          <span className="text-slate-450">Acc Number:</span>
+                          <span className="font-bold text-slate-750 font-mono">{sellerProfile.payout_details.account_number || '-'}</span>
+                        </div>
+                      ) : sellerProfile.payout_details.payout_method === 'cheque' ? (
+                        <div className="grid grid-cols-2 gap-1 text-[11px]">
+                          <span className="text-slate-450">Method:</span>
+                          <span className="font-bold text-[#0B1D2E]">Cheque</span>
+                          <span className="text-slate-450">Recipient:</span>
+                          <span className="font-bold text-slate-750">{sellerProfile.payout_details.cheque_recipient || '-'}</span>
+                          <span className="text-slate-450">Address:</span>
+                          <span className="font-bold text-slate-750">{sellerProfile.payout_details.cheque_address || '-'}</span>
+                        </div>
+                      ) : (
+                        <p className="text-[10px] text-slate-400">No payout method selected.</p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Quick Communication Actions */}
+                  <div className="pt-3 border-t border-slate-100 space-y-2">
+                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider block">Manual Outreach Helpers</span>
+                    {(() => {
+                      const email = sellerProfile?.email || submission.guest_email
+                      const name = sellerProfile?.full_name || submission.guest_name || 'Customer'
+                      const mailtoUrl = email ? `mailto:${email}?subject=${encodeURIComponent(`UK Stamp Valuations - Valuation Request #VAL-${submission.id.slice(0, 8).toUpperCase()}`)}&body=${encodeURIComponent(`Dear ${name},\n\nThank you for submitting your ${submission.collection_type.replace(/_/g, ' ')} collection for valuation.\n\nValuation Reference: VAL-${submission.id.slice(0, 8).toUpperCase()}\nCalculated Payout Offer: ${formatGBP(finalPayoutTotal)}\n\nNext Steps:\nIf you wish to proceed, please post your stamps safely packaged to our processing center.\n\nBest regards,\nUK Stamp Valuations Team`)}` : '#'
+
+                      return (
+                        <div className="flex flex-col gap-2">
+                          {sellerPhone && (
+                            <>
+                              <a
+                                href={`tel:${sellerPhone}`}
+                                className="w-full py-2 px-3 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                              >
+                                <Phone className="h-3.5 w-3.5 text-[#C5A059]" /> Call {sellerPhone}
+                              </a>
+                              <a
+                                href={`https://wa.me/${sellerPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${name}, this is Sell Your Stamps UK regarding your valuation request VAL-${submission.id.slice(0, 8).toUpperCase()}.`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                              >
+                                <MessageSquare className="h-3.5 w-3.5 text-white" /> WhatsApp Customer
+                              </a>
+                            </>
+                          )}
+
+                          {email && (
+                            <a
+                              href={mailtoUrl}
+                              className="w-full py-2 px-3 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                            >
+                              <Mail className="h-3.5 w-3.5 text-[#C5A059]" /> Open Email Launcher
+                            </a>
+                          )}
+                          
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              type="button"
+                              onClick={handleCopyQuoteEmail}
+                              className="py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-[10px] font-bold text-slate-700 transition-all flex items-center justify-center gap-1 cursor-pointer"
+                            >
+                              <Copy className="h-3 w-3 text-slate-400" /> Copy Quote
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleCopyShippingAdvice}
+                              className="py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-[10px] font-bold text-slate-700 transition-all flex items-center justify-center gap-1 cursor-pointer"
+                            >
+                              <Copy className="h-3 w-3 text-slate-400" /> Copy Pack Advice
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })()}
+                  </div>
+                </div>
+              )
+            })()}
 
             {/* 3. Internal Staff Notes */}
             <div className="bg-white rounded-3xl border border-slate-150 shadow-sm p-4 sm:p-6 space-y-4">

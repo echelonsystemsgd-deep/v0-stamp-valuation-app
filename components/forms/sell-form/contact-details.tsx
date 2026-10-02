@@ -136,6 +136,63 @@ export function ContactDetailsStep({ formData, updateFormData, errors }: Contact
         </p>
       </div>
 
+      {/* Shipping / Hand-off Preference */}
+      <fieldset className="flex flex-col gap-2.5">
+        <legend className="text-sm font-semibold text-slate-800">
+          How Would You Prefer to Send Your Collection?
+        </legend>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {[
+            {
+              value: 'prepaid_qr_label',
+              label: 'Prepaid Tracked QR Code',
+              badge: 'Most Popular',
+              desc: 'No printer needed. Show your phone QR code at any Post Office.'
+            },
+            {
+              value: 'self_ship',
+              label: 'Royal Mail Special Delivery',
+              badge: 'Insured £2,500',
+              desc: 'Pack yourself and send via insured next-day tracked delivery.'
+            },
+            {
+              value: 'courier_pickup',
+              label: 'Free Courier Collection',
+              badge: 'Heavy Boxes',
+              desc: 'Doorstep pickup from your home for heavy albums or boxes.'
+            }
+          ].map((ship) => {
+            const isSelected = (formData.shippingPreference || 'prepaid_qr_label') === ship.value
+            return (
+              <label
+                key={ship.value}
+                className={cn(
+                  "p-3 rounded-2xl border flex flex-col justify-between gap-1.5 cursor-pointer transition-all",
+                  isSelected
+                    ? "border-forest-green bg-forest-green/5 ring-1 ring-forest-green/20"
+                    : "border-border hover:border-muted-foreground/30 bg-white"
+                )}
+              >
+                <div className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="shippingPreference"
+                    value={ship.value}
+                    checked={isSelected}
+                    onChange={(e) => updateFormData({ shippingPreference: e.target.value })}
+                    className="w-4 h-4 accent-forest-green cursor-pointer shrink-0"
+                  />
+                  <span className="text-xs font-bold text-slate-900 leading-tight">{ship.label}</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground pl-6 leading-relaxed">
+                  {ship.desc}
+                </p>
+              </label>
+            )
+          })}
+        </div>
+      </fieldset>
+
       {/* Trust & Guarantee Indicators */}
       <div className="border border-gold/30 bg-gold/5 dark:bg-gold/10/5 rounded-2xl p-5 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-16 h-16 bg-gold/10 rounded-full -mr-8 -mt-8" />

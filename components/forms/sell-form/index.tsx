@@ -11,11 +11,13 @@ import { Card, CardContent } from '@/components/ui/card'
 import { CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { InspectionResponseView } from './inspection-response-view'
 
 const steps = ['Collection Details', 'Photos', 'Contact Info']
 
 export interface FormData {
   // Step 1
+  sellingOption: 'box_and_send' | 'photo_appraisal' | 'calculator' | 'vip_collection' | string
   collectionType: string
   quantity: string
   era: string
@@ -27,12 +29,14 @@ export interface FormData {
   fullName: string
   email: string
   phone: string
-  preferredContact: string
+  preferredContact: 'phone' | 'callback' | 'email' | 'either' | string
+  shippingPreference: 'prepaid_qr_label' | 'self_ship' | 'courier_pickup' | 'home_visit' | string
   postcode: string
   leadSource?: string
 }
 
 const initialFormData: FormData = {
+  sellingOption: 'box_and_send',
   collectionType: '',
   quantity: '',
   era: '',
@@ -42,7 +46,8 @@ const initialFormData: FormData = {
   fullName: '',
   email: '',
   phone: '',
-  preferredContact: 'email',
+  preferredContact: 'phone',
+  shippingPreference: 'prepaid_qr_label',
   postcode: '',
   leadSource: 'direct',
 }
@@ -60,12 +65,15 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
   const [formData, setFormData] = React.useState<FormData>(() => {
     return {
       ...initialFormData,
+      sellingOption: isLockInOffer ? "calculator" : initialFormData.sellingOption,
       quantity: initialQuantity || "",
       description: initialDescription || "",
       leadSource: isLockInOffer ? "homepage_calculator" : initialFormData.leadSource,
     }
   })
   const [isSubmitted, setIsSubmitted] = React.useState(false)
+  const [submittedReference, setSubmittedReference] = React.useState<string>('')
+  const [submittedData, setSubmittedData] = React.useState<FormData | null>(null)
   const [errors, setErrors] = React.useState<Partial<Record<keyof FormData, string>>>({})
 
   const updateFormData = (updates: Partial<FormData>) => {
@@ -96,6 +104,9 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
         setFormData((prev) => ({
           ...prev,
           ...parsedData,
+          sellingOption: isLockInOffer ? "calculator" : parsedData.sellingOption || prev.sellingOption || "box_and_send",
+          preferredContact: parsedData.preferredContact || prev.preferredContact || "phone",
+          shippingPreference: parsedData.shippingPreference || prev.shippingPreference || "prepaid_qr_label",
           quantity: initialQuantity || parsedData.quantity || prev.quantity,
           description: initialDescription || parsedData.description || prev.description,
           leadSource: isLockInOffer ? "homepage_calculator" : parsedData.leadSource || prev.leadSource || "direct",
@@ -232,8 +243,14 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
         }
 
         const resData = await response.json()
+        const ref = resData.submissionId 
+          ? `VAL-${resData.submissionId.slice(0, 8).toUpperCase()}` 
+          : `VAL-${Math.random().toString(36).substring(2, 10).toUpperCase()}`
+
         console.log('Form submitted successfully:', resData)
         localStorage.removeItem('sell_form_progress')
+        setSubmittedReference(ref)
+        setSubmittedData(formData)
         setIsSubmitted(true)
       } catch (err: any) {
         console.error('Submission error:', err)
@@ -247,30 +264,28 @@ export function SellForm({ initialQuantity, initialDescription, isLockInOffer = 
     }
   }
 
-  if (isSubmitted) {
+  const handleReset = () => {
+    setFormData({
+      ...initialFormData,
+      sellingOption: isLockInOffer ? "calculator" : initialFormData.sellingOption,
+      quantity: initialQuantity || "",
+      description: initialDescription || "",
+      leadSource: isLockInOffer ? "homepage_calculator" : initialFormData.leadSource,
+    })
+    setCurrentStep(1)
+    setIsSubmitted(false)
+    setSubmittedReference('')
+    setSubmittedData(null)
+  }
+
+  if (isSubmitted && submittedData) {
     return (
-      <Card className="max-w-2xl mx-auto">
-        <CardContent className="py-12 text-center">
-          <div className="w-20 h-20 rounded-full bg-forest-green/10 flex items-center justify-center mx-auto mb-8 border-2 border-forest-green/20">
-            <CheckCircle className="w-10 h-10 text-forest-green" />
-          </div>
-          <h2 className="text-3xl font-serif font-bold text-navy mb-4">
-            Thank You for Your Submission
-          </h2>
-          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-            We have received your collection details. Our team will review your submission 
-            and provide a valuation within 1-12 hours.
-          </p>
-          <p className="text-sm text-muted-foreground mb-8">
-            A confirmation email has been sent to <strong>{formData.email}</strong>
-          </p>
-          <Button asChild className="bg-forest-green hover:bg-forest-green/90 text-white">
-            <Link href={isDashboard ? "/dashboard" : "/"}>
-              {isDashboard ? "Go to Dashboard" : "Return to Home"}
-            </Link>
-          </Button>
-        </CardContent>
-      </Card>
+      <InspectionResponseView
+        referenceId={submittedReference}
+        formData={submittedData}
+        isDashboard={isDashboard}
+        onReset={handleReset}
+      />
     )
   }
 

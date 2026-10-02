@@ -13,6 +13,9 @@ export interface ValuationNotificationData {
   valuableItems?: string | null
   estimatedValuation: number
   imageCount: number
+  preferredContact?: string
+  sellingOption?: string
+  shippingPreference?: string
 }
 
 export interface ContactNotificationData {
@@ -54,7 +57,7 @@ export async function notifyNewValuationLead(data: ValuationNotificationData): P
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `🚨 *New Stamp Valuation Request* (£${data.estimatedValuation.toFixed(2)})\n*Name:* ${data.fullName}\n*Email:* ${data.email}\n*Phone:* ${data.phone}\n*Collection:* ${data.collectionType} (${data.quantity})\n*Photos:* ${data.imageCount}\n*ID:* ${data.submissionId}`,
+          text: `🚨 *New Stamp Valuation Request* (£${data.estimatedValuation.toFixed(2)})\n*Name:* ${data.fullName}\n*Email:* ${data.email}\n*Phone:* ${data.phone}\n*Preferred Contact:* ${data.preferredContact || 'Phone Call'}\n*Selling Method:* ${data.sellingOption || 'Box & Send'}\n*Collection:* ${data.collectionType} (${data.quantity})\n*Photos:* ${data.imageCount}\n*ID:* ${data.submissionId}`,
         }),
       })
       return { sent: true, channel: 'webhook' }
@@ -75,13 +78,15 @@ export async function notifyNewValuationLead(data: ValuationNotificationData): P
         body: JSON.stringify({
           from: `Sell Your Stamps Alerts <notifications@${BUSINESS_CONFIG.domain}>`,
           to: alertDestination,
-          subject: `New Stamp Valuation Lead: £${data.estimatedValuation.toFixed(2)} - ${data.fullName}`,
+          subject: `New Stamp Valuation Lead: £${data.estimatedValuation.toFixed(2)} - ${data.fullName} (${data.preferredContact || 'Phone Call'})`,
           html: `
             <h2>New Stamp Valuation Submission</h2>
             <p><strong>Lead ID:</strong> ${data.submissionId}</p>
             <p><strong>Customer:</strong> ${data.fullName}</p>
             <p><strong>Email:</strong> ${data.email}</p>
             <p><strong>Phone:</strong> ${data.phone || 'N/A'}</p>
+            <p><strong>Preferred Contact:</strong> ${data.preferredContact || 'Phone Call'}</p>
+            <p><strong>Selling Pathway:</strong> ${data.sellingOption || 'Box & Send'}</p>
             <p><strong>Postcode:</strong> ${data.postcode}</p>
             <hr />
             <p><strong>Collection Type:</strong> ${data.collectionType}</p>

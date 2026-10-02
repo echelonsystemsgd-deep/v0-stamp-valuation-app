@@ -15,14 +15,39 @@ import {
   ChevronRight,
   Filter,
   DollarSign,
-  Users
+  Users,
+  Phone,
+  Mail,
+  MessageSquare,
+  Package,
+  Eye,
+  Clock,
+  ShieldCheck,
+  MapPin,
+  Copy,
+  Image as ImageIcon
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogDescription 
+} from '@/components/ui/dialog'
+import { 
+  parseSubmissionMetadata, 
+  getSellingOptionBadge, 
+  getPreferredContactBadge, 
+  getShippingPreferenceBadge 
+} from '@/lib/submissions'
 
 interface Profile {
   full_name: string | null
   email: string
+  phone?: string | null
+  postcode?: string | null
 }
 
 interface Submission {
@@ -45,8 +70,15 @@ interface Submission {
   tracking_reference: string | null
   guest_name: string | null
   guest_email: string | null
+  guest_phone?: string | null
+  guest_postcode?: string | null
+  description?: string
+  approx_quantity?: string
+  estimated_era?: string
+  valuable_items?: string | null
   user_id: string | null
   profiles: Profile | null
+  submission_images?: { id: string; image_url: string }[]
 }
 
 const statusConfig: Record<Submission['status'], { label: string; className: string }> = {
@@ -99,6 +131,10 @@ export default function SubmissionsPage() {
   const [selectedStaffId, setSelectedStaffId] = useState<string>('')
   const [staffLoading, setStaffLoading] = useState(false)
 
+  // Quick Inspection Modal State
+  const [inspectingSub, setInspectingSub] = useState<Submission | null>(null)
+  const [updatingStatusId, setUpdatingStatusId] = useState<string | null>(null)
+
   const supabase = createClient()
 
   // Fetch submissions from Database
@@ -107,7 +143,7 @@ export default function SubmissionsPage() {
     try {
       const { data, error } = await supabase
         .from('submissions')
-        .select('*, profiles!user_id(full_name, email)')
+        .select('*, profiles!user_id(full_name, email, phone, postcode), submission_images(id, image_url)')
         .order('created_at', { ascending: false })
 
       if (error) throw error
@@ -116,6 +152,30 @@ export default function SubmissionsPage() {
       toast.error('Failed to load submissions queue: ' + err.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Quick status update with toast alert
+  const handleUpdateStatus = async (submissionId: string, newStatus: Submission['status']) => {
+    setUpdatingStatusId(submissionId)
+    try {
+      const { error } = await supabase
+        .from('submissions')
+        .update({ status: newStatus })
+        .eq('id', submissionId)
+
+      if (error) throw error
+
+      toast.success(`Status updated to "${statusConfig[newStatus]?.label || newStatus}"`)
+      
+      setSubmissions(prev => prev.map(s => s.id === submissionId ? { ...s, status: newStatus } : s))
+      if (inspectingSub?.id === submissionId) {
+        setInspectingSub(prev => prev ? { ...prev, status: newStatus } : null)
+      }
+    } catch (err: any) {
+      toast.error('Failed to update status: ' + err.message)
+    } finally {
+      setUpdatingStatusId(null)
     }
   }
 
@@ -489,6 +549,10 @@ export default function SubmissionsPage() {
                     const isSelected = selectedIds.includes(sub.id)
                     const sellerName = sub.profiles?.full_name || sub.guest_name || 'Not provided'
                     const sellerEmail = sub.profiles?.email || sub.guest_email || ''
+                    const sellerPhone = sub.profiles?.phone || sub.guest_phone || ''
+                    const meta = parseSubmissionMetadata(sub.description || '')
+                    const sellingBadge = getSellingOptionBadge(meta.sellingOption)
+                    const contactBadge = getPreferredContactBadge(meta.preferredContact)
 
                     return (
                       <tr 
@@ -497,7 +561,7 @@ export default function SubmissionsPage() {
                           'group hover:bg-[#FBFBF9]/80 transition-all cursor-pointer duration-100',
                           isSelected ? 'bg-amber-50/20' : ''
                         )}
-                        onClick={() => router.push(`/admin/submissions/${sub.id}`)}
+                        onClick={() => setInspectingSub(sub)}
                       >
                         <td className="py-4 px-6 text-center w-12" onClick={e => e.stopPropagation()}>
                           <input
@@ -548,12 +612,20 @@ export default function SubmissionsPage() {
                             <span className="text-[9px] text-slate-400 uppercase font-bold tracking-wider mt-1 block">Completed</span>
                           )}
                         </td>
-                        <td className="py-4 px-4 text-sm max-w-[200px] truncate">
-                          <p className="font-semibold text-slate-750">{sellerName}</p>
+                        <td className="py-4 px-4 text-sm max-w-[200px]">
+                          <p className="font-semibold text-slate-750 truncate">{sellerName}</p>
                           <p className="text-xs text-slate-450 truncate">{sellerEmail}</p>
+                          {contactBadge.requiresCall && (
+                            <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded mt-0.5">
+                              📞 Call Requested
+                            </span>
+                          )}
                         </td>
-                        <td className="py-4 px-4 text-xs text-slate-600 capitalize">
-                          {sub.collection_type.replace('_', ' ')}
+                        <td className="py-4 px-4 text-xs text-slate-600">
+                          <p className="capitalize font-medium">{sub.collection_type.replace(/_/g, ' ')}</p>
+                          <span className={cn("inline-flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded border mt-0.5", sellingBadge.className)}>
+                            <span>{sellingBadge.icon}</span> {sellingBadge.label}
+                          </span>
                         </td>
                         <td className="py-4 px-4 text-sm font-bold text-slate-500 text-right font-mono">
                           {formatGBP(sub.estimated_valuation)}
@@ -588,12 +660,21 @@ export default function SubmissionsPage() {
                           ) : null}
                         </td>
                         <td className="py-4 px-6 text-right whitespace-nowrap" onClick={e => e.stopPropagation()}>
-                          <Link
-                            href={`/admin/submissions/${sub.id}`}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 hover:border-slate-350 bg-white text-xs font-bold text-[#0B1D2E] rounded-lg transition-all"
-                          >
-                            Appraise <ExternalLink className="h-3 w-3" />
-                          </Link>
+                          <div className="inline-flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => setInspectingSub(sub)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-amber-300 bg-amber-50/70 hover:bg-amber-100 text-xs font-bold text-amber-900 rounded-lg transition-all cursor-pointer"
+                            >
+                              <Eye className="h-3 w-3 text-amber-700" /> Inspect
+                            </button>
+                            <Link
+                              href={`/admin/submissions/${sub.id}`}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-slate-200 hover:border-slate-350 bg-white text-xs font-bold text-[#0B1D2E] rounded-lg transition-all"
+                            >
+                              Appraise <ExternalLink className="h-3 w-3" />
+                            </Link>
+                          </div>
                         </td>
                       </tr>
                     )
@@ -843,6 +924,260 @@ export default function SubmissionsPage() {
           </div>
         </div>
       )}
+
+      {/* Quick Inspection Modal */}
+      {inspectingSub && (() => {
+        const meta = parseSubmissionMetadata(inspectingSub.description || '')
+        const sellingBadge = getSellingOptionBadge(meta.sellingOption)
+        const contactBadge = getPreferredContactBadge(meta.preferredContact)
+        const shippingBadge = getShippingPreferenceBadge(meta.shippingPreference)
+        const sellerName = inspectingSub.profiles?.full_name || inspectingSub.guest_name || 'Guest Seller'
+        const sellerEmail = inspectingSub.profiles?.email || inspectingSub.guest_email || 'No email'
+        const sellerPhone = inspectingSub.profiles?.phone || inspectingSub.guest_phone || ''
+        const sellerPostcode = inspectingSub.profiles?.postcode || inspectingSub.guest_postcode || ''
+        const currentStatus = inspectingSub.status
+
+        const handleCopyContact = () => {
+          const contactStr = `Seller: ${sellerName}\nEmail: ${sellerEmail}\nPhone: ${sellerPhone || 'N/A'}\nPostcode: ${sellerPostcode || 'N/A'}\nRef: VAL-${inspectingSub.id.slice(0, 8).toUpperCase()}`
+          navigator.clipboard.writeText(contactStr)
+          toast.success('Seller contact details copied to clipboard!')
+        }
+
+        return (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative animate-in zoom-in-95 duration-150">
+              <div className="h-1.5 bg-gradient-to-r from-[#14452F] via-[#C5A059] to-[#14452F]" />
+              
+              <div className="p-6 sm:p-8 space-y-6">
+                {/* Header */}
+                <div className="flex justify-between items-start border-b border-slate-100 pb-4">
+                  <div>
+                    <div className="flex items-center gap-2.5">
+                      <h3 className="font-mono text-xl font-black text-[#0B1D2E]">
+                        VAL-{inspectingSub.id.slice(0, 8).toUpperCase()}
+                      </h3>
+                      <span className={cn(
+                        'text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border',
+                        statusConfig[currentStatus]?.className || 'bg-slate-100'
+                      )}>
+                        {statusConfig[currentStatus]?.label || currentStatus}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-450 mt-1">
+                      Submitted on {new Date(inspectingSub.created_at).toLocaleString('en-GB')}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => setInspectingSub(null)}
+                    className="p-1.5 hover:bg-slate-100 rounded-lg transition-all text-slate-450 cursor-pointer"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+
+                {/* Seller & Contact Box */}
+                <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Seller Information</span>
+                      <h4 className="font-bold text-base text-slate-900">{sellerName}</h4>
+                      <p className="text-xs text-slate-600">{sellerEmail}</p>
+                      {sellerPhone && (
+                        <p className="text-xs font-mono font-bold text-slate-800 mt-0.5">{sellerPhone}</p>
+                      )}
+                      {sellerPostcode && (
+                        <p className="text-xs font-mono text-slate-500 uppercase">{sellerPostcode}</p>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col items-start sm:items-end gap-1.5">
+                      <span className={cn(
+                        "inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold border",
+                        contactBadge.className
+                      )}>
+                        <span>{contactBadge.icon}</span> {contactBadge.label}
+                      </span>
+
+                      {contactBadge.requiresCall && (
+                        <span className="text-[10px] text-amber-700 font-bold bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                          ⚠️ Action Required: Contact seller via phone
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Quick Contact Buttons */}
+                  <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-200/60">
+                    {sellerPhone && (
+                      <>
+                        <a
+                          href={`tel:${sellerPhone}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#14452F] text-white hover:bg-[#14452F]/90 rounded-xl text-xs font-bold transition-all shadow-xs"
+                        >
+                          <Phone className="h-3.5 w-3.5" /> Call {sellerPhone}
+                        </a>
+                        <a
+                          href={`https://wa.me/${sellerPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${sellerName}, this is Sell Your Stamps UK regarding your valuation reference VAL-${inspectingSub.id.slice(0, 8).toUpperCase()}.`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white hover:bg-emerald-700 rounded-xl text-xs font-bold transition-all shadow-xs"
+                        >
+                          <MessageSquare className="h-3.5 w-3.5" /> WhatsApp
+                        </a>
+                      </>
+                    )}
+                    <a
+                      href={`mailto:${sellerEmail}?subject=${encodeURIComponent(`UK Stamp Valuations - Valuation Request VAL-${inspectingSub.id.slice(0, 8).toUpperCase()}`)}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl text-xs font-bold transition-all"
+                    >
+                      <Mail className="h-3.5 w-3.5" /> Email
+                    </a>
+                    <button
+                      type="button"
+                      onClick={handleCopyContact}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                    >
+                      <Copy className="h-3.5 w-3.5" /> Copy Details
+                    </button>
+                  </div>
+                </div>
+
+                {/* Selling Pathway & Logistics Tags */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-3 bg-white border border-slate-200 rounded-xl space-y-1">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Selling Pathway</span>
+                    <span className={cn("inline-flex items-center gap-1.5 text-xs font-bold px-2 py-1 rounded-lg border", sellingBadge.className)}>
+                      <span>{sellingBadge.icon}</span> {sellingBadge.label}
+                    </span>
+                  </div>
+
+                  <div className="p-3 bg-white border border-slate-200 rounded-xl space-y-1">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Shipping Preference</span>
+                    <span className={cn("inline-flex items-center gap-1.5 text-xs font-bold px-2 py-1 rounded-lg border", shippingBadge.className)}>
+                      <span>{shippingBadge.icon}</span> {shippingBadge.label}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Collection & Valuation Summary */}
+                <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-3 text-xs">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Collection Details</span>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div>
+                      <span className="text-slate-450 block">Type:</span>
+                      <span className="font-bold text-slate-800 capitalize">{inspectingSub.collection_type.replace(/_/g, ' ')}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-450 block">Quantity:</span>
+                      <span className="font-bold text-slate-800">{inspectingSub.approx_quantity || '-'}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-450 block">Era:</span>
+                      <span className="font-bold text-slate-800 capitalize">{inspectingSub.estimated_era || '-'}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-450 block">Est. Payout:</span>
+                      <span className="font-mono font-bold text-[#14452F] text-sm">{formatGBP(inspectingSub.estimated_valuation)}</span>
+                    </div>
+                  </div>
+
+                  {meta.cleanDescription && (
+                    <div className="pt-2 border-t border-slate-200/60">
+                      <span className="text-slate-450 block mb-0.5 font-semibold">Seller Description / Notes:</span>
+                      <p className="text-slate-700 bg-white p-2.5 rounded-lg border border-slate-200 whitespace-pre-wrap text-[11px] leading-relaxed">
+                        {meta.cleanDescription}
+                      </p>
+                    </div>
+                  )}
+
+                  {inspectingSub.valuable_items && (
+                    <div className="pt-2 border-t border-slate-200/60">
+                      <span className="text-amber-800 block mb-0.5 font-bold">Known Valuable Items Noted:</span>
+                      <p className="text-amber-900 bg-amber-50 p-2.5 rounded-lg border border-amber-200 text-[11px]">
+                        {inspectingSub.valuable_items}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Uploaded Photos Gallery */}
+                {inspectingSub.submission_images && inspectingSub.submission_images.length > 0 && (
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                      Uploaded Photos ({inspectingSub.submission_images.length})
+                    </span>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                      {inspectingSub.submission_images.map((img) => (
+                        <a
+                          key={img.id}
+                          href={img.image_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-100 relative block hover:border-[#14452F] transition-all"
+                        >
+                          <img
+                            src={img.image_url}
+                            alt="Stamp collection"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                          />
+                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-bold">
+                            View Full
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Fast Status Update Actions */}
+                <div className="pt-3 border-t border-slate-100 space-y-2">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Update Inspection Status</span>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { status: 'under_review' as const, label: 'Mark Under Review', color: 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100' },
+                      { status: 'received' as const, label: 'Mark Received', color: 'bg-indigo-50 text-indigo-800 border-indigo-300 hover:bg-indigo-100' },
+                      { status: 'approved' as const, label: 'Approve Valuation', color: 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100' },
+                      { status: 'paid' as const, label: 'Mark Paid', color: 'bg-emerald-600 text-white border-transparent hover:bg-emerald-700' },
+                    ].map((btn) => (
+                      <button
+                        key={btn.status}
+                        type="button"
+                        disabled={updatingStatusId === inspectingSub.id || currentStatus === btn.status}
+                        onClick={() => handleUpdateStatus(inspectingSub.id, btn.status)}
+                        className={cn(
+                          "px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer disabled:opacity-40",
+                          btn.color
+                        )}
+                      >
+                        {updatingStatusId === inspectingSub.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : btn.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Footer Buttons */}
+                <div className="flex justify-between items-center pt-4 border-t border-slate-100">
+                  <button
+                    type="button"
+                    onClick={() => setInspectingSub(null)}
+                    className="px-4 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer"
+                  >
+                    Close
+                  </button>
+
+                  <Link
+                    href={`/admin/submissions/${inspectingSub.id}`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#14452F] hover:bg-[#14452F]/90 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md"
+                  >
+                    Open Full Appraisal Workspace <ExternalLink className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      })()}
     </main>
   )
 }

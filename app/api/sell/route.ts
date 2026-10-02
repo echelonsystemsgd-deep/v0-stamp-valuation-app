@@ -98,6 +98,9 @@ export async function POST(req: Request) {
       email,
       phone,
       postcode,
+      preferredContact = 'phone',
+      sellingOption = 'box_and_send',
+      shippingPreference = 'prepaid_qr_label',
       collectionType,
       quantity,
       era,
@@ -239,6 +242,17 @@ export async function POST(req: Request) {
     // Parse estimate valuation and categories from description
     const { items, estimatedValuation } = parseSubmissionDescription(description, categories || [])
 
+    // Ensure metadata tags are included in description for admin dashboard visibility & persistence
+    let enrichedDescription = description.trim()
+    if (!enrichedDescription.includes('[Selling Option:')) {
+      const metaTags = [
+        `[Selling Option: ${sellingOption}]`,
+        `[Preferred Contact: ${preferredContact}]`,
+        `[Shipping Preference: ${shippingPreference}]`,
+      ].join('\n')
+      enrichedDescription = `${metaTags}\n\n${enrichedDescription}`
+    }
+
     // Insert record into submissions table
     const { data: submission, error: submissionError } = await supabase
       .from('submissions')
@@ -251,7 +265,7 @@ export async function POST(req: Request) {
         collection_type: collectionType,
         approx_quantity: quantity,
         estimated_era: era,
-        description: description,
+        description: enrichedDescription,
         valuable_items: valuableItems ? valuableItems.trim() : null,
         estimated_valuation: estimatedValuation,
         status: 'quote_requested'
@@ -326,10 +340,13 @@ export async function POST(req: Request) {
       collectionType,
       quantity,
       era,
-      description,
+      description: enrichedDescription,
       valuableItems: valuableItems ? valuableItems.trim() : null,
       estimatedValuation,
       imageCount: imageList.length,
+      preferredContact,
+      sellingOption,
+      shippingPreference,
     }).catch((err) => {
       console.error('Failed to notify new valuation lead:', err)
     })

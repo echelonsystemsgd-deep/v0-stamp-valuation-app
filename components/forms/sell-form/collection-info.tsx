@@ -17,12 +17,45 @@ interface CollectionInfoStepProps {
   errors: Partial<Record<keyof FormData, string>>
 }
 
+const sellingOptions = [
+  {
+    id: 'box_and_send',
+    title: 'Box & Send (We Sort & Value)',
+    badge: 'Most Popular',
+    desc: 'Inherited or unsorted collections? No need to count. Just pack them up, and our experts will catalogue and value every item for you.',
+    icon: '📦',
+  },
+  {
+    id: 'photo_appraisal',
+    title: 'Photo Quick Appraisal',
+    badge: 'Fast Quote',
+    desc: 'Upload 1–5 clear photos of albums, covers, or high-value singles to receive a rapid expert appraisal within 2 hours.',
+    icon: '📸',
+  },
+  {
+    id: 'calculator',
+    title: 'Itemized Modern Postage',
+    badge: 'Instant Rates',
+    desc: 'Selling modern Royal Mail 1st/2nd class sheets or booklets? We buy all quantities with locked-in cash payouts.',
+    icon: '🧮',
+  },
+  {
+    id: 'vip_collection',
+    title: 'VIP Estate Collection (£1,000+)',
+    badge: 'Specialist Service',
+    desc: 'Substantial private collections or estates. We offer insured courier collection, direct phone callbacks, or in-person visits.',
+    icon: '👑',
+  },
+]
+
 const collectionTypes = [
-  { value: 'album', label: 'Complete Album' },
-  { value: 'loose', label: 'Loose Stamps' },
-  { value: 'fdc', label: 'First Day Covers' },
-  { value: 'mixed', label: 'Mixed Collection' },
-  { value: 'other', label: 'Other' },
+  { value: 'mixed', label: 'Mixed Collection (Albums + Loose)' },
+  { value: 'album', label: 'Complete Album(s)' },
+  { value: 'loose', label: 'Loose Stamps (Boxes / Tins)' },
+  { value: 'sheets_booklets', label: 'Modern Sheets & Booklets' },
+  { value: 'fdc', label: 'First Day Covers & Presentation Packs' },
+  { value: 'rare_specialist', label: 'Rare / Specialist Singles' },
+  { value: 'other', label: 'Other Philatelic Items' },
 ]
 
 const eras = [
@@ -42,8 +75,49 @@ export function CollectionInfoStep({ formData, updateFormData, errors }: Collect
           Tell Us About Your Collection
         </h3>
         <p className="text-muted-foreground text-sm">
-          Please provide details about the stamps you would like valued.
+          Select how you would like to sell and provide details about the stamps you would like valued.
         </p>
+      </div>
+
+      {/* Selling Pathway Options */}
+      <div className="flex flex-col gap-2.5">
+        <Label className="text-sm font-semibold text-slate-800">
+          How Would You Like to Sell? <span className="text-destructive">*</span>
+        </Label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {sellingOptions.map((opt) => {
+            const isSelected = (formData.sellingOption || 'box_and_send') === opt.id
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => updateFormData({ sellingOption: opt.id })}
+                className={cn(
+                  "p-3.5 rounded-2xl border text-left transition-all relative flex flex-col justify-between gap-2 cursor-pointer",
+                  isSelected
+                    ? "border-forest-green bg-forest-green/5 ring-2 ring-forest-green/20 shadow-sm"
+                    : "border-border hover:border-muted-foreground/30 hover:bg-secondary/40 bg-white"
+                )}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{opt.icon}</span>
+                    <span className="font-bold text-sm text-slate-900 leading-snug">{opt.title}</span>
+                  </div>
+                  <span className={cn(
+                    "text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full shrink-0",
+                    isSelected ? "bg-forest-green text-white" : "bg-slate-100 text-slate-600"
+                  )}>
+                    {opt.badge}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {opt.desc}
+                </p>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {/* Collection Type */}
