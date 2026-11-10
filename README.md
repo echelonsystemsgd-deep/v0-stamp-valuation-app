@@ -114,6 +114,17 @@ The application utilizes Supabase PostgreSQL for authentication, database, real-
 
 ## 💻 Getting Started
 
+### Live Demo & Deployment
+* **Production Deployment:** [v0-stamp-valuation-app-eight.vercel.app](https://v0-stamp-valuation-app-eight.vercel.app/)
+* **Implementation Plan:** [Master Implementation Plan](file:///c:/Users/Deepg/OneDrive/Desktop/The%20Real%20World/Campuses/AI%20Automation/New%20Lessons/CODING/v0-stamp-valuation-app/Implementations/FULL_SITE_AND_BACKEND_IMPLEMENTATION_PLAN.md)
+
+### Environment Setup
+Copy the example environment configuration:
+```bash
+cp .env.example .env.local
+```
+Provide your Supabase URL, Anon Key, and Resend API Key for transactional customer emails.
+
 First, install the package dependencies:
 ```bash
 npm install
