@@ -62,7 +62,7 @@ export function AboutNarrative() {
               <div className="flex gap-4">
                 <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-primary shrink-0" />
                 <p className="font-bold text-primary leading-tight text-sm md:text-base">
-                  Every stamp collection is carefully inspected and verified by our UK buying desk before any payment is issued, ensuring complete accuracy and peace of mind.
+                  All stamps are carefully checked by our head buyer before any purchase, ensuring complete accuracy and peace of mind.
                 </p>
               </div>
             </div>

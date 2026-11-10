@@ -50,7 +50,7 @@ export default function AboutUsPage() {
         <HeroSlideshow 
           images={aboutSlideshow} 
           title="About Us &amp; Our Heritage"
-          subtitle="For over 10 years, we have provided UK sellers with a transparent, direct, and hassle-free alternative to auction houses and online marketplaces."
+          subtitle="For over 10 years, we have been buying postage stamps across the United Kingdom and getting sellers paid out fast and discreetly."
         />
 
         <AboutNarrative />

@@ -46,11 +46,11 @@ const timelineSteps = [
   {
     icon: ShieldCheck,
     title: 'Expert Verification',
-    description: 'Once we receive your collection, our specialists conduct a thorough in-person examination. If the condition matches the description, we confirm the agreed price. If we discover additional value, we will increase our offer.',
+    description: 'All stamps are carefully checked by our head buyer before any purchase. Once we receive your collection, our specialists conduct a thorough in-person examination. If the condition matches the description, we confirm the agreed price immediately.',
     tips: [
-      'Professional examination by experienced stamp specialists',
-      'Final valuation confirmed within 2 working days',
-      'We only adjust downward if condition was misrepresented',
+      'Professional examination by our head buyer and stamp specialists',
+      'Final valuation confirmed within same day to 2 working days',
+      'Discrete and secure transaction throughout',
     ],
   },
   {
